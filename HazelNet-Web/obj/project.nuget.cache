@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "dgSpecHash": "8Nk/8caXB6k=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\VHON\\Documents\\Source_Codes\\Blazor\\HazelNet\\HazelNet-Web\\HazelNet-Web.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.aspnetcore.authorization\\9.0.1\\microsoft.aspnetcore.authorization.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.aspnetcore.components\\9.0.1\\microsoft.aspnetcore.components.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\9.0.1\\microsoft.aspnetcore.components.analyzers.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.aspnetcore.components.forms\\9.0.1\\microsoft.aspnetcore.components.forms.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.aspnetcore.components.web\\9.0.1\\microsoft.aspnetcore.components.web.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.aspnetcore.metadata\\9.0.1\\microsoft.aspnetcore.metadata.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\9.0.1\\microsoft.extensions.dependencyinjection.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.1\\microsoft.extensions.dependencyinjection.abstractions.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.extensions.localization\\9.0.1\\microsoft.extensions.localization.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.extensions.localization.abstractions\\9.0.1\\microsoft.extensions.localization.abstractions.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\9.0.1\\microsoft.extensions.logging.abstractions.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.extensions.options\\9.0.1\\microsoft.extensions.options.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.extensions.primitives\\9.0.1\\microsoft.extensions.primitives.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\microsoft.jsinterop\\9.0.1\\microsoft.jsinterop.9.0.1.nupkg.sha512",
+    "C:\\Users\\VHON\\.nuget\\packages\\mudblazor\\8.15.0\\mudblazor.8.15.0.nupkg.sha512"
+  ],
+  "logs": []
+}
