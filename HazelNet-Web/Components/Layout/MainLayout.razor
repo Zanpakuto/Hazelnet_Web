@@ -8,13 +8,15 @@
     
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
-        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
+        <MudText Typo="Typo.h5" Class="ml-3">HazelNet</MudText>
         <MudSpacer/>
         <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle"/>
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End"/>
     </MudAppBar>
 
-    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen"  Variant="@DrawerVariant.Mini"  
+               Breakpoint="Breakpoint.None" ClipMode="DrawerClipMode.Always" Elevation="2"
+               Width="200px">
         <NavMenu/>
     </MudDrawer>
 
@@ -44,6 +46,7 @@
         {
             PaletteLight = _lightPalette,
             PaletteDark = _darkPalette,
+            Typography = _typography,
             LayoutProperties = new LayoutProperties()
         };
     }
@@ -97,11 +100,44 @@
         OverlayLight = "#1e1e2d80",
     };
 
+    private readonly Typography _typography = new()
+    {
+        Default = new DefaultTypography()
+        {
+            // Source Sans is a "Workhorse" font used by government and educational sites
+            FontFamily = new[] { "Source Sans 3", "Helvetica", "Arial", "sans-serif" },
+            FontSize = ".9375rem", // Slightly larger (15px) for easier reading
+            LineHeight = "1.6",      // More "breathing room" between lines
+            LetterSpacing = "0"
+        },
+        H1 = new H1Typography() { FontFamily = new[] { "Playfair Display", "serif" }, FontWeight = "700", FontSize = "3.5rem" },
+        H2 = new H2Typography() { FontFamily = new[] { "Playfair Display", "serif" }, FontWeight = "700", FontSize = "2.75rem" },
+        H3 = new H3Typography() { FontFamily = new[] { "Playfair Display", "serif" }, FontWeight = "600", FontSize = "2rem" },
+        H4 = new H4Typography() { FontFamily = new[] { "Playfair Display", "serif" }, FontWeight = "600", FontSize = "1.5rem" },
+        H5 = new H5Typography() { FontFamily = new[] { "Source Sans 3", "sans-serif" }, FontWeight = "600", LetterSpacing = ".02em" },
+        H6 = new H6Typography() { FontFamily = new[] { "Source Sans 3", "sans-serif" }, FontWeight = "600", TextTransform = "uppercase", FontSize = ".85rem" },
+        
+        Button = new ButtonTypography() 
+        { 
+            FontFamily = new[] { "Source Sans 3", "sans-serif" },
+            FontWeight = "600", 
+            TextTransform = "uppercase", // Uppercase here feels more formal/official
+            LetterSpacing = ".1em" 
+        },
+        Body1 = new Body1Typography() 
+        { 
+            FontSize = "1rem", 
+            LineHeight = "1.6" 
+        }
+    };
+
     public string DarkLightModeButtonIcon => _isDarkMode switch
     {
         true => Icons.Material.Rounded.AutoMode,
         false => Icons.Material.Outlined.DarkMode,
     };
+
+
 }
 
 
