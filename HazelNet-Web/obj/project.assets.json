@@ -251,6 +251,29 @@
         "buildMultiTargeting": {
           "buildMultiTargeting/MudBlazor.props": {}
         }
+      },
+      "HazelNet-Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/HazelNet-Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/HazelNet-Domain.dll": {}
+        }
+      },
+      "HazelNet-Infrastractire/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "HazelNet-Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/HazelNet-Infrastractire.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/HazelNet-Infrastractire.dll": {}
+        }
       }
     }
   },
@@ -637,10 +660,22 @@
         "staticwebassets/MudBlazor.min.css",
         "staticwebassets/MudBlazor.min.js"
       ]
+    },
+    "HazelNet-Domain/1.0.0": {
+      "type": "project",
+      "path": "../HazelNet-Domain/HazelNet-Domain.csproj",
+      "msbuildProject": "../HazelNet-Domain/HazelNet-Domain.csproj"
+    },
+    "HazelNet-Infrastractire/1.0.0": {
+      "type": "project",
+      "path": "../HazelNet-Infrastractire/HazelNet-Infrastractire.csproj",
+      "msbuildProject": "../HazelNet-Infrastractire/HazelNet-Infrastractire.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "HazelNet-Domain >= 1.0.0",
+      "HazelNet-Infrastractire >= 1.0.0",
       "MudBlazor >= 8.*"
     ]
   },
@@ -676,7 +711,14 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\VHON\\Documents\\Source_Codes\\Blazor\\HazelNet\\HazelNet-Domain\\HazelNet-Domain.csproj": {
+              "projectPath": "C:\\Users\\VHON\\Documents\\Source_Codes\\Blazor\\HazelNet\\HazelNet-Domain\\HazelNet-Domain.csproj"
+            },
+            "C:\\Users\\VHON\\Documents\\Source_Codes\\Blazor\\HazelNet\\HazelNet-Infrastractire\\HazelNet-Infrastractire.csproj": {
+              "projectPath": "C:\\Users\\VHON\\Documents\\Source_Codes\\Blazor\\HazelNet\\HazelNet-Infrastractire\\HazelNet-Infrastractire.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

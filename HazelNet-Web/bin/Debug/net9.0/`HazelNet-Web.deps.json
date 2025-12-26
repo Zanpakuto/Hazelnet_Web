@@ -8,6 +8,8 @@
     ".NETCoreApp,Version=v9.0": {
       "`HazelNet-Web/1.0.0": {
         "dependencies": {
+          "HazelNet-Domain": "1.0.0",
+          "HazelNet-Infrastractire": "1.0.0",
           "MudBlazor": "8.15.0"
         },
         "runtime": {
@@ -29,8 +31,7 @@
       },
       "Microsoft.AspNetCore.Components/9.0.1": {
         "dependencies": {
-          "Microsoft.AspNetCore.Authorization": "9.0.1",
-          "Microsoft.AspNetCore.Components.Analyzers": "9.0.1"
+          "Microsoft.AspNetCore.Authorization": "9.0.1"
         },
         "runtime": {
           "lib/net9.0/Microsoft.AspNetCore.Components.dll": {
@@ -39,7 +40,6 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Components.Analyzers/9.0.1": {},
       "Microsoft.AspNetCore.Components.Forms/9.0.1": {
         "dependencies": {
           "Microsoft.AspNetCore.Components": "9.0.1"
@@ -166,6 +166,25 @@
             "fileVersion": "8.15.0.0"
           }
         }
+      },
+      "HazelNet-Domain/1.0.0": {
+        "runtime": {
+          "HazelNet-Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "HazelNet-Infrastractire/1.0.0": {
+        "dependencies": {
+          "HazelNet-Domain": "1.0.0"
+        },
+        "runtime": {
+          "HazelNet-Infrastractire.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -188,13 +207,6 @@
       "sha512": "sha512-6pwfbQKNtvPkbF4tCGiAKGyt6BVpu58xAXz7u2YXcUKTNmNxrymbG1mEyMc0EPzVdnquDDqTyfXM3mC1EJycxQ==",
       "path": "microsoft.aspnetcore.components/9.0.1",
       "hashPath": "microsoft.aspnetcore.components.9.0.1.nupkg.sha512"
-    },
-    "Microsoft.AspNetCore.Components.Analyzers/9.0.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-I8Rs4LXT5UQxM5Nin2+Oj8aSY2heszSZ3EyTLgt3mxmfiRPrVO7D8NNSsf1voI2Gb0qFJceof/J5c9E+nfNuHw==",
-      "path": "microsoft.aspnetcore.components.analyzers/9.0.1",
-      "hashPath": "microsoft.aspnetcore.components.analyzers.9.0.1.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Components.Forms/9.0.1": {
       "type": "package",
@@ -279,6 +291,16 @@
       "sha512": "sha512-iOJEnQ6tYGQPfPJaUazyC8H6pcczgaMX7vhUzrJPpB0WqEXNozwMfSzoOe2/JZmVWJcUfYZgKBeBU2Z27XY7Sw==",
       "path": "mudblazor/8.15.0",
       "hashPath": "mudblazor.8.15.0.nupkg.sha512"
+    },
+    "HazelNet-Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "HazelNet-Infrastractire/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

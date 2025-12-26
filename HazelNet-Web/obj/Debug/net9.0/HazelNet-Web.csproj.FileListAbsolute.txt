@@ -32,9 +32,6 @@ C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9
 C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\scopedcss\bundle\`HazelNet-Web.styles.css
-C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\compressed\tzxjg6is5z-7c7lhmh1j6.gz
-C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\compressed\0wz98yz2xy-f96y5mhlyw.gz
-C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\compressed\mwq10ufdzk-2jeq8efc6q.gz
 C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\staticwebassets.development.json
@@ -46,3 +43,12 @@ C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9
 C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\HazelNet-Web.genruntimeconfig.cache
 C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\ref\`HazelNet-Web.dll
 C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\HazelNet-Web.sourcelink.json
+C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\bin\Debug\net9.0\HazelNet-Domain.dll
+C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\bin\Debug\net9.0\HazelNet-Infrastractire.dll
+C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\bin\Debug\net9.0\HazelNet-Domain.pdb
+C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\bin\Debug\net9.0\HazelNet-Infrastractire.pdb
+C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\compressed\tzxjg6is5z-{0}-7c7lhmh1j6-7c7lhmh1j6.gz
+C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\compressed\0wz98yz2xy-{0}-f96y5mhlyw-f96y5mhlyw.gz
+C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\compressed\lcacbh7qoh-{0}-2jeq8efc6q-2jeq8efc6q.gz
+C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\swae.build.ex.cache
+C:\Users\VHON\Documents\Source_Codes\Blazor\HazelNet\HazelNet-Web\obj\Debug\net9.0\compressed\3s3aold7sl-{0}-65k0thk11k-65k0thk11k.gz

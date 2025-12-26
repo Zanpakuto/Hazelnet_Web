@@ -12,4 +12,41 @@
   <ItemGroup>
     <PackageReference Include="MudBlazor" Version="8.*" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\HazelNet-Domain\HazelNet-Domain.csproj" />
+    <ProjectReference Include="..\HazelNet-Infrastractire\HazelNet-Infrastractire.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Shared\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <AdditionalFiles Include="Features\Counter.razor" />
+    <AdditionalFiles Include="Features\Error.razor" />
+    <AdditionalFiles Include="Features\Home.razor" />
+    <AdditionalFiles Include="Features\Weather.razor" />
+    <AdditionalFiles Include="Shared\Layout\MainLayout.razor" />
+    <AdditionalFiles Include="Shared\Layout\NavMenu.razor" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\App.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Counter.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Error.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Home.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Weather.razor" />
+    <_ContentIncludedByDefault Remove="Components\Routes.razor" />
+    <_ContentIncludedByDefault Remove="Components\_Imports.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Components\Pages\Counter.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Components\Pages\Error.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Components\Pages\Home.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Components\Pages\Weather.razor" />
+  </ItemGroup>
 </Project>
