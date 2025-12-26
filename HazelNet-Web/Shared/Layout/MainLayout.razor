@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using MudBlazor
+@inherits LayoutComponentBase
 
 <MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
@@ -110,12 +111,12 @@
             LineHeight = "1.6", // More "breathing room" between lines
             LetterSpacing = "0"
         },
-        H1 = new H1Typography() { FontFamily = new[] { "Playfair Display", "serif" }, FontWeight = "700", FontSize = "3.5rem" },
-        H2 = new H2Typography() { FontFamily = new[] { "Playfair Display", "serif" }, FontWeight = "700", FontSize = "2.75rem" },
-        H3 = new H3Typography() { FontFamily = new[] { "Source Sans 3", "serif" }, FontWeight = "600", FontSize = "2rem" },
-        H4 = new H4Typography() { FontFamily = new[] { "Source Sans 3", "serif" }, FontWeight = "600", FontSize = "1.5rem" },
-        H5 = new H5Typography() { FontFamily = new[] { "Source Sans 3", "sans-serif" }, FontWeight = "600", LetterSpacing = ".02em" },
-        H6 = new H6Typography() { FontFamily = new[] { "Source Sans 3", "sans-serif" }, FontWeight = "600", TextTransform = "uppercase", FontSize = ".85rem" },
+        H1 = new H1Typography() { FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" }, FontWeight = "800", FontSize = "1.75rem" },
+        H2 = new H2Typography() { FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" }, FontWeight = "600", FontSize = "1.75rem" },
+        H3 = new H3Typography() { FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" }, FontWeight = "400", FontSize = "1rem" },
+        H4 = new H4Typography() { FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" }, FontWeight = "200", FontSize = "0.75rem" },
+        H5 = new H5Typography() { FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" }, FontWeight = "200", LetterSpacing = ".02em" },
+        H6 = new H6Typography() { FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" }, FontWeight = "200", TextTransform = "uppercase", FontSize = ".85rem" },
 
         Button = new ButtonTypography()
         {
