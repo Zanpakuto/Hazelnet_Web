@@ -1,0 +1,85 @@
+﻿@page "/"
+@layout HomeLayout
+
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="pt-16 pb-12 text-center">
+    
+    <MudImage Fluid="true" Src="HazelNetLogo.svg" 
+              Alt="HazelNet Logo" 
+              Class="mx-auto d-block rounded-lg" 
+              ObjectPosition="ObjectPosition.Center"/>
+    
+    <MudText Typo="Typo.h1" Class="mb-6" Align="Align.Center" Style="line-height: 1.1; font-size: 4.25rem">
+        Study smarter,<br/>
+        <span style="background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            remember longer.
+        </span>
+    </MudText>
+
+    <MudText Typo="Typo.body1" Color="Color.Default" Class="mx-auto mb-10"
+             Style="max-width: 600px" Align="Align.Center">
+        HazelNet is a web-based flashcard system built for structured learning.
+        Create decks, study using spaced repetition, and track progress across devices.
+    </MudText>
+
+    <div class="d-flex justify-center gap-4 mb-16">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large"
+                   Style="border-radius: 16px; font-weight: 700; text-transform: none;" DisableElevation="true">
+            Start Studying
+        </MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Default" Size="Size.Large" Class=" px-8 py-4"
+                   Style="border-radius: 16px; font-weight: 700; text-transform: none;">
+            Browse Public Decks
+        </MudButton>
+    </div>
+
+    <MudPaper Elevation="25" Class="mx-auto pa-4" Style="max-width: 900px; border-radius: 32px;">
+        <MudPaper Elevation="0" Class="pa-8 d-flex flex-column align-center justify-center"
+                  Style="height: 400px; background-color: #151521; border-radius: 24px;">
+
+            <MudPaper Elevation="1" Class="pa-10 text-center" Style="max-width: 400px; width: 100%; border-radius: 20px;">
+                <MudText Typo="Typo.overline" Color="Color.Primary" Style="font-weight: 900;">Flashcard</MudText>
+                <MudText Typo="Typo.h5" Class="mt-4" Style="font-family: 'JetBrains Mono'; font-weight: 700;">
+                    What is the time complexity of Merge Sort?
+                </MudText>
+                <div class="d-flex justify-center gap-4 mt-8 pt-8 border-t border-solid mud-border-lines-default">
+                    <MudAvatar Size="Size.Small" Color="Color.Default"/>
+                    <MudAvatar Size="Size.Small" Color="Color.Default"/>
+                </div>
+            </MudPaper>
+
+        </MudPaper>
+    </MudPaper>
+</MudContainer>
+
+<section id="how"  class="py-16">
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudText Typo="Typo.h2" Align="Align.Center" Class="mb-16">
+            A simple system for <span class="mud-primary-text">consistent learning</span>
+        </MudText>
+
+        <MudGrid Spacing="10" Justify="Justify.Center">
+            <MudItem xs="12" md="4" Class="text-center">
+                <MudText Typo="Typo.h1" Color="Color.Primary" Class="mb-4 opacity-50">01</MudText>
+                <MudText Typo="Typo.h5" Class="font-bold mb-2">Create</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                    Build decks with clear questions and answers. Organize cards using tags and structured content.
+                </MudText>
+            </MudItem>
+            <MudItem xs="12" md="4" Class="text-center">
+                <MudText Typo="Typo.h1" Style="color: #8b5cf6;" Class="mb-4 opacity-50">02</MudText>
+                <MudText Typo="Typo.h5" Class="font-bold mb-2">Study</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                    Review cards in focused sessions. Scheduling adapts to your performance over time.
+                </MudText>
+            </MudItem>
+            <MudItem xs="12" md="4" Class="text-center">
+                <MudText Typo="Typo.h1" Color="Color.Success" Class="mb-4 opacity-50">03</MudText>
+                <MudText Typo="Typo.h5" Class="font-bold mb-2">Improve</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                    Track accuracy, review history, and weak topics using built-in statistics.
+                </MudText>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</section>
