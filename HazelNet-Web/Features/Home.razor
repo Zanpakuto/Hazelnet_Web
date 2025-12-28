@@ -33,53 +33,40 @@
         </MudButton>
     </div>
 
-    <MudPaper Elevation="25" Class="mx-auto pa-4" Style="max-width: 900px; border-radius: 32px;">
-        <MudPaper Elevation="0" Class="pa-8 d-flex flex-column align-center justify-center"
-                  Style="height: 400px; background-color: #151521; border-radius: 24px;">
-
-            <MudPaper Elevation="1" Class="pa-10 text-center" Style="max-width: 400px; width: 100%; border-radius: 20px;">
-                <MudText Typo="Typo.overline" Color="Color.Primary" Style="font-weight: 900;">Flashcard</MudText>
-                <MudText Typo="Typo.h5" Class="mt-4" Style="font-family: 'JetBrains Mono'; font-weight: 700;">
-                    What is the time complexity of Merge Sort?
-                </MudText>
-                <div class="d-flex justify-center gap-4 mt-8 pt-8 border-t border-solid mud-border-lines-default">
-                    <MudAvatar Size="Size.Small" Color="Color.Default"/>
-                    <MudAvatar Size="Size.Small" Color="Color.Default"/>
-                </div>
+    <MudPaper Elevation="20" Class="mx-auto pa-4" 
+              Style="max-width: 1000px; border-radius: 20px;">
+        <MudPaper Class="mx-auto pa-4 d-flex flex-column" Elevation="2"
+                  Style="height: 450px; border-radius: 15px;">
+            
+            <div class="d-flex flex-row gap-1 ma-2">
+                <MudAvatar Color="Color.Error" Style="height:12px; width:12px;"/>
+                <MudAvatar Color="Color.Warning" Style="height:12px; width:12px;"/>
+                <MudAvatar Color="Color.Success" Style="height:12px; width:12px;"/>
+            </div>
+            
+            <MudPaper Class="d-flex justify-center align-center " Elevation="0" Style="height: 450px">
+                <MudCard Outlined="true" Style="border-radius: 20px; height: 200px; width: 400px" Elevation="2">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body2" Color="Color.Primary" Align="Align.Center">FLASHCARD</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Class="mb-5" Align="Align.Center" Color="Color.Dark" Typo="Typo.h3">
+                            What is the time <br/>complexity of Merge Sort?
+                        </MudText>
+                        <MudSpacer/>
+                        <MudDivider/>
+                            <div class="d-flex flex-row gap-5 ma-5 align-center justify-center">
+                                <MudAvatar Color="Color.Primary" Style="height:12px; width:12px;"/>
+                                <MudAvatar Color="Color.Primary" Style="height:12px; width:12px;"/>
+                                <MudAvatar Color="Color.Primary" Style="height:12px; width:12px;"/>
+                            </div>
+                    </MudCardContent>
+                </MudCard>
             </MudPaper>
-
+            
         </MudPaper>
     </MudPaper>
 </MudContainer>
 
-<section id="how"  class="py-16">
-    <MudContainer MaxWidth="MaxWidth.Large">
-        <MudText Typo="Typo.h2" Align="Align.Center" Class="mb-16">
-            A simple system for <span class="mud-primary-text">consistent learning</span>
-        </MudText>
-
-        <MudGrid Spacing="10" Justify="Justify.Center">
-            <MudItem xs="12" md="4" Class="text-center">
-                <MudText Typo="Typo.h1" Color="Color.Primary" Class="mb-4 opacity-50">01</MudText>
-                <MudText Typo="Typo.h5" Class="font-bold mb-2">Create</MudText>
-                <MudText Typo="Typo.body2" Color="Color.Secondary">
-                    Build decks with clear questions and answers. Organize cards using tags and structured content.
-                </MudText>
-            </MudItem>
-            <MudItem xs="12" md="4" Class="text-center">
-                <MudText Typo="Typo.h1" Style="color: #8b5cf6;" Class="mb-4 opacity-50">02</MudText>
-                <MudText Typo="Typo.h5" Class="font-bold mb-2">Study</MudText>
-                <MudText Typo="Typo.body2" Color="Color.Secondary">
-                    Review cards in focused sessions. Scheduling adapts to your performance over time.
-                </MudText>
-            </MudItem>
-            <MudItem xs="12" md="4" Class="text-center">
-                <MudText Typo="Typo.h1" Color="Color.Success" Class="mb-4 opacity-50">03</MudText>
-                <MudText Typo="Typo.h5" Class="font-bold mb-2">Improve</MudText>
-                <MudText Typo="Typo.body2" Color="Color.Secondary">
-                    Track accuracy, review history, and weak topics using built-in statistics.
-                </MudText>
-            </MudItem>
-        </MudGrid>
-    </MudContainer>
-</section>
