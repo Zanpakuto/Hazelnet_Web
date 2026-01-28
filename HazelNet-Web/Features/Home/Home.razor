@@ -34,6 +34,27 @@
         </MudButton>
     </div>
 
+    <!-- Learning Model -->
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="pa-5">
+        
+        <div class="d-flex flex-column align-center mb-10">
+            <MudText Typo="Typo.overline" Color="Color.Primary">
+                LEARNING MODEL
+            </MudText>
+            <MudText Typo="Typo.h2" Align="Align.Center">
+                Spaced repetition, 
+                <span style="background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    with intent
+                </span>
+            </MudText>
+            <MudText Typo="Typo.body1" Align="Align.Center" Class="py-3">
+                HazelNet prioritizes cards you struggle with while spacing out mastered material. 
+                This approach improves long-term retention without unnecessary repetition.
+            </MudText>
+        </div>
+        
+    </MudContainer>
+    
     <MudPaper Elevation="20" Class="mx-auto pa-4" 
               Style="max-width: 1000px; border-radius: 20px;">
         <MudPaper Class="mx-auto pa-4 d-flex flex-column" Elevation="2"
@@ -90,13 +111,12 @@
                 <MudItem xs="12" md="5">
                     <MudStack Spacing="2">
                         <MudText Typo="Typo.h3" GutterBottom="true">
-                            Create Decks
+                            Deck Customization
                         </MudText>
                         <MudText Typo="Typo.body1" Style="line-height: 1.5;">
-                            Organize your learning by creating custom decks
-                            tailored to your subjects, courses, or topics. 
-                            HazelNet lets you structure your study materials 
-                            in a way that fits your learning style.
+                            Your study space, your rules. 
+                            Build custom decks for every course and
+                            organize your materials to match exactly how your brain works.
                         </MudText>
                         <MudStack Spacing="2" Class="mt-4">
         
@@ -154,12 +174,12 @@
                 <MudItem xs="12" md="5">
                     <MudStack Spacing="2">
                         <MudText Typo="Typo.h3" GutterBottom="true">
-                            Create Cards
+                            Cards Creation
                         </MudText>
                         <MudText Typo="Typo.body1" Style="line-height: 1.5;">
-                            Build flashcards quickly and easily to capture key concepts, 
-                            definitions, and questions. HazelNet makes card creation 
-                            simple so you can focus more on learning and less on setup.
+                            Flashcards without the fuss. Capture concepts in seconds. 
+                            HazelNet streamlines the setup so you can spend less time 
+                            typing and more time mastering the material.
                         </MudText>
                         <MudStack Spacing="2" Class="mt-4">
 
@@ -199,12 +219,12 @@
                 <MudItem xs="12" md="5">
                     <MudStack Spacing="2">
                         <MudText Typo="Typo.h3" GutterBottom="true">
-                            Check your Stats
+                            Progress Tracking
                         </MudText>
                         <MudText Typo="Typo.body1" Style="line-height: 1.5;">
-                            Track your learning progress with detailed statistics 
-                            and insights. HazelNet helps you understand your strengths, 
-                            identify difficult topics, and improve your study habits over time.
+                            Visualize your victory. Track your stats in real-time. 
+                            HazelNet helps you spot weak points, celebrate strengths, 
+                            and watch your knowledge grow.
                         </MudText>
                         <MudStack Spacing="2" Class="mt-4">
         
@@ -252,6 +272,78 @@
         
     </MudContainer>
     
+    
+    <!--How it works-->
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="pa-10" >
+        
+        <div class="d-flex flex-column align-center mb-10">
+            <MudText Typo="Typo.overline" Color="Color.Primary">
+                HOW IT WORKS
+            </MudText>
+            <MudText Typo="Typo.h2" Align="Align.Center">
+                Get started with 
+                <span style="background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    three
+                </span>
+                simple step
+            </MudText>
+        </div>
+        
+        <MudGrid Spacing="5" Justify="Justify.Center" Class="my-10">
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard Height="100%" Elevation="3" Class="pa-3" 
+                         Style="border-radius: 10px">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h3">Create</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudAvatar Color="Color.Primary" Size="Size.Small">1</MudAvatar>
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        Build decks with clear questions and answers. 
+                        Organize cards using tags and structured content.
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard Height="100%" Elevation="3" Class="pa-3" 
+                         Style="border-radius: 10px">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h3">Study</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudAvatar Color="Color.Primary" Size="Size.Small">2</MudAvatar>
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        Review cards in focused sessions. 
+                        Scheduling adapts to your performance over time.
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard Height="100%" Elevation="3" Class="pa-3"
+                         Style="border-radius: 10px">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h3">Improve</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudAvatar Color="Color.Primary" Size="Size.Small">3</MudAvatar>
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        Track accuracy, review history, and weak topics using built-in statistics.
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+        
+    </MudContainer>
+
    
 
 </MudContainer>
