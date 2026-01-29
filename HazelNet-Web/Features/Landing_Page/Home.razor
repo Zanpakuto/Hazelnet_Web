@@ -5,7 +5,7 @@
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="pt-16 pb-12 text-center">
     
-    <MudImage Fluid="true" Src="HazelNetLogo.svg" 
+    <MudImage Fluid="true" Src="/Images/HazelNetLogo.svg" 
               Alt="HazelNet Logo" 
               Class="mx-auto d-block rounded-lg" 
               ObjectPosition="ObjectPosition.Center"/>
@@ -55,6 +55,7 @@
         
     </MudContainer>
     
+    <!-- FlashCard Sample-->
     <MudPaper Elevation="20" Class="mx-auto pa-4" 
               Style="max-width: 1000px; border-radius: 20px;">
         <MudPaper Class="mx-auto pa-4 d-flex flex-column" Elevation="2"
@@ -92,7 +93,8 @@
     </MudPaper>
     
     <!--Feature Section-->
-    <MudContainer MaxWidth="MaxWidth.Medium" Class="pa-10">
+    <MudContainer Id="feature-section" 
+        MaxWidth="MaxWidth.Medium" Class="pa-10 scroll-target">
     
         <div class="d-flex flex-column align-center mb-10">
             <MudText Typo="Typo.overline" Color="Color.Primary">
@@ -151,7 +153,7 @@
                 <MudItem xs="12" md="7">
                     <MudPaper Elevation="0" Class="d-flex align-center justify-center pa-4" 
                               Height="380px" Style= "border-radius: 12px; width: 100%;" >
-                        <MudImage Src="DeckCreation.png" Fluid="true" Alt="App Screenshot" 
+                        <MudImage Src="/Images/DeckCreation.png" Fluid="true" Alt="App Screenshot" 
                                   ObjectFit="ObjectFit.Contain"
                                   Style="max-height: 100%; width: auto;"/>
                     </MudPaper>
@@ -165,7 +167,7 @@
                 <MudItem xs="12" md="7">
                     <MudPaper Elevation="0" Class="d-flex align-center justify-center pa-4"
                               Height="380px" Style="border-radius: 12px; width: 100%">
-                        <MudImage Src="CardCreation.png" Fluid="true" Alt="App Screenshot" 
+                        <MudImage Src="/Images/CardCreation.png" Fluid="true" Alt="App Screenshot" 
                                   ObjectFit="ObjectFit.Contain" 
                                   Style="max-height: 100%; width: auto;"/>
                     </MudPaper>
@@ -259,7 +261,7 @@
                 <MudItem xs="12" md="7">
                     <MudPaper Elevation="0" Class="d-flex align-center justify-center pa-4" 
                               Height="380px" Style= "border-radius: 12px; width: 100%" >
-                        <MudImage Src="Stats.jpg" Fluid="true" Alt="App Screenshot" 
+                        <MudImage Src="/Images/Stats.jpg" Fluid="true" Alt="App Screenshot" 
                                   ObjectFit="ObjectFit.Contain"
                                   Style="max-height: 100%; width: auto;"/>
                     </MudPaper>
@@ -274,7 +276,8 @@
     
     
     <!--How it works-->
-    <MudContainer MaxWidth="MaxWidth.Medium" Class="pa-10" >
+    <MudContainer Id="how-section"
+        MaxWidth="MaxWidth.Medium" Class="pa-10 scroll-target" >
         
         <div class="d-flex flex-column align-center mb-10">
             <MudText Typo="Typo.overline" Color="Color.Primary">
@@ -347,4 +350,3 @@
    
 
 </MudContainer>
-
