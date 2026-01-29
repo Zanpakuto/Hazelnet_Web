@@ -3,6 +3,7 @@ using HazelNet_Domain.Models;
 
 namespace HazelNet_Domain.Services.FSRS;
 
+//fsrs-related calculations
 public class Parameters
 {
     public double RequestRetention { get; set; }
@@ -22,9 +23,10 @@ public class Parameters
         W = Weights.Default();
     }
 
+    //parameters config
     public static Parameters DefaultParam()
     {
-        double DR = 0.95;
+        double DR = 0.95;   //desired retention
         double decay = 0.0658;
         double factor = Math.Pow(DR, 1.0 / decay) - 1;
         return new Parameters
@@ -40,6 +42,7 @@ public class Parameters
         };
     }
 
+    //computes retrievability
     public double ForgettingCurve(double elapsedDays, double stability)
     {
         double s = Math.Max(stability, MinStability);
@@ -53,6 +56,7 @@ public class Parameters
         return val;
     }
 
+    //initial stability for new cards
     public double InitStability(Rating r)
     {
         int idx = (int)r - 1;
@@ -60,22 +64,26 @@ public class Parameters
         return Math.Max(val, MinStability);
     }
 
+    //initial difficulty for new cards
     public double InitDifficulty(Rating r)
     {
         double d = W[4] - Math.Exp(W[5] * ((float)r - 1)) + 1;
         return ConstrainDifficulty(d);
     }
 
+    //clamps difficulty to [1.0, 10.0]
     private static double ConstrainDifficulty(double d)
     {
         return Math.Min(Math.Max(d, 1.0), 10.0);
     }
 
+    //applies linear damping to difficulty changes
     private static double LinearDamping(double deltaD, double oldD)
     {
         return (10.0 - oldD) * deltaD / 9.0;
     }
 
+    //computes next interval based on stability
     public double NextInterval(double s, double elapsedDays)
     {
         double newInterval = s / Factor * (Math.Pow(RequestRetention, 1.0 / Decay) - 1.0);
@@ -84,6 +92,7 @@ public class Parameters
         return ApplyFuzz(clamped, elapsedDays, EnableFuzz);
     }
 
+    //apply fuzzing to interval to prevent predictability
     public double ApplyFuzz(double ivl, double elapsedDays, bool enableFuzz)
     {
         if (!enableFuzz || ivl < 2.5) return ivl;
@@ -94,6 +103,7 @@ public class Parameters
         return Math.Floor(fuzzFactor * (maxIvl - minIvl + 1)) + minIvl;
     }
 
+    //computes fuzzing range based on interval (idk how this works)
     private (int, int) GetFuzzRange(double interval, double elapsedDays, double maximumInterval)
     {
         var ranges = new (double Start, double End, double Factor)[] {
@@ -121,6 +131,7 @@ public class Parameters
         return ((int)minIvlFloat, (int)maxIvlFloat);
     }
 
+    //computes next difficulty based on rating
     public double NextDifficulty(double d, Rating r)
     {
         double deltaD = -W[6] * (float)(r - 3);
@@ -129,17 +140,20 @@ public class Parameters
         return ConstrainDifficulty(MeanReversion(init, nextD));
     }
 
+    //computes short-term stability modifier
     public double ShortTermStability(double s, Rating r)
     {
         double baseS = Math.Max(s, MinStability);
         return baseS * Math.Exp(W[17] * ((float)(r - 3) + W[18]));
     }
 
+    //applies mean reversion to difficulty
     public double MeanReversion(double init, double current)
     {
         return W[7] * init + (1 - W[7]) * current;
     }
 
+    //computes next stability after a successful recall
     public double NextRecallStability(double d, double s, double r, Rating rating)
     {
         double hardPenalty = rating == Rating.Hard ? W[15] : 1.0;
@@ -156,7 +170,7 @@ public class Parameters
 
         double next = s * multiplier;
 
-        // guard: ensure finite and sensible minimum
+        //ensure finite and sensible minimum
         if (double.IsNaN(next) || double.IsInfinity(next) || next <= 0)
         {
             next = MinStability;
@@ -165,6 +179,7 @@ public class Parameters
         return next;
     }
 
+    //computes next stability after a failed recall (user pressed Again)
     public double NextForgetStability(double d, double s, double r)
     {
         // clamp input stability to avoid pathological inputs

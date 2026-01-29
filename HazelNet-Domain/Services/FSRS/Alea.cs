@@ -8,6 +8,7 @@ public struct AleaState
     public double C, S0, S1, S2;
 }
 
+//responsible for fuzzing randomness (tbh I have no idea how this works)
 public class Alea
 {
     private double c, s0, s1, s2;

@@ -4,6 +4,7 @@ namespace HazelNet_Domain.Services.FSRS;
 
 public static class SchedulerFactory
 {
+    //selects between short-term and long-term scheduler based on parameters
     public static Scheduler SchedulerFor(Parameters p, Card card, DateTime now)
     {
         if (p.EnableShortTerm)

@@ -17,6 +17,7 @@ public class Scheduler
         next = new RecordLog();
     }
 
+    //previews the results of reviewing a card with all possible ratings
     public RecordLog Preview()
     {
         var log = new RecordLog();
@@ -27,6 +28,7 @@ public class Scheduler
         return log;
     }
 
+    //reviews the card with the given rating and returns the scheduling info
     public SchedulingInfo Review(Rating grade)
     {
         var state = last.State;
@@ -36,7 +38,7 @@ public class Scheduler
             case State.New:
                 item = impl.NewState(grade);
                 break;
-            case State.Learning:    
+            case State.Learning:   
             case State.Relearning:
                 item = impl.LearningState(grade);
                 break;
@@ -47,6 +49,7 @@ public class Scheduler
         return item;
     }
 
+    //initializes the seed used for fuzzing
     internal void InitSeed()
     {
         long unix = ((DateTimeOffset)now).ToUnixTimeSeconds();
@@ -54,6 +57,7 @@ public class Scheduler
         parameters.seed = $"{unix}_{current.Reps}_{mul}";
     }
 
+    //builds a review log for the current review
     internal ReviewLog BuildLog(Rating rating)
     {
         return new ReviewLog
@@ -66,7 +70,7 @@ public class Scheduler
         };
     }
 
-    //called whenever a card is reviewed
+    //called whenever a card is reviewed to schedule its next review
     public static Scheduler NewScheduler(Parameters p, Card card, DateTime now, Func<Scheduler, IImplScheduler> createImpl)
     {
         var s = new Scheduler(p)

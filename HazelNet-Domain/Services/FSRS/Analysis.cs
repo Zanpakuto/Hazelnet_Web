@@ -4,11 +4,13 @@ namespace HazelNet_Domain.Services.FSRS;
 
 public class Analysis
 {
+    //ratio of score and total reviews
     public double RecallAccuracy(Card card)
     {
         return (card.Reps - card.Lapses) / (double)card.Lapses;
     }
 
+    //average difficulty from review history
     public Rating AvgDifficulty(ReviewHistory reviewHistory)
     {
         float totalDifficulty = 0;

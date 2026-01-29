@@ -2,6 +2,7 @@ using HazelNet_Domain.Models;
 
 namespace HazelNet_Domain.Services.FSRS;
 
+//scheduler implemented if long term scheduling is enabled
 public class LongTermScheduler : IImplScheduler
 {
     private readonly Scheduler s;
@@ -12,6 +13,7 @@ public class LongTermScheduler : IImplScheduler
         s = scheduler;
     }
 
+    //compute scheduling info for a new card based on the initial grade (typically hard/again)
     public SchedulingInfo NewState(Rating grade)
     {
         if (s.next.TryGetValue(grade, out var exist)) return exist;
@@ -38,6 +40,7 @@ public class LongTermScheduler : IImplScheduler
         return ReviewState(grade);
     }
 
+    //compute scheduling info for a review card based on the grade
     public SchedulingInfo ReviewState(Rating grade)
     {
         if (s.next.TryGetValue(grade, out var exist)) return exist;
@@ -61,6 +64,7 @@ public class LongTermScheduler : IImplScheduler
         return s.next[grade];
     }
 
+    //initialize the difficulties and stabilities for each possible rating
     private void InitDs(Card a, Card h, Card g, Card e)
     {
         a.Difficulty = p.InitDifficulty(Rating.Again);
@@ -76,6 +80,7 @@ public class LongTermScheduler : IImplScheduler
         e.Stability = p.InitStability(Rating.Easy);
     }
 
+    //computes next Ds for each rating based on parameters
     private void NextDs(Card a, Card h, Card g, Card e, double difficulty, double stability, double retrievability)
     {
         a.Difficulty = p.NextDifficulty(difficulty, Rating.Again);
@@ -91,6 +96,7 @@ public class LongTermScheduler : IImplScheduler
         e.Stability = p.NextRecallStability(difficulty, stability, retrievability, Rating.Easy);
     }
 
+    //computes next intervals for each rating based on parameters
     private void NextInterval(Card a, Card h, Card g, Card e, double elapsedDays)
     {
         double againInterval = p.NextInterval(a.Stability, elapsedDays);
@@ -99,6 +105,7 @@ public class LongTermScheduler : IImplScheduler
         double easyInterval = p.NextInterval(e.Stability, elapsedDays);
 
         againInterval = Math.Min(againInterval, hardInterval);
+        //ensure intervals are strictly increasing
         hardInterval = Math.Max(hardInterval, againInterval + 1);
         goodInterval = Math.Max(goodInterval, hardInterval + 1);
         easyInterval = Math.Max(easyInterval, goodInterval + 1);
@@ -116,6 +123,7 @@ public class LongTermScheduler : IImplScheduler
         e.Due = s.now.AddDays(easyInterval);
     }
 
+    //ensure next states is review for all ratings
     private void NextState(Card a, Card h, Card g, Card e)
     {
         a.State = State.Review;
@@ -124,6 +132,7 @@ public class LongTermScheduler : IImplScheduler
         e.State = State.Review;
     }
 
+    //updates scheduler recordlog with scheduling info for each rating
     private void UpdateNext(Card a, Card h, Card g, Card e)
     {
         s.next[Rating.Again] = new SchedulingInfo { Card = a, ReviewLog = s.BuildLog(Rating.Again) };

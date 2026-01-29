@@ -2,6 +2,7 @@ using HazelNet_Domain.Models;
 
 namespace HazelNet_Domain.Services.FSRS;
 
+//scheduler to be used for short term scheduling
 public class BasicScheduler : IImplScheduler
 {
     private readonly Scheduler s;
@@ -12,9 +13,10 @@ public class BasicScheduler : IImplScheduler
         s = scheduler;
     }
     
-    //setup card upon creation
+    //returns scheduling info for a new card based on the initial grade (typically hard/again)
     public SchedulingInfo NewState(Rating grade)
     {
+        //check if already computed
         if (s.next.TryGetValue(grade, out var exist)) return exist;
 
         var next = s.current.Clone();
@@ -52,6 +54,7 @@ public class BasicScheduler : IImplScheduler
         return item;
     }
 
+    //returns scheduling info for a learning/relearning card based on the grade
     public SchedulingInfo LearningState(Rating grade)
     {
         if (s.next.TryGetValue(grade, out var exist)) return exist;
@@ -66,12 +69,12 @@ public class BasicScheduler : IImplScheduler
         {
             case Rating.Again:
                 next.ScheduledDays = 0;
-                next.Due = s.now.AddMinutes(5);
+                next.Due = s.now.AddMinutes(5); //ensure same day review
                 next.State = s.last.State;
                 break;
             case Rating.Hard:
                 next.ScheduledDays = 0;
-                next.Due = s.now.AddMinutes(10);
+                next.Due = s.now.AddMinutes(10); //ensure same day review
                 next.State = s.last.State;
                 break;
             case Rating.Good:
@@ -83,6 +86,7 @@ public class BasicScheduler : IImplScheduler
             case Rating.Easy:
                 var goodStability = p.ShortTermStability(s.last.Stability, Rating.Good);
                 var gi = p.NextInterval(goodStability, interval);
+                //the interval for easy must be at least one day more than good
                 var ei = Math.Max(p.NextInterval(next.Stability, interval), gi + 1);
                 next.ScheduledDays = (ulong)ei;
                 next.Due = s.now.AddDays(ei);
@@ -95,6 +99,7 @@ public class BasicScheduler : IImplScheduler
         return item;
     }
 
+    //returns scheduling info for a review card based on the grade
     public SchedulingInfo ReviewState(Rating grade)
     {
         if (s.next.TryGetValue(grade, out var exist)) return exist;
@@ -104,11 +109,13 @@ public class BasicScheduler : IImplScheduler
         double stability = s.last.Stability;
         double retrievability = p.ForgettingCurve(interval, stability);
 
+        //clone current card for each possible grade
         var nextAgain = s.current.Clone();
         var nextHard = s.current.Clone();
         var nextGood = s.current.Clone();
         var nextEasy = s.current.Clone();
 
+        //compute next parameters for each possible grade
         NextDs(nextAgain, nextHard, nextGood, nextEasy, difficulty, stability, retrievability);
         NextInterval(nextAgain, nextHard, nextGood, nextEasy, interval);
         NextState(nextAgain, nextHard, nextGood, nextEasy);
@@ -119,14 +126,17 @@ public class BasicScheduler : IImplScheduler
         var ig = new SchedulingInfo { Card = nextGood, ReviewLog = s.BuildLog(Rating.Good) };
         var ie = new SchedulingInfo { Card = nextEasy, ReviewLog = s.BuildLog(Rating.Easy) };
 
+        //store scheduling info in record log
         s.next[Rating.Again] = ia;
         s.next[Rating.Hard] = ih;
         s.next[Rating.Good] = ig;
         s.next[Rating.Easy] = ie;
 
+        //return specific scheduling info based on grade 
         return s.next[grade];
     }
 
+    //compute next difficulty and stability for each possible grade
     private void NextDs(Card a, Card h, Card g, Card e, double difficulty, double stability, double retrievability)
     {
         a.Difficulty = p.NextDifficulty(difficulty, Rating.Again);
@@ -144,6 +154,7 @@ public class BasicScheduler : IImplScheduler
         
     }
 
+    //compute next interval for each possible grade
     private void NextInterval(Card a, Card h, Card g, Card e, double elapsedDays)
     {
         double hardInterval = p.NextInterval(h.Stability, elapsedDays);
@@ -165,6 +176,7 @@ public class BasicScheduler : IImplScheduler
         e.Due = s.now.AddDays(easyInterval);
     }
 
+    //compute next state for each possible grade
     private void NextState(Card a, Card h, Card g, Card e)
     {
         a.State = State.Relearning;

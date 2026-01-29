@@ -13,7 +13,7 @@ public class FSRS
 
     public static FSRS NewFSRS(Parameters p) => new FSRS(p);
 
-        
+    //call to preview next review without changing state
     public RecordLog Repeat(Card card, DateTime now)
     {
         var scheduler = SchedulerFactory.SchedulerFor(Parameters, card, now);
@@ -27,6 +27,7 @@ public class FSRS
         return scheduler.Review(grade);
     }
 
+    //get card's retrievability at the given time
     public double GetRetrievability(Card card, DateTime now)
     {
         if (card.State == State.New) return 0.0;
