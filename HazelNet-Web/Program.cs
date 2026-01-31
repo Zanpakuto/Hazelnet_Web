@@ -1,7 +1,12 @@
 using MudBlazor.Services;
 using HazelNet_Web.Core;
+using HazelNet_Infrastracture.DBContext;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ApplicationDbContext>( option =>
+    option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add MudBlazor services
 builder.Services.AddMudServices();
