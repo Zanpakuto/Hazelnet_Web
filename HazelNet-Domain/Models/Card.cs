@@ -4,6 +4,13 @@ public class Card
 {
     
     public int Id { get; private set; }
+    public required string FrontOfCard { get; set; }
+    public string? BackOfCard { get; set; }
+    public DateTime CreationDate { get; set; } = DateTime.Now;
+    
+    //Navigation properties
+    public int DeckId { get; set; }
+    public Deck Deck { get; set; } =  new Deck();
     
     //FSRS PROPERTIES
     public DateTime Due { get; set; }
