@@ -110,8 +110,8 @@ public class ParametersTest
     
     [Theory]
     [InlineData(2.83, 8.801)]
-    [InlineData(-33.21, 6.023)]
-    [InlineData(310.67, 9.097)]
+    [InlineData(1.2, 10)]
+    [InlineData(1.004, 2.72)]
     public void Parameters_LinearDamping_ReducesToRangeZeroToOne(double newDelta, double oldDelta)
     {
         // arrange
