@@ -2,7 +2,7 @@ using HazelNet_Domain.Services.FSRS;
 using Xunit;
 using FluentAssertions;
 
-namespace HazelNet_Tests.HazelNet_Domain.Services;
+namespace HazelNet_Tests.HazelNet_Domain.Services.FSRS;
 
 public class AleaTest
 {

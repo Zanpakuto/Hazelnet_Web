@@ -1,7 +1,7 @@
 using HazelNet_Domain.Services.FSRS;
 using HazelNet_Domain.Models;
 
-namespace HazelNet_Tests.HazelNet_Domain.Services;
+namespace HazelNet_Tests.HazelNet_Domain.Services.FSRS;
 using Xunit;
 using FluentAssertions;
 
