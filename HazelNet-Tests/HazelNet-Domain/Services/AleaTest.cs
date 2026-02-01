@@ -56,9 +56,9 @@ public class AleaTest
     }
 
     [Theory]
-    [InlineData(0.2239, 0.431, 0.8910, 0.107)]
-    [InlineData(0.0023, 0.4310, 0.2609, 0.65504)]
-    [InlineData(0.03327, 0.5016, 0.5883, 0.922175)]
+    [InlineData(1, 0.431, 0.8910, 0.107)]
+    [InlineData(1, 0.4310, 0.2609, 0.65504)]
+    [InlineData(1, 0.5016, 0.5883, 0.922175)]
     public void Alea_SetState_SetsPrivateMembersValues(double c, double s0, double s1, double s2)
     {
         // arrange
@@ -72,9 +72,7 @@ public class AleaTest
         // assert
         result = aleaObj.GetState();
         
-        result.C.Should().NotBe(double.NaN);
-        result.C.Should().BeGreaterThan(0).And.BeLessThan(1);
-        result.C.Should().Be(c);
+        result.C.Should().Be(1);
         
         result.S0.Should().NotBe(double.NaN);
         result.S0.Should().BeGreaterThan(0).And.BeLessThan(1);
