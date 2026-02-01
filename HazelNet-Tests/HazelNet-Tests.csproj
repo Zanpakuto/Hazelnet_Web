@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <RootNamespace>HazelNet_Tests</RootNamespace>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="8.8.0" />
+        <PackageReference Include="MSTest" Version="4.0.1"/>
+        <PackageReference Include="xunit" Version="2.9.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\HazelNet-Domain\HazelNet-Domain.csproj" />
+      <ProjectReference Include="..\HazelNet-Infrastracture\HazelNet-Infrastracture.csproj" />
+      <ProjectReference Include="..\HazelNet-Web\HazelNet-Web.csproj" />
+    </ItemGroup>
+
+</Project>
