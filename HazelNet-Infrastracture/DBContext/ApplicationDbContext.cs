@@ -14,10 +14,7 @@ public class ApplicationDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
-        
-        modelBuilder.ApplyConfiguration(new CardsEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new DeckEntityTypeConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 }
 public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
@@ -26,7 +23,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=HazelNetDb;Username=postgres;Password=password");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=HazelNetDb;Username=postgres;Password=Password");
         
         return new ApplicationDbContext(optionsBuilder.Options);
     }
