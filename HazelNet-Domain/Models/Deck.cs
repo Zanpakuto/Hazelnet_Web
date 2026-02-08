@@ -7,5 +7,7 @@ public class Deck
     public DateTime CreationDate { get; set; } = DateTime.Now;
     public DateTime LastAcess { get; set; } = DateTime.Now;
     
+    public User User { get; set; }
+    public int UserId { get; set; }
     public List<Card> Cards { get; set; } = new List<Card>();
 }
