@@ -97,9 +97,85 @@ namespace HazelNet_Infrastractire.Migrations
                     b.Property<DateTime>("LastAcess")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Decks");
+                });
+
+            modelBuilder.Entity("HazelNet_Domain.Models.ReviewHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CardId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CardId")
+                        .IsUnique();
+
+                    b.ToTable("ReviewHistory");
+                });
+
+            modelBuilder.Entity("HazelNet_Domain.Models.ReviewLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("ElapsedDays")
+                        .HasColumnType("numeric(20,0)");
+
+                    b.Property<short>("Rating")
+                        .HasColumnType("smallint");
+
+                    b.Property<DateTime>("Review")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ReviewHistoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("ScheduledDays")
+                        .HasColumnType("numeric(20,0)");
+
+                    b.Property<short>("State")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewHistoryId");
+
+                    b.ToTable("ReviewLog");
+                });
+
+            modelBuilder.Entity("HazelNet_Domain.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("HazelNet_Domain.Models.Card", b =>
@@ -115,7 +191,56 @@ namespace HazelNet_Infrastractire.Migrations
 
             modelBuilder.Entity("HazelNet_Domain.Models.Deck", b =>
                 {
+                    b.HasOne("HazelNet_Domain.Models.User", "User")
+                        .WithMany("Decks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HazelNet_Domain.Models.ReviewHistory", b =>
+                {
+                    b.HasOne("HazelNet_Domain.Models.Card", "Card")
+                        .WithOne("ReviewHistory")
+                        .HasForeignKey("HazelNet_Domain.Models.ReviewHistory", "CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Card");
+                });
+
+            modelBuilder.Entity("HazelNet_Domain.Models.ReviewLog", b =>
+                {
+                    b.HasOne("HazelNet_Domain.Models.ReviewHistory", "ReviewHistory")
+                        .WithMany("ReviewLogs")
+                        .HasForeignKey("ReviewHistoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ReviewHistory");
+                });
+
+            modelBuilder.Entity("HazelNet_Domain.Models.Card", b =>
+                {
+                    b.Navigation("ReviewHistory")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HazelNet_Domain.Models.Deck", b =>
+                {
                     b.Navigation("Cards");
+                });
+
+            modelBuilder.Entity("HazelNet_Domain.Models.ReviewHistory", b =>
+                {
+                    b.Navigation("ReviewLogs");
+                });
+
+            modelBuilder.Entity("HazelNet_Domain.Models.User", b =>
+                {
+                    b.Navigation("Decks");
                 });
 #pragma warning restore 612, 618
         }
