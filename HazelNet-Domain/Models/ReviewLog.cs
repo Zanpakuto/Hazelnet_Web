@@ -7,4 +7,8 @@ public class ReviewLog
     public ulong ElapsedDays { get; set; }
     public DateTime Review { get; set; }
     public State State { get; set; }
+    
+    
+    public ReviewHistory ReviewHistory { get; set; }
+    public int ReviewHistoryId { get; set; }
 }
