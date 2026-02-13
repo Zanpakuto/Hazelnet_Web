@@ -23,7 +23,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\HazelNet-Domain\HazelNet-Domain.csproj" />
+    <ProjectReference Include="..\HazelNet-Application\HazelNet-Application.csproj" />
     <ProjectReference Include="..\HazelNet-Infrastracture\HazelNet-Infrastracture.csproj" />
   </ItemGroup>
 
