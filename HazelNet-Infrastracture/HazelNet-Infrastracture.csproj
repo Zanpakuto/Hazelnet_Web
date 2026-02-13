@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\HazelNet-Application\HazelNet-Application.csproj" />
       <ProjectReference Include="..\HazelNet-Domain\HazelNet-Domain.csproj" />
     </ItemGroup>
 
