@@ -22,7 +22,17 @@ Previous Version / Iteration:
 
 ### Software Architecture
 
-There are three seperate but connected projects in this repo/solution(.sln). This uses or take inspiration from **Clean Architecure** with ***vertical slice architecture*** in features.
+There are four seperate but connected projects in this repo/solution(.sln). This uses or take inspiration from **Clean Architecure** with ***vertical slice architecture*** in each features.
+
+### Application 
+  - Orchestrate the flow of Data
+
+**Example**:
+
+    Interfaces
+    DTOs
+    USe case(Command / Queries)
+
 #### Domain
   - This part should only contain "***Pure***" buisness logic and classes.
   - There should be No database dependencies and UI Logic.
@@ -41,6 +51,8 @@ There are three seperate but connected projects in this repo/solution(.sln). Thi
     
     Entity Framework: AppDbContext.cs, Migrations/.
     Database Configuration: DbConfig classes.
+    Identity: Authentication and Authorization
+    Third Party APIs
 
 #### Web
   - The main part of the web app and composition root.
