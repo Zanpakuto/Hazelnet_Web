@@ -1,0 +1,134 @@
+﻿@using MudBlazor
+@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudLayout>
+    
+    <MudMainContent >
+        @Body
+    </MudMainContent>
+
+</MudLayout>
+
+
+
+
+@code {
+    private bool _isDarkMode = false;
+    private MudTheme? _theme = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _theme = new()
+        {
+            PaletteLight = _lightPalette,
+            PaletteDark = _darkPalette,
+            Typography = _typography,
+            LayoutProperties = new LayoutProperties()
+        };
+    }
+
+    private void DarkModeToggle()
+    {
+        _isDarkMode = !_isDarkMode;
+    }
+
+    private readonly PaletteLight _lightPalette = new()
+    {
+        Primary = "#7e6fff", // Keep brand color consistent
+        Surface = "#ffffff",
+        Background = "#fcfcfd", // Slightly off-white to make white cards "pop"
+        AppbarBackground = "rgba(255,255,255,0.8)",
+        AppbarText = "#424242",
+        DrawerBackground = "#ffffff",
+        TextPrimary = "#110e2d",
+        TextSecondary = "#67667a",
+        Success = "#2d9d78", // Slightly deeper for white backgrounds
+        Error = "#e64646",
+        Divider = "#e8e8e8",
+    };
+
+    private readonly PaletteDark _darkPalette = new()
+    {
+        Primary = "#7e6fff",
+        Surface = "#1e1e2d",
+        Background = "#1a1a27",
+        BackgroundGray = "#151521",
+        AppbarText = "#92929f",
+        AppbarBackground = "rgba(26,26,39,0.8)",
+        DrawerBackground = "#1a1a27",
+        ActionDefault = "#74718e",
+        ActionDisabled = "#99994d",
+        ActionDisabledBackground = "#605f6d",
+        TextPrimary = "#b2b0bf",
+        TextSecondary = "#92929f",
+        TextDisabled = "#ffffff33",
+        DrawerIcon = "#92929f",
+        DrawerText = "#92929f",
+        GrayLight = "#2a2833",
+        GrayLighter = "#1e1e2d",
+        Info = "#4a86ff",
+        Success = "#3dcb6c",
+        Warning = "#ffb545",
+        Error = "#ff3f5f",
+        LinesDefault = "#33323e",
+        TableLines = "#33323e",
+        Divider = "#292838",
+        OverlayLight = "#1e1e2d80",
+    };
+
+    private readonly Typography _typography = new()
+    {
+        Default = new DefaultTypography()
+        {
+            // Source Sans is a "Workhorse" font used by government and educational sites
+            FontFamily = new[] { "Source Sans 3", "Helvetica", "Arial", "sans-serif" },
+            FontSize = ".9375rem", // Slightly larger (15px) for easier reading
+            LineHeight = "1.6", // More "breathing room" between lines
+            LetterSpacing = "0"
+        },
+        H1 = new H1Typography() { FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" }, FontWeight = "800", FontSize = "2.75rem" },
+        H2 = new H2Typography() { FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" }, FontWeight = "600", FontSize = "1.75rem" },
+        H3 = new H3Typography() { FontFamily = new[] { "Plus Jakarta Sans" }, FontWeight = "600", FontSize = "1.25rem" },
+        H4 = new H4Typography() { FontFamily = new[] { "Plus Jakarta Sans" }, FontWeight = "500", FontSize = "1.1rem" },
+        H6 = new H6Typography() { 
+            FontFamily = new[] { "Plus Jakarta Sans" }, 
+            FontWeight = "600", 
+            TextTransform = "uppercase", 
+            FontSize = ".75rem", 
+            LetterSpacing = ".05em" 
+        },
+        Button = new ButtonTypography()
+        {
+            FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" },
+            FontWeight = "400",
+            TextTransform = "none", // Uppercase here feels more formal/official
+            LetterSpacing = ".1em"
+        },
+        Body1 = new Body1Typography()
+        {
+            FontSize = "1rem",
+            LineHeight = "1.6"
+        },
+
+        Body2 = new Body2Typography()
+        {
+        FontSize = ".875rem", // 14px
+        LineHeight = "1.5", // Slightly tighter than Body1, but still readable
+        LetterSpacing = ".01em",
+        FontWeight = "400"
+        }  
+    };
+
+    public string DarkLightModeButtonIcon => _isDarkMode switch
+    {
+        true => Icons.Material.Rounded.LightMode,
+        false => Icons.Material.Outlined.DarkMode,
+    };
+
+
+}
