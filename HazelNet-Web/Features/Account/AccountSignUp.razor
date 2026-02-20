@@ -8,10 +8,10 @@
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
 <DataAnnotationsValidator/>
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="text-center">
-    <MudGrid Spacing="0" Justify="Justify.Center">
+<MudContainer MaxWidth="MaxWidth.Large" Class="text-center d-flex">
+    <MudGrid Spacing="0" Justify="Justify.Center" Class="flex-grow-1">
 
-        <MudItem xs="12" md="5" Class="d-flex">
+        <MudItem xs="12" md="5"  Class="d-flex justify-center align-center">
             <MudPaper Class="pa-16 ma-2 flex-grow-1" Outlined="false" Elevation="0">
 
                 <MudStack>
@@ -22,13 +22,19 @@
                     <MudCard Elevation="0">
                         <MudCardContent>
                             <MudTextField Label="Username" HelperText="Max. 30 characters"
-                                          @bind-Value="model.Username" For="@(() => model.Username)"/>
+                                          @bind-Value="model.Username" For="@(() => model.Username)"
+                                          Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Person"/>
                             <MudTextField Label="Email" Class="mt-3"
-                                          @bind-Value="model.Email" For="@(() => model.Email)"/>
+                                          @bind-Value="model.Email" For="@(() => model.Email)"
+                                          Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Email"/>
                             <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
-                                          @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password"/>
+                                          @bind-Value="model.Password" For="@(() => model.Password)" 
+                                          InputType="InputType.Password" Clearable="true"
+                                          Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Lock"/>
                             <MudTextField Label="Check Password" HelperText="Repeat the password" Class="mt-3"
-                                          @bind-Value="model.Password2" For="@(() => model.Password2)" InputType="InputType.Password"/>
+                                          @bind-Value="model.Password2" For="@(() => model.Password2)" 
+                                          InputType="InputType.Password" Clearable="true"
+                                          Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Password"/>
                         </MudCardContent>
                         <MudCardActions>
                             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" 
@@ -44,11 +50,25 @@
         </MudItem>
 
 
-        <MudItem xs="12" md="7" Class="d-flex">
-            <MudPaper Class="pa-16 ma-2 flex-grow-1" Outlined="true" Elevation="0"
-                      Style="background: #7e6fff; border-radius: 200px 10px 10px 200px">
+        <MudItem xs="12" md="7" Class="d-flex" >
+            <MudPaper Class="pa-16 ma-5 flex-grow-1 d-flex" Outlined="true" Elevation="0"
+                      Style="background: #7e6fff; 
+                      border-radius: 100px 10px 10px 100px">
+                <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" 
+                          Class="flex-grow-1">
+                    <MudText Typo="Typo.h1" Align="Align.Center" Style="color: #fcfcfd">
+                        Welcome Back!
+                    </MudText>
+                    <MudText Typo="Typo.body1" Align="Align.Center" Style="color: #fcfcfd">
+                        Already have an account?
+                    </MudText>
 
-
+                    <MudButton Variant="Variant.Outlined" class="ma-10" Size="Size.Large"
+                               Style="background-color: transparent; color: white; width: 200px; height: 60px; border-color: white">
+                        Register
+                    </MudButton>
+                    
+                </MudStack>
             </MudPaper>
         </MudItem>
 
@@ -58,8 +78,10 @@
 </EditForm>
 
 @code {
-    RegisterAccountForm model = new RegisterAccountForm();
-    bool success;
+    public RegisterAccountForm model = new RegisterAccountForm();
+    private bool success;
+    
+    
     
     
     public class RegisterAccountForm
@@ -88,4 +110,5 @@
         success = true;
         StateHasChanged();
     }
+    
 }
