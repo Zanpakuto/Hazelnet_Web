@@ -20,9 +20,15 @@ public class Study
         
     }
     
-
+    //retrieve earliest card
     public Card RetrieveCard(List<Card> cards)
     {
         return cards.First();
+    }
+    
+    //sorts cards by time due, earliest first
+    public List<Card> SortCards(List<Card> cards)
+    {
+        return cards.OrderBy(c => c.Due).ToList();
     }
 }
