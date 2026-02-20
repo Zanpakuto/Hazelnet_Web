@@ -1,0 +1,113 @@
+﻿@page "/Login"
+@layout EmptyLayout
+
+@using System.ComponentModel.DataAnnotations
+
+<PageTitle>Account Login</PageTitle>
+
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+<DataAnnotationsValidator/>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="text-center d-flex">
+    <MudGrid Spacing="0" Justify="Justify.Center" Class="flex-grow-1">
+        
+        <MudItem xs="12" md="7" Class="d-flex align-center justify-center" >
+            <MudPaper Class="pa-16 ma-5 flex-grow-1 d-flex" Outlined="true" Elevation="0"
+                      Style="background: #7e6fff; 
+                      border-radius: 10px 100px 100px 10px">
+                <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" 
+                          Class="flex-grow-1">
+                    <MudText Typo="Typo.h1" Align="Align.Center" Style="color: #fcfcfd">
+                        Welcome Back!
+                    </MudText>
+                    <MudText Typo="Typo.body1" Align="Align.Center" Style="color: #fcfcfd"
+                             Class="mt-10">
+                        Don't have an account?
+                    </MudText>
+                    
+
+                    <MudButton Variant="Variant.Outlined" class="mb-10" Size="Size.Large"
+                               Href="/SignUp"
+                               Style="background-color: transparent; color: white; width: 200px; height: 60px; border-color: white">
+                        Register 
+                    </MudButton>
+                    
+                </MudStack>
+            </MudPaper>
+        </MudItem>
+
+
+        <MudItem xs="12" md="5" Class="d-flex justify-center align-center">
+            <MudPaper Class="pa-16 ma-2 flex-grow-1" Outlined="false" Elevation="0">
+
+                <MudStack>
+                    <MudText Typo="Typo.h1" Color="Color.Default" Align="Align.Center">
+                        Login
+                    </MudText>
+
+                    <MudCard Elevation="0">
+                        <MudCardContent>
+                            <MudTextField Label="Username" HelperText="Enter your username"
+                                          @bind-Value="model.Username" For="@(() => model.Username)"
+                                          Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Person"/>
+                            <MudTextField Label="Password" HelperText="Enter your password" Class="mt-3"
+                                          @bind-Value="model.Password" For="@(() => model.Password)"
+                                          InputType="InputType.Password" Clearable="true"
+                                          Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Lock"/>
+                        </MudCardContent>
+                        <MudText Typo="Typo.caption" Align="Align.End" Color="Color.Dark">
+                            forgot password?
+                        </MudText> 
+                        <MudCardActions>
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+                                       Color="Color.Primary" Class="ml-auto" Size="Size.Large"
+                                       FullWidth="true">
+                                Login
+                            </MudButton>
+                        </MudCardActions>
+                        <MudText Typo="Typo.caption" Align="Align.Center" Color="Color.Dark"
+                                 Class="my-3">
+                            or login with
+                        </MudText> 
+                        <MudStack Row="true" Spacing="3" Justify="Justify.Center">
+                            <MudIconButton Icon="@Icons.Custom.Brands.Google" Color="Color.Dark" aria-label="google" Size="Size.Large"/>
+                            <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Color="Color.Dark" aria-label="facebook" Size="Size.Large"/>
+                            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Dark" aria-label="github" Size="Size.Large"/>
+                            <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn" Color="Color.Dark" aria-label="linkedin" Size="Size.Large"/>
+
+                        </MudStack>
+                    </MudCard>
+                </MudStack>
+
+            </MudPaper>
+        </MudItem>
+
+    </MudGrid>
+</MudContainer>
+
+</EditForm>
+
+@code {
+    public RegisterAccountForm model = new RegisterAccountForm();
+    private bool success;
+    
+    
+    
+    
+    public class RegisterAccountForm
+    {
+        [Required]
+        public string Username { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+        
+    }
+
+    private void OnValidSubmit(EditContext context)
+    {
+        success = true;
+        StateHasChanged();
+    }
+    
+}
