@@ -43,6 +43,16 @@
                                 Register
                             </MudButton>
                         </MudCardActions>
+                        <MudText Typo="Typo.caption" Align="Align.Center" Color="Color.Dark">
+                            or signup with
+                        </MudText> 
+                        <MudStack Row="true" Spacing="3" Justify="Justify.Center">
+                            <MudIconButton Icon="@Icons.Custom.Brands.Google" Color="Color.Dark" aria-label="google" Size="Size.Large"/>
+                            <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Color="Color.Dark" aria-label="facebook" Size="Size.Large"/>
+                            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Dark" aria-label="github" Size="Size.Large"/>
+                            <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn" Color="Color.Dark" aria-label="linkedin" Size="Size.Large"/>
+
+                        </MudStack>
                     </MudCard>
                 </MudStack>
 
@@ -57,15 +67,17 @@
                 <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" 
                           Class="flex-grow-1">
                     <MudText Typo="Typo.h1" Align="Align.Center" Style="color: #fcfcfd">
-                        Welcome Back!
+                        Welcome to HazelNet!
                     </MudText>
-                    <MudText Typo="Typo.body1" Align="Align.Center" Style="color: #fcfcfd">
+                    <MudText Typo="Typo.body1" Align="Align.Center" Style="color: #fcfcfd"
+                             Class="mt-10">
                         Already have an account?
                     </MudText>
 
-                    <MudButton Variant="Variant.Outlined" class="ma-10" Size="Size.Large"
+                    <MudButton Variant="Variant.Outlined" class="mb-10" Size="Size.Large"
+                               Href="/Login"
                                Style="background-color: transparent; color: white; width: 200px; height: 60px; border-color: white">
-                        Register
+                        Login 
                     </MudButton>
                     
                 </MudStack>
