@@ -1,5 +1,6 @@
 using HazelNet_Domain.Models;
 using HazelNet_Domain.Services.FSRS;
+using System.Linq;
 
 namespace HazelNet_Domain.Services.StudySession;
 
@@ -17,5 +18,11 @@ public class Study
         //log result
         //di accessible db from my end for some reason
         
+    }
+    
+
+    public Card RetrieveCard(List<Card> cards)
+    {
+        return cards.First();
     }
 }
