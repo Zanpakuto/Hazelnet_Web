@@ -13,7 +13,11 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.Property(c => c.Username)
             .HasMaxLength(30)
             .IsRequired();
+
+        builder.Property(c => c.PasswordHash)
+            .HasMaxLength(512);
         
+
         builder.HasMany(c => c.Decks)
             .WithOne(d => d.User)
             .HasForeignKey(d => d.UserId);
