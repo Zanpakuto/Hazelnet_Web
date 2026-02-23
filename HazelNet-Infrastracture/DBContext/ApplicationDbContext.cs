@@ -8,6 +8,9 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Deck> Decks { get; set; }
     public DbSet<Card> Cards { get; set; }
+    public DbSet<ReviewHistory> ReviewHistory { get; set; }
+    public DbSet<ReviewLog> ReviewLogs { get; set; }
+    public DbSet<User> User { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         :base(options) {}
