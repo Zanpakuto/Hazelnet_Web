@@ -9,7 +9,7 @@ public class UserRepository :  IUserRepository
 {
     public readonly ApplicationDbContext _context;
 
-    private UserRepository(ApplicationDbContext context)
+    public UserRepository(ApplicationDbContext context)
     {
         _context = context;
     }
