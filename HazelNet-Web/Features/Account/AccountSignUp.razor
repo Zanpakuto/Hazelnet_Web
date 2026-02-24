@@ -1,9 +1,20 @@
-﻿@page "/SignUp"
+﻿@page "/register"
 @layout EmptyLayout
+
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
 
 @using System.ComponentModel.DataAnnotations
 
 <PageTitle>Account Sign Up</PageTitle>
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <MudAlert Severity="Severity.Error" Class="mb-4" ShowCloseIcon="true" CloseIconClicked="(() => _errorMessage = null)">
+        @_errorMessage
+    </MudAlert>
+}
 
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
 <DataAnnotationsValidator/>
@@ -75,7 +86,7 @@
                     </MudText>
 
                     <MudButton Variant="Variant.Outlined" class="mb-10" Size="Size.Large"
-                               Href="/Login"
+                               Href="/login"
                                Style="background-color: transparent; color: white; width: 200px; height: 60px; border-color: white">
                         Login 
                     </MudButton>
@@ -93,6 +104,8 @@
     public RegisterAccountForm model = new RegisterAccountForm();
     private bool success;
     
+    private string? _errorMessage;
+    private bool _isBusy;
     
     
     
@@ -111,16 +124,44 @@
         [RegularExpression(@"^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)).+$", ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, and one digit.")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "   must match the password above")]
-        [Compare(nameof(Password))]
+        [Required]
+        [Compare(nameof(Password), ErrorMessage = "Passwords do not match.")]
         public string Password2 { get; set; }
 
     }
 
-    private void OnValidSubmit(EditContext context)
+    private async Task OnValidSubmit(EditContext context)
     {
-        success = true;
-        StateHasChanged();
+        _isBusy = true;
+        _errorMessage = null;
+        
+        var absoluteUri = Navigation.ToAbsoluteUri("/register");        
+        
+        try
+        {
+            // Assuming standard API convention. Change logic if using Blazor Server.
+            var response = await Http.PostAsJsonAsync(absoluteUri, model);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Navigation.NavigateTo("/login?success=registered");
+            }
+            else
+            {
+                // Read error, display locally, DO NOT Navigate
+                _errorMessage = await response.Content.ReadAsStringAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = "An unexpected error occurred.";
+            // Log error to console or logging service
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _isBusy = false;
+        }
     }
     
 }

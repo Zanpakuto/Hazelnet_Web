@@ -24,4 +24,12 @@ public class UserRepository :  IUserRepository
         _context.User.Add(user);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<string> GetPasswordHashAsync(string email)
+    {
+        return await _context.User
+            .Where(c => c.EmailAddress == email)
+            .Select(c => c.PasswordHash)
+            .FirstOrDefaultAsync();
+    }
 }
