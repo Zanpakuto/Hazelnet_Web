@@ -1,9 +1,19 @@
-﻿@page "/Login"
+﻿@page "/login"
 @layout EmptyLayout
 
 @using System.ComponentModel.DataAnnotations
 
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
 <PageTitle>Account Login</PageTitle>
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <MudAlert Severity="Severity.Error" Class="mb-4" ShowCloseIcon="true" CloseIconClicked="(() => _errorMessage = null)">
+        @_errorMessage
+    </MudAlert>
+}
 
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
 <DataAnnotationsValidator/>
@@ -27,7 +37,7 @@
                     
 
                     <MudButton Variant="Variant.Outlined" class="mb-10" Size="Size.Large"
-                               Href="/SignUp"
+                               Href="/register"
                                Style="background-color: transparent; color: white; width: 200px; height: 60px; border-color: white">
                         Register 
                     </MudButton>
@@ -47,8 +57,8 @@
 
                     <MudCard Elevation="0">
                         <MudCardContent>
-                            <MudTextField Label="Username" HelperText="Enter your username"
-                                          @bind-Value="model.Username" For="@(() => model.Username)"
+                            <MudTextField Label="Email" HelperText="Enter your username"
+                                          @bind-Value="model.Email" For="@(() => model.Email)"
                                           Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Person"/>
                             <MudTextField Label="Password" HelperText="Enter your password" Class="mt-3"
                                           @bind-Value="model.Password" For="@(() => model.Password)"
@@ -90,24 +100,53 @@
 @code {
     public RegisterAccountForm model = new RegisterAccountForm();
     private bool success;
-    
+    private string? _errorMessage;
+    private bool _isBusy;
     
     
     
     public class RegisterAccountForm
     {
         [Required]
-        public string Username { get; set; }
+        public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }
         
     }
 
-    private void OnValidSubmit(EditContext context)
+    private async Task OnValidSubmit(EditContext context)
     {
-        success = true;
-        StateHasChanged();
+        _isBusy = true;
+        _errorMessage = null;
+        
+        var absoluteUri = Navigation.ToAbsoluteUri("/login");   
+        
+        try
+        {
+            // Assuming standard API convention. Change logic if using Blazor Server.
+            var response = await Http.PostAsJsonAsync(absoluteUri, model);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Navigation.NavigateTo("/counter?success=registered");
+            }
+            else
+            {
+                // Read error, display locally, DO NOT Navigate
+                _errorMessage = await response.Content.ReadAsStringAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = "An unexpected error occurred.";
+            // Log error to console or logging service
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _isBusy = false;
+        }
     }
     
 }
