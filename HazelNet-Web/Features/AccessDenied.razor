@@ -1,0 +1,43 @@
+﻿@page "/AccessDenied"
+@layout EmptyLayout
+
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="text-center align-center pa-5 ">
+    
+    <MudStack xs="12" Spacing="2" Justify="Justify.Center" 
+              Class="object-center" AlignItems="AlignItems.Center">
+              
+        <MudText Typo="Typo.h1" Align="Align.Center"
+                 Color="Color.Primary">
+            401
+        </MudText>
+        
+        <MudText Typo="Typo.h2" Align="Align.Center"
+                 Color="Color.Primary">
+            Access Denied
+        </MudText>
+        
+        <MudText Typo="Typo.h4" Align="Align.Center"
+                 Color="Color.Dark">
+            Sorry, you don't have permission to access this page.
+        </MudText>
+        
+        <MudText Typo="Typo.h4" Align="Align.Center"
+                 Color="Color.Dark">
+            You can go back to
+            <!-- Currently redirects to Home page. Implement previous page route-->
+            <span style="color: #7e6fff; font-style: italic">
+                <MudLink Href="/">
+                    home page
+                </MudLink>
+            </span>
+        </MudText>
+        
+        <MudImage Src="/Svg/Denied.svg" Alt="Access Denied Graphics" Elevation="0" 
+                  Class="rounded-lg" Height="400" Width="400"
+                  ObjectPosition="ObjectPosition.Center" ObjectFit="ObjectFit.Contain"/>
+        
+    </MudStack>
+
+</MudContainer>
+
