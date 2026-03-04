@@ -55,4 +55,28 @@ public class CardService
             .FirstOrDefaultAsync(rh => rh.CardId == cardId);
     }
 
+    public async Task AddReviewHistoryToCardAsync(int cardId, ReviewHistory reviewHistory)
+    {
+        var card = await _context.Cards.FindAsync(cardId);
+        if (card != null)
+        {
+            reviewHistory.CardId = cardId; // Set the foreign key
+            reviewHistory.Card = card; // Set the navigation property
+            _context.ReviewHistory.Add(reviewHistory);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task DeleteReviewHistoryByCardIdAsync(int cardId)
+    {
+        var reviewHistory = await _context.ReviewHistory
+            .FirstOrDefaultAsync(rh => rh.CardId == cardId);
+
+        if (reviewHistory != null)
+        {
+            _context.ReviewHistory.Remove(reviewHistory);
+            await _context.SaveChangesAsync();
+        }
+    }
+
 }

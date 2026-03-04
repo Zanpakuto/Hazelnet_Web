@@ -72,10 +72,22 @@ public class DeckService
         if (deck != null)
         {
             card.DeckId = deckId;
-
+            card.Deck = deck;
             deck.Cards.Add(card);
             deck.LastAcess = DateTime.Now;
             await _context.SaveChangesAsync();
         }
     }   
+
+    public async Task RemoveCardFromDeckAsync(int deckId, int cardId)
+    {
+        var card = await _context.Cards
+            .FirstOrDefaultAsync(c => c.Id == cardId && c.DeckId == deckId);
+
+        if (card != null)
+        {
+            _context.Cards.Remove(card);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

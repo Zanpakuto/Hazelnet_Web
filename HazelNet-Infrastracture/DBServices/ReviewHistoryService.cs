@@ -58,4 +58,32 @@ public class ReviewHistoryService
         return logs.ToList().OrderByDescending(log => log.Review).ToList(); // Sort by review date descending
     }
 
+    public async Task AddReviewLogToReviewHistoryAsync(int reviewHistoryId, ReviewLog reviewLog)
+    {
+        var reviewHistory = await _context.ReviewHistory
+            .Include(rh => rh.ReviewLogs) // Include related review logs
+            .FirstOrDefaultAsync(rh => rh.Id == reviewHistoryId);
+
+        if (reviewHistory != null)
+        {
+            reviewLog.ReviewHistoryId = reviewHistoryId; // Set the foreign key
+            reviewLog.ReviewHistory = reviewHistory; // Set the navigation property
+            reviewHistory.ReviewLogs.Add(reviewLog);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task DeleteReviewLogsByReviewHistoryIdAsync(int reviewHistoryId)
+    {
+        var reviewHistory = await _context.ReviewHistory
+            .Include(rh => rh.ReviewLogs) // Include related review logs
+            .FirstOrDefaultAsync(rh => rh.Id == reviewHistoryId);
+
+        if (reviewHistory != null)
+        {
+            _context.ReviewLogs.RemoveRange(reviewHistory.ReviewLogs);
+            await _context.SaveChangesAsync();
+        }
+    }
+
 }
