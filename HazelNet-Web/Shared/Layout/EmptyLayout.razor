@@ -12,7 +12,6 @@
 
 
 
-
 @code {
     private bool _isDarkMode = false;
     private MudTheme? _theme = null;
@@ -27,6 +26,11 @@
             PaletteDark = _darkPalette,
             Typography = _typography,
             LayoutProperties = new LayoutProperties()
+            {
+                DefaultBorderRadius = "8px",
+                DrawerWidthLeft = "260px",
+                AppbarHeight = "64px",
+            }
         };
     }
 
@@ -35,98 +39,255 @@
         _isDarkMode = !_isDarkMode;
     }
 
+    // Primary: #7e6fff — a medium-weight indigo-violet
+    // Light palette built around warm whites and the violet accent
+
     private readonly PaletteLight _lightPalette = new()
     {
-        Primary = "#7e6fff", // Keep brand color consistent
-        Surface = "#ffffff",
-        Background = "#fcfcfd", // Slightly off-white to make white cards "pop"
-        AppbarBackground = "rgba(255,255,255,0.8)",
-        AppbarText = "#424242",
+        // Brand
+        Primary          = "#7e6fff",
+        PrimaryDarken    = "#6355e0",
+        PrimaryLighten   = "#a898ff",
+        PrimaryContrastText = "#ffffff",
+
+        Secondary        = "#f0eeff",          // Very light violet tint — used for chips, tags, soft surfaces
+        SecondaryContrastText = "#7e6fff",
+
+        Tertiary         = "#f5a623",          // Warm amber for highlights/badges
+
+        // Semantic
+        Info             = "#3b82f6",          // Clear blue
+        InfoContrastText = "#ffffff",
+        Success          = "#16a34a",          // Accessible green on white (WCAG AA)
+        SuccessContrastText = "#ffffff",
+        Warning          = "#d97706",          // Amber — readable on white
+        WarningContrastText = "#ffffff",
+        Error            = "#dc2626",          // Standard red
+        ErrorContrastText = "#ffffff",
+
+        // Surfaces
+        Background       = "#f8f7ff",          // Barely-there violet wash — ties back to brand
+        BackgroundGray   = "#f0eeff",          // Violet-tinted gray for sidebars/zebra rows
+        Surface          = "#ffffff",
         DrawerBackground = "#ffffff",
-        TextPrimary = "#110e2d",
-        TextSecondary = "#67667a",
-        Success = "#2d9d78", // Slightly deeper for white backgrounds
-        Error = "#e64646",
-        Divider = "#e8e8e8",
+
+        // Appbar
+        AppbarBackground = "rgba(248,247,255,0.85)",  // Frosted glass — apply backdrop-filter in CSS
+        AppbarText       = "#1e1b4b",
+
+        // Text
+        TextPrimary      = "#1e1b4b",          // Deep indigo-black — on-brand
+        TextSecondary    = "#6b6b80",          // Neutral mid-gray
+        TextDisabled     = "#b0afc2",          // Muted, clearly inactive
+
+        // Actions
+        ActionDefault         = "#7e6fff",
+        ActionDisabled        = "#c4c3d4",     // Muted gray-violet, clearly inactive
+        ActionDisabledBackground = "#ededf5",
+
+        // Lines & dividers
+        Divider          = "#e8e7f3",          // Slightly violet-tinted
+        LinesDefault     = "#e8e7f3",
+        TableLines       = "#e8e7f3",
+
+        // Grays (used by MudBlazor internals for hover states etc.)
+        GrayDefault      = "#9e9db5",
+        GrayLight        = "#e8e7f3",
+        GrayLighter      = "#f4f3fc",
+        GrayDark         = "#4a4860",
+        GrayDarker       = "#2d2b45",
+
+        // Overlays
+        OverlayLight     = "rgba(248,247,255,0.6)",
+        OverlayDark      = "rgba(30,27,75,0.5)",
     };
 
     private readonly PaletteDark _darkPalette = new()
     {
-        Primary = "#7e6fff",
-        Surface = "#1e1e2d",
-        Background = "#1a1a27",
-        BackgroundGray = "#151521",
-        AppbarText = "#92929f",
-        AppbarBackground = "rgba(26,26,39,0.8)",
-        DrawerBackground = "#1a1a27",
-        ActionDefault = "#74718e",
-        ActionDisabled = "#99994d",
-        ActionDisabledBackground = "#605f6d",
-        TextPrimary = "#b2b0bf",
-        TextSecondary = "#92929f",
-        TextDisabled = "#ffffff33",
-        DrawerIcon = "#92929f",
-        DrawerText = "#92929f",
-        GrayLight = "#2a2833",
-        GrayLighter = "#1e1e2d",
-        Info = "#4a86ff",
-        Success = "#3dcb6c",
-        Warning = "#ffb545",
-        Error = "#ff3f5f",
-        LinesDefault = "#33323e",
-        TableLines = "#33323e",
-        Divider = "#292838",
-        OverlayLight = "#1e1e2d80",
+        // Brand — same primary, slightly brighter in dark to maintain contrast
+        Primary          = "#7e6fff",
+        PrimaryDarken    = "#6355e0",
+        PrimaryLighten   = "#a898ff",
+        PrimaryContrastText = "#ffffff",
+
+        Secondary        = "#2a2840",          // Deep violet surface — pairs with primary
+        SecondaryContrastText = "#a898ff",
+
+        Tertiary         = "#f5a623",
+
+        // Semantic — all brightened slightly for dark backgrounds
+        Info             = "#60a5fa",
+        InfoContrastText = "#0f172a",
+        Success          = "#4ade80",
+        SuccessContrastText = "#052e16",
+        Warning          = "#fbbf24",
+        WarningContrastText = "#1c0900",
+        Error            = "#f87171",
+        ErrorContrastText = "#1c0000",
+
+        // Surfaces — layered dark violet scale
+        Background       = "#13121f",          // Deepest layer
+        BackgroundGray   = "#0f0e1a",          // Even deeper — drawer backgrounds, sidebars
+        Surface          = "#1c1b2e",          // Cards, dialogs
+        DrawerBackground = "#13121f",
+
+        // Appbar
+        AppbarBackground = "rgba(19,18,31,0.85)",
+        AppbarText       = "#a5a3be",
+
+        // Text
+        TextPrimary      = "#e8e6ff",          // Slightly violet-white
+        TextSecondary    = "#9997b5",          // Mid tone
+        TextDisabled     = "rgba(255,255,255,0.2)",
+
+        // Actions
+        ActionDefault         = "#a898ff",     // Lighter primary for icon buttons in dark
+        ActionDisabled        = "#4a4860",
+        ActionDisabledBackground = "#252338",
+
+        // Drawer
+        DrawerText       = "#9997b5",
+        DrawerIcon       = "#7e6fff",          // Violet icons in nav — on-brand
+
+        // Lines & dividers
+        Divider          = "#2c2a42",
+        LinesDefault     = "#2c2a42",
+        TableLines       = "#2c2a42",
+
+        // Grays
+        GrayDefault      = "#6b6985",
+        GrayLight        = "#252338",
+        GrayLighter      = "#1c1b2e",
+        GrayDark         = "#a5a3be",
+        GrayDarker       = "#e8e6ff",
+
+        // Overlays
+        OverlayLight     = "rgba(28,27,46,0.7)",
+        OverlayDark      = "rgba(0,0,0,0.6)",
     };
 
     private readonly Typography _typography = new()
     {
         Default = new DefaultTypography()
         {
-            // Source Sans is a "Workhorse" font used by government and educational sites
-            FontFamily = new[] { "Source Sans 3", "Helvetica", "Arial", "sans-serif" },
-            FontSize = ".9375rem", // Slightly larger (15px) for easier reading
-            LineHeight = "1.6", // More "breathing room" between lines
+            // Figtree: modern, geometric, warm — excellent for apps/dashboards
+            FontFamily    = new[] { "Figtree", "system-ui", "sans-serif" },
+            FontSize      = "0.9375rem",   // 15px — slightly more comfortable than 14px
+            FontWeight    = "400",
+            LineHeight    = "1.6",
             LetterSpacing = "0"
         },
-        H1 = new H1Typography() { FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" }, FontWeight = "800", FontSize = "2.75rem" },
-        H2 = new H2Typography() { FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" }, FontWeight = "600", FontSize = "1.75rem" },
-        H3 = new H3Typography() { FontFamily = new[] { "Plus Jakarta Sans" }, FontWeight = "600", FontSize = "1.25rem" },
-        H4 = new H4Typography() { FontFamily = new[] { "Plus Jakarta Sans" }, FontWeight = "500", FontSize = "1.1rem" },
-        H6 = new H6Typography() { 
-            FontFamily = new[] { "Plus Jakarta Sans" }, 
-            FontWeight = "600", 
-            TextTransform = "uppercase", 
-            FontSize = ".75rem", 
-            LetterSpacing = ".05em" 
-        },
-        Button = new ButtonTypography()
+
+        // Plus Jakarta Sans kept for headings — works well with Figtree
+        H1 = new H1Typography()
         {
-            FontFamily = new[] { "Plus Jakarta Sans", "sans-serif" },
-            FontWeight = "400",
-            TextTransform = "none", // Uppercase here feels more formal/official
-            LetterSpacing = ".1em"
+            FontFamily    = new[] { "Plus Jakarta Sans", "sans-serif" },
+            FontWeight    = "800",
+            FontSize      = "2.5rem",      // 40px
+            LineHeight    = "1.2",
+            LetterSpacing = "-0.02em"      // Tight tracking on large display text
         },
-        Body1 = new Body1Typography()
+        H2 = new H2Typography()
         {
-            FontSize = "1rem",
-            LineHeight = "1.6"
+            FontFamily    = new[] { "Plus Jakarta Sans", "sans-serif" },
+            FontWeight    = "700",
+            FontSize      = "2rem",        // 32px
+            LineHeight    = "1.25",
+            LetterSpacing = "-0.015em"
+        },
+        H3 = new H3Typography()
+        {
+            FontFamily    = new[] { "Plus Jakarta Sans", "sans-serif" },
+            FontWeight    = "600",
+            FontSize      = "1.5rem",      // 24px
+            LineHeight    = "1.3",
+            LetterSpacing = "-0.01em"
+        },
+        H4 = new H4Typography()
+        {
+            FontFamily    = new[] { "Plus Jakarta Sans", "sans-serif" },
+            FontWeight    = "600",
+            FontSize      = "1.25rem",     // 20px
+            LineHeight    = "1.4",
+            LetterSpacing = "-0.005em"
+        },
+        H5 = new H5Typography()
+        {
+            FontFamily    = new[] { "Plus Jakarta Sans", "sans-serif" },
+            FontWeight    = "600",
+            FontSize      = "1.125rem",    // 18px — was missing entirely
+            LineHeight    = "1.4",
+            LetterSpacing = "0"
+        },
+        H6 = new H6Typography()
+        {
+            FontFamily    = new[] { "Figtree", "sans-serif" },   // Body font for small labels
+            FontWeight    = "700",
+            FontSize      = "0.75rem",     // 12px
+            LineHeight    = "1.5",
+            LetterSpacing = "0.08em",      // Wide tracking for uppercase labels
+            TextTransform = "uppercase"
         },
 
+        Body1 = new Body1Typography()
+        {
+            FontSize      = "0.9375rem",   // Match default — 15px
+            LineHeight    = "1.6",
+            LetterSpacing = "0"
+        },
         Body2 = new Body2Typography()
         {
-        FontSize = ".875rem", // 14px
-        LineHeight = "1.5", // Slightly tighter than Body1, but still readable
-        LetterSpacing = ".01em",
-        FontWeight = "400"
-        }  
+            FontSize      = "0.875rem",    // 14px
+            LineHeight    = "1.55",
+            LetterSpacing = "0",
+            FontWeight    = "400"
+        },
+
+        Subtitle1 = new Subtitle1Typography()
+        {
+            FontSize      = "0.9375rem",
+            FontWeight    = "600",
+            LineHeight    = "1.5",
+            LetterSpacing = "0"
+        },
+        Subtitle2 = new Subtitle2Typography()
+        {
+            FontSize      = "0.875rem",
+            FontWeight    = "600",
+            LineHeight    = "1.5",
+            LetterSpacing = "0"
+        },
+
+        Button = new ButtonTypography()
+        {
+            FontFamily    = new[] { "Figtree", "sans-serif" },
+            FontWeight    = "600",
+            FontSize      = "0.875rem",
+            LetterSpacing = "0.02em",      // Subtle — modern apps don't use wide button tracking
+            TextTransform = "none"         // Sentence case is the modern standard
+        },
+
+        Caption = new CaptionTypography()
+        {
+            FontSize      = "0.75rem",     // 12px
+            FontWeight    = "400",
+            LineHeight    = "1.5",
+            LetterSpacing = "0.01em"
+        },
+
+        Overline = new OverlineTypography()
+        {
+            FontSize      = "0.6875rem",   // 11px
+            FontWeight    = "700",
+            LineHeight    = "1.5",
+            LetterSpacing = "0.1em",
+            TextTransform = "uppercase"
+        }
     };
 
     public string DarkLightModeButtonIcon => _isDarkMode switch
     {
-        true => Icons.Material.Rounded.LightMode,
+        true  => Icons.Material.Rounded.LightMode,
         false => Icons.Material.Outlined.DarkMode,
     };
-
-
 }
