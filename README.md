@@ -65,4 +65,14 @@ There are four seperate but connected projects in this repo/solution(.sln). This
 
 ---
 
+### Current Progress
 
+#### Landing Page
+![Picture of Landing](/Readme_Images/Homepage.png)
+
+![Picture of Landing](/Readme_Images/Homepage2.png)
+
+#### Authentication
+![Picture of Login Page](/Readme_Images/Login.png)
+
+![Picture of Registration Page](/Readme_Images/Register.png)
