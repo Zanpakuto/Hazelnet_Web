@@ -15,11 +15,13 @@ public class ReviewHistoryService
         _context = context;
     }
 
+    //retrieves all review histories
     public async Task<List<ReviewHistory>> GetAllReviewHistoriesAsync()
     {
         return await _context.ReviewHistory.ToListAsync();
     }
 
+    //retrieves a review history by ID
     public async Task<ReviewHistory?> GetReviewHistoryByIdAsync(int reviewHistoryId)
     {
         return await _context.ReviewHistory
@@ -27,23 +29,15 @@ public class ReviewHistoryService
     }
 
 
-
+    //update the review history whenever contents are modified
     public async Task UpdateReviewHistoryAsync(ReviewHistory reviewHistory)
     {
         _context.ReviewHistory.Update(reviewHistory);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteReviewHistoryAsync(int reviewHistoryId)
-    {
-        var reviewHistory = await _context.ReviewHistory.FindAsync(reviewHistoryId);
-        if (reviewHistory != null)
-        {
-            _context.ReviewHistory.Remove(reviewHistory);
-            await _context.SaveChangesAsync();
-        }
-    }
 
+    //retrieves reviewlogs for a review history
     public async Task<List<ReviewLog>> GetReviewLogsByReviewHistoryIdAsync(int reviewHistoryId)
     {
         var reviewHistory = await _context.ReviewHistory
@@ -54,6 +48,7 @@ public class ReviewHistoryService
         return logs.ToList().OrderByDescending(log => log.Review).ToList(); // Sort by review date descending
     }
 
+    //adds a review log to a review history
     public async Task AddReviewLogToReviewHistoryAsync(int reviewHistoryId, ReviewLog reviewLog)
     {
         var reviewHistory = await _context.ReviewHistory
@@ -69,6 +64,7 @@ public class ReviewHistoryService
         }
     }
 
+    //deletes a review log from a review history.
     public async Task DeleteReviewLogsByReviewHistoryIdAsync(int reviewHistoryId)
     {
         var reviewHistory = await _context.ReviewHistory

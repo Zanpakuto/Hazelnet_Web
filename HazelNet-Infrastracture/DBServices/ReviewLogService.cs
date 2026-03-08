@@ -15,22 +15,20 @@ public class ReviewLogService
         _context = context;
     }
 
+
+    //retrieves all review logs
     public async Task<List<ReviewLog>> GetAllReviewLogsAsync()
     {
         return await _context.ReviewLogs.ToListAsync();
     }
 
+    //retrieves a review log by ID
     public async Task<ReviewLog?> GetReviewLogByIdAsync(int reviewLogId)
     {
         return await _context.ReviewLogs
             .FirstOrDefaultAsync(r => r.Id == reviewLogId);
     }
 
-    public async Task AddReviewLogAsync(ReviewLog reviewLog)
-    {
-        _context.ReviewLogs.Add(reviewLog);
-        await _context.SaveChangesAsync();
-    }
 
     public async Task UpdateReviewLogAsync(ReviewLog reviewLog)
     {
@@ -38,13 +36,5 @@ public class ReviewLogService
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteReviewLogAsync(int reviewLogId)
-    {
-        var reviewLog = await _context.ReviewLogs.FindAsync(reviewLogId);
-        if (reviewLog != null)
-        {
-            _context.ReviewLogs.Remove(reviewLog);
-            await _context.SaveChangesAsync();
-        }
-    }
+
 }

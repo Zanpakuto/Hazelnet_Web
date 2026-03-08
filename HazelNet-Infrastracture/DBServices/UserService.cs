@@ -15,29 +15,34 @@ public class UserService
         _context = context;
     }
 
+    //retrieves all users
     public async Task<List<User>> GetAllUsersAsync()
     {
         return await _context.User.ToListAsync();
     }
 
+    //retrieves a user by ID
     public async Task<User?> GetUserByIdAsync(int userId)
     {
         return await _context.User
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
+    //adds a new user to the database
     public async Task AddUserAsync(User user)
     {
         _context.User.Add(user);
         await _context.SaveChangesAsync();
     }
 
+    //updates the user whenever contents are modified
     public async Task UpdateUserAsync(User user)
     {
         _context.User.Update(user);
         await _context.SaveChangesAsync();
     }
 
+    //deletes a user from the database
     public async Task DeleteUserAsync(int userId)
     {
         var user = await _context.User.FindAsync(userId);
@@ -48,6 +53,7 @@ public class UserService
         }
     }
 
+    //retrieves all decks associated with a user
     public async Task<List<Deck>> GetDecksByUserIdAsync(int userId)
     {
         var user = await _context.User
@@ -57,6 +63,7 @@ public class UserService
         return user?.Decks ?? new List<Deck>();
     }
 
+    //adds a deck to a user
     public async Task AddDeckToUserAsync(int userId, Deck deck)
     {
         var user = await _context.User
@@ -72,6 +79,7 @@ public class UserService
         }
     }
 
+    //deletes all decks associated with a user
     public async Task DeleteDecksByUserIdAsync(int userId)
     {
         var user = await _context.User

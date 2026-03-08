@@ -15,34 +15,29 @@ public class CardService
         _context = context;
     }
 
+    //Retrieves all cards
     public async Task<List<Card>> GetAllCardsAsync()
     {
         return await _context.Cards.ToListAsync();
     }
 
-    public async Task<Card> GetCardByIdAsync(int cardId)
+
+    //retrieve a card by ID
+    public async Task<Card?> GetCardByIdAsync(int cardId)
     {
         return await _context.Cards
             .FirstOrDefaultAsync(c => c.Id == cardId);
     }
 
 
+    //update the card whenever contents are modified
     public async Task UpdateCardAsync(Card card)
     {
         _context.Cards.Update(card);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteCardAsync(int cardId)
-    {
-        var card = await _context.Cards.FindAsync(cardId);
-        if (card != null)
-        {
-            _context.Cards.Remove(card);
-            await _context.SaveChangesAsync();
-        }
-    }
-
+    //retrieves review history for a card
     public async Task<ReviewHistory?> GetReviewHistoryByCardIdAsync(int cardId)
     {
         return await _context.ReviewHistory
@@ -50,6 +45,7 @@ public class CardService
             .FirstOrDefaultAsync(rh => rh.CardId == cardId);
     }
 
+    //adds review history to a card. sets reviewhistory ID to be the same as card ID to maintain 1:1 relationship
     public async Task AddReviewHistoryToCardAsync(int cardId, ReviewHistory reviewHistory)
     {
         var card = await _context.Cards.FindAsync(cardId);
@@ -63,6 +59,7 @@ public class CardService
         }
     }
 
+    //deletes review history for a card. recommend using this method instead of ReviewHistoryService method to maintain referential integrity
     public async Task DeleteReviewHistoryByCardIdAsync(int cardId)
     {
         var reviewHistory = await _context.ReviewHistory
