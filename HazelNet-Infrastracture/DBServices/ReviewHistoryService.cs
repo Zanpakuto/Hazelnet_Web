@@ -20,17 +20,13 @@ public class ReviewHistoryService
         return await _context.ReviewHistory.ToListAsync();
     }
 
-    public async Task<ReviewHistory> GetReviewHistoryByIdAsync(int reviewHistoryId)
+    public async Task<ReviewHistory?> GetReviewHistoryByIdAsync(int reviewHistoryId)
     {
         return await _context.ReviewHistory
             .FirstOrDefaultAsync(r => r.Id == reviewHistoryId);
     }
 
-    public async Task AddReviewHistoryAsync(ReviewHistory reviewHistory)
-    {
-        _context.ReviewHistory.Add(reviewHistory);
-        await _context.SaveChangesAsync();
-    }
+
 
     public async Task UpdateReviewHistoryAsync(ReviewHistory reviewHistory)
     {
