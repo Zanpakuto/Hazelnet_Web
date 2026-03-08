@@ -29,12 +29,7 @@ public class DeckService
             .FirstOrDefaultAsync(d => d.Id == deckId);
     }
 
-    //add a new deck to the DB. recommend using UserService method instead to maintain referential integrity
-    public async Task AddDeckAsync(Deck deck)
-    {
-        _context.Decks.Add(deck);
-        await _context.SaveChangesAsync();
-    }
+   
 
     //call wheneved deck is modified
     public async Task UpdateDeckAsync(Deck deck)
@@ -50,16 +45,7 @@ public class DeckService
 
     }
 
-    //delete a deck from the DB. recommend using UserService method instead to maintain referential integrity
-    public async Task DeleteDeckAsync(int deckId)
-    {
-        var deck = await _context.Decks.FindAsync(deckId);
-        if (deck != null)
-        {
-            _context.Decks.Remove(deck);
-            await _context.SaveChangesAsync();
-        }
-    }
+ 
 
     //retrieves all cards in a deck
     public async Task<List<Card>> GetCardsByDeckIdAsync(int deckId)
@@ -69,7 +55,7 @@ public class DeckService
             .ToListAsync();
     }
 
-    //adds a card to a deck. use this method instead of CardService method to maintain referential integrity and update deck's last access time
+    //adds a card to a deck. 
     public async Task AddCardToDeckAsync(int deckId, Card card)
     {
         var deck = await _context.Decks

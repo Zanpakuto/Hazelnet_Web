@@ -37,17 +37,6 @@ public class CardService
         await _context.SaveChangesAsync();
     }
 
-    //delete card from the DB. Recommend using DeckService method instead to maintain referential integrity
-    public async Task DeleteCardAsync(int cardId)
-    {
-        var card = await _context.Cards.FindAsync(cardId);
-        if (card != null)
-        {
-            _context.Cards.Remove(card);
-            await _context.SaveChangesAsync();
-        }
-    }
-
     //retrieves review history for a card
     public async Task<ReviewHistory?> GetReviewHistoryByCardIdAsync(int cardId)
     {
