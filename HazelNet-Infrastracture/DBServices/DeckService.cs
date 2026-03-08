@@ -15,11 +15,13 @@ public class DeckService
         _context = context;
     }
 
+    //Retrieves all decks
     public async Task<List<Deck>> GetAllDecksAsync()
     {
         return await _context.Decks.ToListAsync();
     }
 
+    //retrieve a deck by ID
     public async Task<Deck?> GetDeckByIdAsync(int deckId)
     {
         return await _context.Decks
@@ -27,12 +29,14 @@ public class DeckService
             .FirstOrDefaultAsync(d => d.Id == deckId);
     }
 
+    //add a new deck to the DB. recommend using UserService method instead to maintain referential integrity
     public async Task AddDeckAsync(Deck deck)
     {
         _context.Decks.Add(deck);
         await _context.SaveChangesAsync();
     }
 
+    //call wheneved deck is modified
     public async Task UpdateDeckAsync(Deck deck)
     {
         var existingDeck = await _context.Decks.FindAsync(deck.Id);
@@ -46,6 +50,7 @@ public class DeckService
 
     }
 
+    //delete a deck from the DB. recommend using UserService method instead to maintain referential integrity
     public async Task DeleteDeckAsync(int deckId)
     {
         var deck = await _context.Decks.FindAsync(deckId);
@@ -56,6 +61,7 @@ public class DeckService
         }
     }
 
+    //retrieves all cards in a deck
     public async Task<List<Card>> GetCardsByDeckIdAsync(int deckId)
     {
         return await _context.Cards
@@ -63,6 +69,7 @@ public class DeckService
             .ToListAsync();
     }
 
+    //adds a card to a deck. use this method instead of CardService method to maintain referential integrity and update deck's last access time
     public async Task AddCardToDeckAsync(int deckId, Card card)
     {
         var deck = await _context.Decks
@@ -79,6 +86,7 @@ public class DeckService
         }
     }   
 
+    //removes a card from a deck. use this method instead of CardService method to maintain referential integrity and update deck's last access time
     public async Task RemoveCardFromDeckAsync(int deckId, int cardId)
     {
         var card = await _context.Cards
