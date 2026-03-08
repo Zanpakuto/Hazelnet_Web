@@ -20,7 +20,7 @@ public class UserService
         return await _context.User.ToListAsync();
     }
 
-    public async Task<User> GetUserByIdAsync(int userId)
+    public async Task<User?> GetUserByIdAsync(int userId)
     {
         return await _context.User
             .FirstOrDefaultAsync(u => u.Id == userId);
@@ -67,7 +67,7 @@ public class UserService
         {
             deck.UserId = userId; // Set the UserId for the deck
             deck.User = user; // Set the User navigation property
-            user.Decks.Add(deck);
+            user.Decks?.Add(deck);
             await _context.SaveChangesAsync();
         }
     }
@@ -80,7 +80,7 @@ public class UserService
 
         if (user != null)
         {
-            _context.Decks.RemoveRange(user.Decks);
+            _context.Decks.RemoveRange(user.Decks ?? new List<Deck>());
             await _context.SaveChangesAsync();
         }
     }

@@ -20,7 +20,7 @@ public class ReviewLogService
         return await _context.ReviewLogs.ToListAsync();
     }
 
-    public async Task<ReviewLog> GetReviewLogByIdAsync(int reviewLogId)
+    public async Task<ReviewLog?> GetReviewLogByIdAsync(int reviewLogId)
     {
         return await _context.ReviewLogs
             .FirstOrDefaultAsync(r => r.Id == reviewLogId);
