@@ -4,7 +4,7 @@ public interface ICommand : IBaseCommand
 {
 }
 
-public interface ICommand<T> : IBaseCommand
+public interface ICommand<TResult> : IBaseCommand
 {
 }
 
