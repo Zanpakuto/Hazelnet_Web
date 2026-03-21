@@ -88,7 +88,7 @@ app.MapPost("/register", async (
    if (result.Success)
        return Results.Ok(new { success = true });
    else
-       return Results.BadRequest(new { error = "Email exists" });
+       return Results.BadRequest(new { error = "Email already exists" });
 });
 
 app.MapPost("/login", async (
