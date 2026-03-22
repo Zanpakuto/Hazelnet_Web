@@ -1,0 +1,43 @@
+using HazelNet_Domain.Models;
+using HazelNet_Domain.IRepository;
+using HazelNet_Infrastracture.DBContext;
+using Microsoft.EntityFrameworkCore;
+
+namespace HazelNet_Infrastracture.DBServices.Repository;
+
+public class ReviewLogRepository : IReviewLogRepository
+{
+    private readonly ApplicationDbContext _context;
+
+    public ReviewLogRepository(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<ReviewLog?> Get(int reviewLogId)
+    {
+        return await _context.ReviewLogs.FindAsync(reviewLogId);
+    }
+
+    public async Task Update(ReviewLog reviewLog)
+    {
+        _context.ReviewLogs.Update(reviewLog);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task Delete(int reviewLogId)
+    {
+        var reviewLog = await Get(reviewLogId);
+        if (reviewLog != null)
+        {
+            _context.ReviewLogs.Remove(reviewLog);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task Create(ReviewLog reviewLog)
+    {
+        await _context.ReviewLogs.AddAsync(reviewLog);
+        await _context.SaveChangesAsync();
+    }
+}
