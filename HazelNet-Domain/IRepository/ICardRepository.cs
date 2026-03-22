@@ -1,6 +1,6 @@
 using HazelNet_Domain.Models;
 
-namespace HazelNet_Infrastracture.DBServices.IRepository;
+namespace HazelNet_Domain.IRepository;
 
 public interface ICardRepository
 {
