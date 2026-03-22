@@ -1,0 +1,43 @@
+using HazelNet_Domain.Models;
+using HazelNet_Domain.IRepository;
+using HazelNet_Infrastracture.DBContext;
+using Microsoft.EntityFrameworkCore;
+
+namespace HazelNet_Infrastracture.DBServices.Repository;
+
+public class UserRepository : IUserRepository
+{
+    private readonly ApplicationDbContext _context;
+
+    public UserRepository(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<User?> Get(int userId)
+    {
+        return await _context.Users.FindAsync(userId);
+    }
+
+    public async Task Update(User user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task Delete(int userId)
+    {
+        var user = await Get(userId);
+        if (user != null)
+        {
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task Create(User user)
+    {
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
+    }
+}

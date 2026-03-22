@@ -3,6 +3,7 @@ using HazelNet_Domain.IRepository;
 using HazelNet_Infrastracture.DBContext;
 using Microsoft.EntityFrameworkCore;
 
+namespace HazelNet_Infrastracture.DBServices.Repository;
 public class DeckRepository : IDeckRepository
 {
     private readonly ApplicationDbContext _context;
