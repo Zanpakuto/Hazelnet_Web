@@ -1,4 +1,4 @@
-using HazelNet_Infrastracture.DBServices.IRepository;
+using HazelNet_Domain.IRepository;
 using HazelNet_Domain.Models;
 using HazelNet_Infrastracture.DBContext;
 
