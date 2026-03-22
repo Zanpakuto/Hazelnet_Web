@@ -1,6 +1,6 @@
 using HazelNet_Domain.Models;
 
-namespace HazelNet_Infrastracture.DBServices.Repositories;
+namespace HazelNet_Infrastracture.DBServices.IRepository;
 
 public interface IDeckRepository
 {
