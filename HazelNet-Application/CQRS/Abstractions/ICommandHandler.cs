@@ -1,4 +1,4 @@
-namespace HazelNet_Infrastracture.DBServices.Abstractions;
+namespace HazelNet_Application.DBServices.Abstractions;
 
 public interface ICommandHandler<in TCommand> where TCommand : ICommand
 {

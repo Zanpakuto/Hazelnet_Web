@@ -1,4 +1,4 @@
-namespace HazelNet_Infrastracture.DBServices.Abstractions;
+namespace HazelNet_Application.DBServices.Abstractions;
 
 public interface IQueryHandler<in TQuery, TResult> where TQuery : IQuery<TResult>
 {
