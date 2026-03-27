@@ -6,6 +6,7 @@ using MudBlazor.Services;
 using HazelNet_Web.Core;
 using HazelNet_Infrastracture.DBContext;
 using HazelNet_Web.Features.Account;
+using HazelNet_Web.Features.Private;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
@@ -140,7 +141,7 @@ app.MapPost("/login", async (
             });
 
 
-        return Results.Redirect("/counter");
+        return Results.Redirect("/Dashboard");
     }
     else 
         return Results.Redirect("/login?error=true");
