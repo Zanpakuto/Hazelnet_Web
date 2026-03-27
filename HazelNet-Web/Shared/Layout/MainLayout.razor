@@ -7,12 +7,19 @@
 <MudSnackbarProvider />
 <MudLayout>
     
-    <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
-        <MudText Typo="Typo.h5" Class="ml-3">HazelNet</MudText>
-        <MudSpacer/>
-        <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle"/>
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End"/>
+    <MudAppBar Elevation="1" Dense="false" Style="backdrop-filter: blur(10px);" 
+               Gutters="false">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="d-flex align-center">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
+            <MudText Typo="Typo.h5" Class="ml-3" Color="Color.Primary"
+                     Style="font-size: 1.5rem; font-weight: 800; cursor: pointer; outline:none">
+                HazelNet
+            </MudText>
+            <MudSpacer/>
+            <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle"/>
+            <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End"/>
+        </MudContainer>
+        
     </MudAppBar>
 
     <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen"  Variant="@DrawerVariant.Mini"  
