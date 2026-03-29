@@ -1,63 +1,108 @@
-﻿@page "/Dashboard"
+﻿@page "/dashboard"
 
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 
 
+<PageTitle>Dashboard</PageTitle>
 
-<PageTitle>Weather</PageTitle>
+<MudPaper Class="d-flex align-center pa-5 ma-5" Outlined="true" Elevation="0">
+    
+    <MudText Typo="Typo.h4" Class="fw-bold">
+        Learning Analytics
+    </MudText>
+    
+    <MudSpacer/>
+        
+    <div class="d-flex gap-8 text-center">
+        <div class="d-flex flex-column">
+            <MudText Typo="Typo.caption" Style="opacity: 0.7;">Cards Due</MudText>
+            <MudText Typo="Typo.h5" Color="Color.Error"><strong>11</strong></MudText>
+        </div>
+        
+        <div class="d-flex flex-column">
+            <MudText Typo="Typo.caption" Style="opacity: 0.7;">Mastered Cards</MudText>
+            <MudText Typo="Typo.h5" Color="Color.Info"><strong>142</strong></MudText>
+        </div>
 
-<MudText Typo="Typo.h3" GutterBottom="true">Weather forecast</MudText>
-<MudText Typo="Typo.body1" Class="mb-8">This component demonstrates fetching data from the server.</MudText>
+        <div class="d-flex flex-column">
+            <MudText Typo="Typo.caption" Style="opacity: 0.7;">Average Rate</MudText>
+            <MudText Typo="Typo.h5" Color="Color.Info"><strong>88.5%</strong></MudText>
+        </div>
 
-@if (forecasts == null)
+        <div class="d-flex flex-column">
+            <MudText Typo="Typo.caption" Style="opacity: 0.7;">Streak</MudText>
+            <MudText Typo="Typo.h5" Color="Color.Info"><strong>12 Days</strong></MudText>
+        </div>
+    </div>
+   
+</MudPaper>
+
+
+<MudPaper Class="d-flex align-center pa-4 ma-5" Outlined="true" Elevation="0">
+    
+    <MudContainer Class=" align-content-center align-center justify-center">
+        <MudChart T="double" ChartType="ChartType.Donut" Width="100%" Height="300px"
+                  LegendPosition="Position.Left" ChartLabels="@labels" ChartSeries="@([data])"/>
+    </MudContainer>
+    
+    <MudContainer Class="align-content-center align-center justify-center">
+        <MudText Typo="Typo.h4" Align="Align.Center">
+            Upcoming WorkLoad Forecast
+        </MudText>
+        <MudChart ChartType="ChartType.StackedBar" ChartSeries="@Series"
+                  ChartLabels="@XAxisLabels" Width="100%" Height="350px"/>
+    </MudContainer>
+    
+    <MudContainer Class="align-content-center align-center justify-center">
+        <MudChart ChartType="ChartType.Line" ChartSeries="@Series2" ChartLabels="@XAxisLabels2" Width="100%" Height="350px" CanHideSeries/>
+    </MudContainer>
+    
+    
+    
+</MudPaper>
+
+<MudPaper Class="d-flex align-center pa-4 ma-5" Outlined="true" Elevation="0">
+
+    
+</MudPaper>
+
+
+@code
 {
-    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
-}
-else
-{
-  <MudTable Items="forecasts" Hover="true" SortLabel="Sort By" Elevation="0" AllowUnsorted="false">
-        <HeaderContent>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<WeatherForecast, object>(x=>x.Date)">Date</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<WeatherForecast, object>(x=>x.TemperatureC)">Temp. (C)</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<WeatherForecast, object>(x=>x.TemperatureF)">Temp. (F)</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<WeatherForecast, object>(x=>x.Summary!)">Summary</MudTableSortLabel></MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Date">@context.Date</MudTd>
-            <MudTd DataLabel="Temp. (C)">@context.TemperatureC</MudTd>
-            <MudTd DataLabel="Temp. (F)">@context.TemperatureF</MudTd>
-            <MudTd DataLabel="Summary">@context.Summary</MudTd>
-        </RowTemplate>
-        <PagerContent>
-            <MudTablePager PageSizeOptions="new int[]{50, 100}" />
-        </PagerContent>
-    </MudTable>
-}
-
-@code {
-    private WeatherForecast[]? forecasts;
-
-    protected override async Task OnInitializedAsync()
+    public double[] data = { 50, 25, 20, 5 };
+    public string[] labels = {"Mastered", "Reviewed", "Learning", "New"};   
+    
+    public List<ChartSeries<double>> Series = new List<ChartSeries<double>>()
     {
-        // Simulate asynchronous loading to demonstrate a loading indicator
-        await Task.Delay(500);
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
+        new() { Name = "Mastered", Data = new double[] { 40, 20, 25, 27, 46, 46, 48 } },
+        new() { Name = "Learning", Data = new double[] { 19, 24, 35, 13, 28, 15, 13 } },
+        new() { Name = "New", Data = new double[] { 8, 6, 11, 13, 4, 16, 10 } },
+    };
+    public string[] XAxisLabels = { "Sun", "Mon", "Tue", "Wed", "Thu", "Frid", "Sat"};
+    
+    
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        RandomizeData();
     }
 
-    private class WeatherForecast
+    public List<ChartSeries<double>> Series2 = new List<ChartSeries<double>>();
+    public string[] XAxisLabels2 = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
+
+    Random random = new Random();
+    public void RandomizeData()
     {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        var newSeries = new List<ChartSeries<double>>();
+        for (int s = 1; s <= 10; s++)
+        {
+            var series = new ChartSeries<double>() { Name = $"Deck {s}", Data = new double[9] };
+            for (int i = 0; i < 9; i++)
+                series.Data[i].Y = random.NextDouble() * 100;
+            newSeries.Add(series);
+        }
+        Series2 = newSeries;
+        StateHasChanged();
     }
 }
