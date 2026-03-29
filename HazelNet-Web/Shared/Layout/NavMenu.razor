@@ -1,9 +1,17 @@
-﻿
-<MudNavMenu Bordered="true" Rounded="true" Margin="Margin.Dense" Color="Color.Info" Class="pa-1">
-    <MudNavLink  Class="d-flex justify-center align-center" Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavLink  Class="d-flex justify-center align-center" Href="counter" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Counter</MudNavLink>
-    <MudNavLink  Class="d-flex justify-center align-center" Href="weather" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Weather</MudNavLink>
+﻿<MudNavMenu Bordered="true" Margin="Margin.Dense" Color="Color.Primary" Class="pa-1 d-flex flex-column" Style="height: 100%;">
+    <MudNavLink Class="d-flex justify-center align-center" Href="dashboard" Match="NavLinkMatch.Prefix"
+                Icon="@Icons.Material.Rounded.Dashboard">Dashboard</MudNavLink>
+    <MudNavLink Class="d-flex justify-center align-center" Href="decks" Match="NavLinkMatch.Prefix"
+                Icon="@Icons.Material.Rounded.LibraryBooks">Decks</MudNavLink>
+    <MudNavLink Class="d-flex justify-center align-center" Href="study" Match="NavLinkMatch.Prefix"
+                Icon="@Icons.Material.Filled.StickyNote2">Study</MudNavLink>
+    <MudNavLink Class="d-flex justify-center align-center" Href="insights" Match="NavLinkMatch.Prefix"
+                Icon="@Icons.Material.Rounded.Insights">Insights</MudNavLink>
 
+    <div class="mt-auto">
+        <MudNavLink Class="d-flex justify-center align-center" Href="settings" Match="NavLinkMatch.Prefix"
+                    Icon="@Icons.Material.Rounded.Settings">Settings</MudNavLink>
+        <MudNavLink Class="d-flex justify-center align-center" Href="user" Match="NavLinkMatch.Prefix"
+                    Icon="@Icons.Material.Rounded.AccountCircle">User</MudNavLink>
+    </div>
 </MudNavMenu>
-
-
