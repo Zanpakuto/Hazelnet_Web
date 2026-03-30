@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HazelNet_Infrastracture.DBServices.Repository;
 
+//implementation of ireviewhistoryrepository
 public class ReviewHistoryRepository : IReviewHistoryRepository
 {
     private readonly ApplicationDbContext _context;

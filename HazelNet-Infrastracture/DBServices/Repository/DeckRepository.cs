@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HazelNet_Infrastracture.DBServices.Repository;
+
+//implementation of ideckrepository
 public class DeckRepository : IDeckRepository
 {
     private readonly ApplicationDbContext _context;

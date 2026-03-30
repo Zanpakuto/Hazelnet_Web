@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace HazelNet_Infrastracture.DBServices.Repository;
 
+//implementation of icardrepository 
 public class CardRepository : ICardRepository
 {
     private readonly ApplicationDbContext _context;
