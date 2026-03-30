@@ -6,103 +6,176 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<MudPaper Class="d-flex align-center pa-5 ma-5" Outlined="true" Elevation="0">
-    
-    <MudText Typo="Typo.h4" Class="fw-bold">
-        Learning Analytics
-    </MudText>
-    
-    <MudSpacer/>
-        
-    <div class="d-flex gap-8 text-center">
-        <div class="d-flex flex-column">
-            <MudText Typo="Typo.caption" Style="opacity: 0.7;">Cards Due</MudText>
-            <MudText Typo="Typo.h5" Color="Color.Error"><strong>11</strong></MudText>
-        </div>
-        
-        <div class="d-flex flex-column">
-            <MudText Typo="Typo.caption" Style="opacity: 0.7;">Mastered Cards</MudText>
-            <MudText Typo="Typo.h5" Color="Color.Info"><strong>142</strong></MudText>
-        </div>
-
-        <div class="d-flex flex-column">
-            <MudText Typo="Typo.caption" Style="opacity: 0.7;">Average Rate</MudText>
-            <MudText Typo="Typo.h5" Color="Color.Info"><strong>88.5%</strong></MudText>
-        </div>
-
-        <div class="d-flex flex-column">
-            <MudText Typo="Typo.caption" Style="opacity: 0.7;">Streak</MudText>
-            <MudText Typo="Typo.h5" Color="Color.Info"><strong>12 Days</strong></MudText>
-        </div>
-    </div>
-   
-</MudPaper>
-
-
-<MudPaper Class="d-flex align-center pa-4 ma-5" Outlined="true" Elevation="0">
-    
-    <MudContainer Class=" align-content-center align-center justify-center">
-        <MudChart T="double" ChartType="ChartType.Donut" Width="100%" Height="300px"
-                  LegendPosition="Position.Left" ChartLabels="@labels" ChartSeries="@([data])"/>
-    </MudContainer>
-    
-    <MudContainer Class="align-content-center align-center justify-center">
-        <MudText Typo="Typo.h4" Align="Align.Center">
-            Upcoming WorkLoad Forecast
+<MudContainer  Class="d-flex align-center pa-5 ma-5" Outlined="true">
+    <MudStack Spacing="0" Class="justify-center ">
+        <MudText Typo="Typo.h3">
+            Dashboard
         </MudText>
-        <MudChart ChartType="ChartType.StackedBar" ChartSeries="@Series"
-                  ChartLabels="@XAxisLabels" Width="100%" Height="350px"/>
-    </MudContainer>
-    
-    <MudContainer Class="align-content-center align-center justify-center">
-        <MudChart ChartType="ChartType.Line" ChartSeries="@Series2" ChartLabels="@XAxisLabels2" Width="100%" Height="350px" CanHideSeries/>
-    </MudContainer>
-    
-    
-    
-</MudPaper>
+        <MudText Typo="Typo.body2" Style="opacity: 0.7;">
+            @_currentDateTime.ToString("dddd MMMM dd, yyyy");
+        </MudText>
+    </MudStack>
 
-<MudPaper Class="d-flex align-center pa-4 ma-5" Outlined="true" Elevation="0">
+    <MudSpacer/>
+    
+    <MudButton Variant="Variant.Outlined" Class="justify-center align-center"
+               EndIcon="@Icons.Material.Filled.ArrowOutward" Size="Size.Large">
+        Study due cards 
+    </MudButton>
+</MudContainer>
+
+<MudCard Elevation="0" Outlined="true" Class="mx-5">
+    <MudStack Row="true" Spacing="15" AlignItems="AlignItems.Center" Justify="Justify.SpaceAround" Class="pa-3">
+        <MudStack Spacing="0" >
+            <MudText Typo="Typo.h2" Color="Color.Primary">
+                @_totalCards
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Total cards
+            </MudText>
+            <MudText Typo="Typo.caption" Color="Color.Success">
+                @_newCards new cards
+            </MudText>
+        </MudStack>
+        
+        <MudStack Spacing="0" >
+            <MudText Typo="Typo.h2" Color="Color.Error">
+                @_dueToday
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Due Today
+            </MudText>
+            <MudText Typo="Typo.caption" Color="Color.Success">
+                across @_acrossNumDecks decks
+            </MudText>
+        </MudStack>
+        
+        <MudStack Spacing="0" >
+            <MudText Typo="Typo.h2" Color="Color.Tertiary">
+                @_dayStreak
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Day streak
+            </MudText>
+            <MudText Typo="Typo.caption" Color="Color.Success">
+                @_motivationalQuote
+            </MudText>
+        </MudStack>
+        
+        
+        <MudStack Spacing="0" >
+            <MudText Typo="Typo.h2" Color="Color.Primary">
+                @_avgMastery
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Avg Mastery
+            </MudText>
+            <MudText Typo="Typo.caption" Color="Color.Success">
+                @_masteryThisWeek this week
+            </MudText>
+        </MudStack>
+        
+    </MudStack>
+</MudCard>
+
+<MudCard Elevation="0" Outlined="true" Class="ma-5 pa-5">
+    <MudText Typo="Typo.h3"  Align="Align.Center">
+        Month of @_currentDateTime.ToString("MMMM")
+    </MudText>
+    <MudChart ChartType="ChartType.HeatMap" ChartSeries="@_series" ChartOptions="@_options"
+              ChartLabels="@_xLabels" Width="100%" Height="350px"></MudChart>
+</MudCard>
+
+<MudGrid Justify="Justify.Center" Spacing="5" Class="align-center justify-center align-item-center pa-5">
+    <MudItem sm="12" md="6" lg="5">
+        <MudCard Elevation="0" Class="d-flex" >
+            <MudCardHeader>
+                <CardHeaderContent>
+                    Mastery by Deck
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    
+    <MudItem sm="12" md="6" lg="7">
+        <MudCard Elevation="0" Class="d-flex" >
+            <MudCardHeader>
+                <CardHeaderContent>
+                    Due today
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
 
     
-</MudPaper>
-
+</MudGrid>
 
 @code
 {
-    public double[] data = { 50, 25, 20, 5 };
-    public string[] labels = {"Mastered", "Reviewed", "Learning", "New"};   
+    private DateTime _currentDateTime =  DateTime.Now;
+    private int _totalCards = 0;
+    private int _newCards = 0;
+    private int _dueToday = 0;
+    private int _acrossNumDecks = 0;
+    private int _dayStreak = 0;
+    private string _motivationalQuote = "You can do it!";
+    private double _avgMastery = 0;
+    private double _masteryThisWeek = 0;
     
-    public List<ChartSeries<double>> Series = new List<ChartSeries<double>>()
-    {
-        new() { Name = "Mastered", Data = new double[] { 40, 20, 25, 27, 46, 46, 48 } },
-        new() { Name = "Learning", Data = new double[] { 19, 24, 35, 13, 28, 15, 13 } },
-        new() { Name = "New", Data = new double[] { 8, 6, 11, 13, 4, 16, 10 } },
-    };
-    public string[] XAxisLabels = { "Sun", "Mon", "Tue", "Wed", "Thu", "Frid", "Sat"};
     
-    
+    //HeatMap
+    private readonly string[] _colors = ["#f0eeff", "#6355e0",  "#7e6fff"];
+    private List<ChartSeries<double>> _series = [];
+    private HeatMapChartOptions _options = new();
+    private XAxisLabelPosition _xAxisLabelPosition = XAxisLabelPosition.Bottom;
+    private YAxisLabelPosition _yAxisLabelPosition = YAxisLabelPosition.Left;
+    private string[] _xLabels;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        RandomizeData();
+        WeeklyData();
+        BuildOptions();
     }
 
-    public List<ChartSeries<double>> Series2 = new List<ChartSeries<double>>();
-    public string[] XAxisLabels2 = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
-
-    Random random = new Random();
-    public void RandomizeData()
+    private void BuildOptions()
     {
-        var newSeries = new List<ChartSeries<double>>();
-        for (int s = 1; s <= 10; s++)
+        var options = new HeatMapChartOptions
         {
-            var series = new ChartSeries<double>() { Name = $"Deck {s}", Data = new double[9] };
-            for (int i = 0; i < 9; i++)
-                series.Data[i].Y = random.NextDouble() * 100;
-            newSeries.Add(series);
+            ChartPalette = _colors,
+            YAxisLabelPosition = YAxisLabelPosition.Left,
+            ShowLegend = true,
+            XAxisLabelPosition = XAxisLabelPosition.None,
+            ShowToolTips = true,
+            ShowLabels = true
+        };
+        _options = options;
+    }
+
+    private void WeeklyData()
+    {
+        string[] xaxis = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        var heatMapSeries = new List<ChartSeries<double>>();
+        var dataPoints = xaxis.Length;
+        var data = new Double[dataPoints];
+        var random = new Random();
+        foreach (var x in xaxis)
+        {
+            for (int i = 0; i < dataPoints; i++)
+            {
+                data[i] = random.Next(1, 101); 
+            }
+            heatMapSeries.Add(new() { Name = x, Data = data });
         }
-        Series2 = newSeries;
-        StateHasChanged();
+        
+        _xLabels = xaxis;
+        _series = heatMapSeries;
+        BuildOptions();
     }
 }

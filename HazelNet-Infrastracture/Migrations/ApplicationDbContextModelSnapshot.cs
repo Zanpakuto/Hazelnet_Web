@@ -89,6 +89,10 @@ namespace HazelNet_Infrastractire.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("DeckDescription")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
                     b.Property<string>("DeckName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -150,7 +154,7 @@ namespace HazelNet_Infrastractire.Migrations
 
                     b.HasIndex("ReviewHistoryId");
 
-                    b.ToTable("ReviewLog");
+                    b.ToTable("ReviewLogs");
                 });
 
             modelBuilder.Entity("HazelNet_Domain.Models.User", b =>

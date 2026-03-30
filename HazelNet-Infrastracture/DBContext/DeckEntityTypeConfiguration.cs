@@ -12,6 +12,9 @@ public class DeckEntityTypeConfiguration :IEntityTypeConfiguration<Deck>
         builder.Property(d => d.DeckName)
             .HasMaxLength(100)
             .IsRequired();
+
+        builder.Property(d => d.DeckDescription)
+            .HasMaxLength(250);
         
         builder.HasMany(d => d.Cards)
             .WithOne(c => c.Deck)
