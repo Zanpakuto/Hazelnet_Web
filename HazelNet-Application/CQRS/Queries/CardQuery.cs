@@ -1,4 +1,4 @@
-using HazelNet_Application.DBServices.Abstractions;
+using HazelNet_Application.CQRS.Abstractions;
 using HazelNet_Domain.IRepository;
 using HazelNet_Domain.Models;
 
