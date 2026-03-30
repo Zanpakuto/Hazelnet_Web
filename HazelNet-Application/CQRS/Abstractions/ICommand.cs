@@ -1,4 +1,4 @@
-namespace HazelNet_Application.DBServices.Abstractions;
+namespace HazelNet_Application.CQRS.Abstractions;
 
 public interface ICommand : IBaseCommand
 {

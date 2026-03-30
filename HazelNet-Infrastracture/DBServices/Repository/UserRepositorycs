@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HazelNet_Infrastracture.DBServices.Repository;
 
+//implementation of iuserrepository
 public class UserRepository : IUserRepository
 {
     private readonly ApplicationDbContext _context;

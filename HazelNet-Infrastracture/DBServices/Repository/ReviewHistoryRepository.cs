@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HazelNet_Infrastracture.DBServices.Repository;
 
+//implementation of ireviewhistoryrepository
 public class ReviewHistoryRepository : IReviewHistoryRepository
 {
     private readonly ApplicationDbContext _context;
@@ -17,6 +18,12 @@ public class ReviewHistoryRepository : IReviewHistoryRepository
     public async Task<ReviewHistory?> Get(int reviewHistoryId)
     {
         return await _context.ReviewHistory.FindAsync(reviewHistoryId);
+    }
+
+    public async Task<ReviewHistory?> GetReviewHistoryByCardId(int cardId)
+    {
+        return await _context.ReviewHistory
+            .FirstOrDefaultAsync(rh => rh.CardId == cardId);
     }
 
     public async Task Update(ReviewHistory reviewHistory)
