@@ -19,6 +19,13 @@ public class ReviewLogRepository : IReviewLogRepository
         return await _context.ReviewLogs.FindAsync(reviewLogId);
     }
 
+    public async Task<List<ReviewLog>> GetReviewLogsByReviewHistoryId(int reviewHistoryId)
+    {
+        return await _context.ReviewLogs
+            .Where(rl => rl.ReviewHistoryId == reviewHistoryId)
+            .ToListAsync();
+    }  
+
     public async Task Update(ReviewLog reviewLog)
     {
         _context.ReviewLogs.Update(reviewLog);
