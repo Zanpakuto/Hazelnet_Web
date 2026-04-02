@@ -25,11 +25,20 @@ public class UserRepository :  IUserRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<string> GetPasswordHashAsync(string email)
+    //Made it nullable for possiblity of null
+    public async Task<string?> GetPasswordHashAsync(string email)
     {
         return await _context.User
             .Where(c => c.EmailAddress == email)
             .Select(c => c.PasswordHash)
+            .FirstOrDefaultAsync();
+    }
+
+    //Made a new query for getting user by email
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        return await _context.User
+            .Where(c => c.EmailAddress == email)
             .FirstOrDefaultAsync();
     }
 }

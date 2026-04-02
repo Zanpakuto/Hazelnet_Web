@@ -106,7 +106,9 @@ app.MapPost("/login", async (
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, email),
+            new Claim(ClaimTypes.Email, email),
+            new Claim(ClaimTypes.Name, result.username!),
+            new Claim(ClaimTypes.NameIdentifier, result.userID.ToString()!),
             new Claim(ClaimTypes.Role, "User")
         };
         

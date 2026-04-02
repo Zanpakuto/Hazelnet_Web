@@ -1,8 +1,19 @@
 ﻿@page "/decks"
 @using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @attribute [Authorize]
 
-
+<AuthorizeView>
+    <Authorized>
+        <p>Hello, @context.User.Identity?.Name!</p>
+        <MudText>@_username</MudText>
+    </Authorized>
+    <NotAuthorized>
+        <p>You are not logged in.</p>
+    </NotAuthorized>
+</AuthorizeView>
 
 
 <PageTitle>Counter</PageTitle>
@@ -19,5 +30,23 @@
     private void IncrementCount()
     {
         currentCount++;
+    }
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthStateTask { get; set; }
+
+    private string? _username;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthStateTask != null)
+        {
+            var authState = await AuthStateTask;
+            var user = authState.User;
+
+            if (user.Identity is { IsAuthenticated: true })
+            {
+                _username = user.Identity.Name;
+            }
+        }
     }
 }

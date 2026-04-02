@@ -8,7 +8,7 @@ public class LoginHandler
     private readonly IPasswordHasher _passwordHasher;
     
     public record LoginQuery(string email, string password);
-    public record LoginResult(bool Success, string? ErrorMessage);
+    public record LoginResult(bool Success, int? userID, string? username, string? ErrorMessage);
     
     public LoginHandler(IUserRepository userRepository, IPasswordHasher passwordHasher)
     {
@@ -19,20 +19,20 @@ public class LoginHandler
     public async Task<LoginResult> Handle(LoginQuery query)
     {
         
-            var storedHash = await _userRepository.GetPasswordHashAsync(query.email);
+            var user  = await _userRepository.GetUserByEmailAsync(query.email);
             
-            if (storedHash is null)
+            if (user is null)
             {
                 // Return generic error to prevent enumeration
-                return new LoginResult(false, "Invalid email or password.");
+                return new LoginResult(false, null, null, "Invalid email or password.");
             }
             
-            bool matched = _passwordHasher.Verify(query.password, storedHash);
+            bool matched = _passwordHasher.Verify(query.password, user.PasswordHash);
 
             if (matched)
-                return new  LoginResult(true, null);
-           
-            return new LoginResult(false, $"The password {query.password} is wrong");
+                return new  LoginResult(true, user.Id, user.Username, null);
+
+            return new LoginResult(false, null, null,$"The password {query.password} is wrong");
         
        
     }
