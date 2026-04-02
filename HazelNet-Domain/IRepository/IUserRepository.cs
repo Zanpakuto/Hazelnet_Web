@@ -10,4 +10,6 @@ public interface IUserRepository
     Task Update(User user);
     Task Delete(int userId);
     Task Create(User user);
+
+    Task<User?> GetWithDecks(int userId);
 }
