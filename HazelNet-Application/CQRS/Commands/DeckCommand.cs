@@ -43,3 +43,36 @@ public class CreateDeckCommandHandler : ICommandHandler<CreateDeckCommand>
         await _deckRepository.Create(deck);
     }
 }
+
+public class UpdateDeckCommand : ICommand
+{
+    public int DeckId { get; set; }
+    public string Name { get; set; }
+
+    public UpdateDeckCommand(int deckId, string name)
+    {
+        DeckId = deckId;
+        Name = name;
+    }
+}
+
+public class UpdateDeckCommandHandler : ICommandHandler<UpdateDeckCommand>
+{
+    private readonly IDeckRepository _deckRepository;
+
+    public UpdateDeckCommandHandler(IDeckRepository deckRepository)
+    {
+        _deckRepository = deckRepository;
+    }
+
+    public async Task Handle(UpdateDeckCommand command)
+    {
+        var deck = await _deckRepository.Get(command.DeckId);
+        if (deck == null)
+        {
+            throw new Exception("Deck not found");
+        }
+        deck.DeckName = command.Name;
+        await _deckRepository.Update(deck);
+    }
+}
