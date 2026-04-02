@@ -17,12 +17,19 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> Get(int userId)
     {
-        return await _context.Users.FindAsync(userId);
+        return await _context.User.FindAsync(userId);
+    }
+
+    public async Task<User?> GetWithDecks(int userId)
+    {
+        return await _context.User
+            .Include(u => u.Decks)
+            .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
     public async Task Update(User user)
     {
-        _context.Users.Update(user);
+        _context.User.Update(user);
         await _context.SaveChangesAsync();
     }
 
@@ -31,14 +38,14 @@ public class UserRepository : IUserRepository
         var user = await Get(userId);
         if (user != null)
         {
-            _context.Users.Remove(user);
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
         }
     }
 
     public async Task Create(User user)
     {
-        await _context.Users.AddAsync(user);
+        await _context.User.AddAsync(user);
         await _context.SaveChangesAsync();
     }
 }
