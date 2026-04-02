@@ -79,3 +79,28 @@ public class UpdateCardCommandHandler : ICommandHandler<UpdateCardCommand>
         }
     }
 }
+
+public class DeleteCardCommand : ICommand
+{
+    public int CardId { get; set; }
+
+    public DeleteCardCommand(int cardId)
+    {
+        CardId = cardId;
+    }
+}
+
+public class DeleteCardCommandHandler : ICommandHandler<DeleteCardCommand>
+{
+    private readonly ICardRepository _cardRepository;
+
+    public DeleteCardCommandHandler(ICardRepository cardRepository)
+    {
+        _cardRepository = cardRepository;
+    }
+
+    public async Task Handle(DeleteCardCommand command)
+    {
+        await _cardRepository.Delete(command.CardId);
+    }
+}
