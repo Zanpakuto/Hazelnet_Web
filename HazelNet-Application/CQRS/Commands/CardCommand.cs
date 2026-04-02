@@ -44,3 +44,38 @@ public class CreateCardCommandHandler : ICommandHandler<CreateCardCommand>
         await _cardRepository.Create(card);
     }
 }
+
+public class UpdateCardCommand : ICommand
+{
+    public int CardId { get; set; }
+    public string Front { get; set; }
+    public string Back { get; set; }
+
+    public UpdateCardCommand(int cardId, string front, string back)
+    {
+        CardId = cardId;
+        Front = front;
+        Back = back;
+    }
+}
+
+public class UpdateCardCommandHandler : ICommandHandler<UpdateCardCommand>
+{
+    private readonly ICardRepository _cardRepository;
+
+    public UpdateCardCommandHandler(ICardRepository cardRepository)
+    {
+        _cardRepository = cardRepository;
+    }
+
+    public async Task Handle(UpdateCardCommand command)
+    {
+        var card = await _cardRepository.Get(command.CardId);
+        if (card != null)
+        {
+            card.FrontOfCard = command.Front;
+            card.BackOfCard = command.Back;
+            await _cardRepository.Update(card);
+        }
+    }
+}
