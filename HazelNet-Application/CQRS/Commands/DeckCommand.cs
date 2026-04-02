@@ -76,3 +76,28 @@ public class UpdateDeckCommandHandler : ICommandHandler<UpdateDeckCommand>
         await _deckRepository.Update(deck);
     }
 }
+
+public class DeleteDeckCommand : ICommand
+{
+    public int DeckId { get; set; }
+
+    public DeleteDeckCommand(int deckId)
+    {
+        DeckId = deckId;
+    }
+}
+
+public class DeleteDeckCommandHandler : ICommandHandler<DeleteDeckCommand>
+{
+    private readonly IDeckRepository _deckRepository;
+
+    public DeleteDeckCommandHandler(IDeckRepository deckRepository)
+    {
+        _deckRepository = deckRepository;
+    }
+
+    public async Task Handle(DeleteDeckCommand command)
+    {
+        await _deckRepository.Delete(command.DeckId);
+    }
+}
