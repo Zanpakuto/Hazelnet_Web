@@ -1,0 +1,131 @@
+using HazelNet_Application.CQRS.Abstractions;
+using HazelNet_Domain.Models;
+using HazelNet_Domain.IRepository;
+
+namespace HazelNet_Application.CQRS.Commands;
+
+/*
+    HOW TO USE
+    1. Inject the command handler into your controller or service where you want to execute the command
+    ex:
+    private readonly CreateCardCommandHandler _createCardCommandHandler;
+    public YourController(CreateCardCommandHandler createCardCommandHandler)
+    {
+        _createCardCommandHandler = createCardCommandHandler;
+    }
+
+    2. Create an instance of the command with the required parameters and execute it using the handler
+    ex:
+    var command = new CreateCardCommand(deckId, front, back);
+    await _createCardCommandHandler.Handle(command);
+
+    3. Command handler will execute the logic defined and use repositories to interact with the database as needed
+    
+*/
+
+public class CreateUserCommand : ICommand
+{
+    public string Username { get; set; }
+    public string Email { get; set; }
+    public string PasswordHash { get; set; }
+
+    public CreateUserCommand(string username, string email, string passwordHash)
+    {
+        Username = username;
+        Email = email;
+        PasswordHash = passwordHash;
+    }
+}
+
+public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand>
+{
+    private readonly IUserRepository _userRepository;
+
+    public CreateUserCommandHandler(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    public async Task Handle(CreateUserCommand command)
+    {
+        var user = new User
+        {
+            Username = command.Username,
+            EmailAddress = command.Email,
+            PasswordHash = command.PasswordHash
+        };
+
+        await _userRepository.Create(user);
+    }
+}
+
+public class UpdateUserCommand : ICommand
+{
+    public int UserId { get; set; }
+    public string Username { get; set; }
+    public string Email { get; set; }
+    public string PasswordHash { get; set; }
+
+    public UpdateUserCommand(int userId, string username, string email, string passwordHash)
+    {
+        UserId = userId;
+        Username = username;
+        Email = email;
+        PasswordHash = passwordHash;
+    }
+}
+
+public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand>
+{
+    private readonly IUserRepository _userRepository;
+
+    public UpdateUserCommandHandler(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    public async Task Handle(UpdateUserCommand command)
+    {
+        var user = await _userRepository.Get(command.UserId);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+        user.Username = command.Username;
+        user.EmailAddress = command.Email;
+        user.PasswordHash = command.PasswordHash;
+
+        await _userRepository.Update(user);
+    }
+}
+
+public class DeleteUserCommand : ICommand
+{
+    public int UserId { get; set; }
+
+    public DeleteUserCommand(int userId)
+    {
+        UserId = userId;
+    }
+}
+
+public class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand>
+{
+    private readonly IUserRepository _userRepository;
+
+    public DeleteUserCommandHandler(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    public async Task Handle(DeleteUserCommand command)
+    {
+        var user = await _userRepository.Get(command.UserId);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+
+        await _userRepository.Delete(command.UserId);
+    }
+}
