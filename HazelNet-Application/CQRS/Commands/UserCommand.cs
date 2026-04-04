@@ -39,3 +39,43 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand>
         await _userRepository.Create(user);
     }
 }
+
+public class UpdateUserCommand : ICommand
+{
+    public int UserId { get; set; }
+    public string Username { get; set; }
+    public string Email { get; set; }
+    public string PasswordHash { get; set; }
+
+    public UpdateUserCommand(int userId, string username, string email, string passwordHash)
+    {
+        UserId = userId;
+        Username = username;
+        Email = email;
+        PasswordHash = passwordHash;
+    }
+}
+
+public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand>
+{
+    private readonly IUserRepository _userRepository;
+
+    public UpdateUserCommandHandler(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    public async Task Handle(UpdateUserCommand command)
+    {
+        var user = await _userRepository.Get(command.UserId);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+        user.Username = command.Username;
+        user.EmailAddress = command.Email;
+        user.PasswordHash = command.PasswordHash;
+
+        await _userRepository.Update(user);
+    }
+}
