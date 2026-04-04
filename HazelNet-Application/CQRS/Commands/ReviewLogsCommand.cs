@@ -101,3 +101,34 @@ public class UpdateReviewLogCommandHandler : ICommandHandler<UpdateReviewLogComm
         await _reviewLogRepository.Update(reviewLog);
     }
 }
+
+public class DeleteReviewLogCommand : ICommand
+{
+    public int ReviewLogId { get; set; }
+
+    public DeleteReviewLogCommand(int reviewLogId)
+    {
+        ReviewLogId = reviewLogId;
+    }
+}
+
+public class DeleteReviewLogCommandHandler : ICommandHandler<DeleteReviewLogCommand>
+{
+    private readonly IReviewLogRepository _reviewLogRepository;
+
+    public DeleteReviewLogCommandHandler(IReviewLogRepository reviewLogRepository)
+    {
+        _reviewLogRepository = reviewLogRepository;
+    }
+
+    public async Task Handle(DeleteReviewLogCommand command)
+    {
+        var reviewLog = await _reviewLogRepository.Get(command.ReviewLogId);
+        if (reviewLog == null)
+        {
+            throw new Exception("Review log not found");
+        }
+
+        await _reviewLogRepository.Delete(command.ReviewLogId);
+    }
+}
