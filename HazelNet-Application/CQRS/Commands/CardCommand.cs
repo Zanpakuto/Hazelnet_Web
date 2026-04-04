@@ -4,6 +4,26 @@ using HazelNet_Application.CQRS.Abstractions;
 
 namespace HazelNet_Application.CQRS.Commands;
 
+/*
+    HOW TO USE
+    1. Inject the command handler into your controller or service where you want to execute the command
+    ex:
+    private readonly CreateCardCommandHandler _createCardCommandHandler;
+    public YourController(CreateCardCommandHandler createCardCommandHandler)
+    {
+        _createCardCommandHandler = createCardCommandHandler;
+    }
+
+    2. Create an instance of the command with the required parameters and execute it using the handler
+    ex:
+    var command = new CreateCardCommand(deckId, front, back);
+    await _createCardCommandHandler.Handle(command);
+
+    3. Command handler will execute the logic defined and use repositories to interact with the database as needed
+    
+*/
+
+
 public class CreateCardCommand : ICommand
 {
     public int DeckId { get; set; }
