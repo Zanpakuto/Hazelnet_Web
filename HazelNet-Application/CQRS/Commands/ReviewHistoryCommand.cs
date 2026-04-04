@@ -37,3 +37,38 @@ public class CreateReviewHistoryCommandHandler : ICommandHandler<CreateReviewHis
         await _reviewHistoryRepository.Create(reviewHistory);
     }
 }
+
+//only needed if we want to update review logs in bulk, otherwise we can just create new review log and add it to the review history
+public class UpdateReviewHistoryCommand : ICommand
+{
+    public int ReviewHistoryId { get; set; }
+    public List<ReviewLog> ReviewLogs { get; set; }
+
+    public UpdateReviewHistoryCommand(int reviewHistoryId, List<ReviewLog> reviewLogs)
+    {
+        ReviewHistoryId = reviewHistoryId;
+        ReviewLogs = reviewLogs;
+    }
+}
+
+public class UpdateReviewHistoryCommandHandler : ICommandHandler<UpdateReviewHistoryCommand>
+{
+    private readonly IReviewHistoryRepository _reviewHistoryRepository;
+
+    public UpdateReviewHistoryCommandHandler(IReviewHistoryRepository reviewHistoryRepository)
+    {
+        _reviewHistoryRepository = reviewHistoryRepository;
+    }
+
+    public async Task Handle(UpdateReviewHistoryCommand command)
+    {
+        var reviewHistory = await _reviewHistoryRepository.Get(command.ReviewHistoryId);
+        if (reviewHistory == null)
+        {
+            throw new Exception("Review history not found");
+        }
+        reviewHistory.ReviewLogs = command.ReviewLogs;
+
+        await _reviewHistoryRepository.Update(reviewHistory);
+    }
+}
