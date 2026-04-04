@@ -55,3 +55,49 @@ public class CreateReviewLogCommandHandler : ICommandHandler<CreateReviewLogComm
         await _reviewLogRepository.Create(reviewLog);
     }
 }
+
+public class UpdateReviewLogCommand : ICommand
+{
+    public int ReviewLogId { get; set; }
+    public Rating Rating { get; set; }
+    public ulong ScheduledDays { get; set; }
+    public ulong ElapsedDays { get; set; }
+    public DateTime Review { get; set; }
+    public State State { get; set; }
+
+    public UpdateReviewLogCommand(int reviewLogId, Rating rating, ulong scheduledDays, ulong elapsedDays, DateTime review, State state)
+    {
+        ReviewLogId = reviewLogId;
+        Rating = rating;
+        ScheduledDays = scheduledDays;
+        ElapsedDays = elapsedDays;
+        Review = review;
+        State = state;
+    }
+}
+
+public class UpdateReviewLogCommandHandler : ICommandHandler<UpdateReviewLogCommand>
+{
+    private readonly IReviewLogRepository _reviewLogRepository;
+
+    public UpdateReviewLogCommandHandler(IReviewLogRepository reviewLogRepository)
+    {
+        _reviewLogRepository = reviewLogRepository;
+    }
+
+    public async Task Handle(UpdateReviewLogCommand command)
+    {
+        var reviewLog = await _reviewLogRepository.Get(command.ReviewLogId);
+        if (reviewLog == null)
+        {
+            throw new Exception("Review log not found");
+        }
+        reviewLog.Rating = command.Rating;
+        reviewLog.ScheduledDays = command.ScheduledDays;
+        reviewLog.ElapsedDays = command.ElapsedDays;
+        reviewLog.Review = command.Review;
+        reviewLog.State = command.State;
+
+        await _reviewLogRepository.Update(reviewLog);
+    }
+}
