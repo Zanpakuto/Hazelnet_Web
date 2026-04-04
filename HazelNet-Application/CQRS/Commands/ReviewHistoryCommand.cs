@@ -72,3 +72,34 @@ public class UpdateReviewHistoryCommandHandler : ICommandHandler<UpdateReviewHis
         await _reviewHistoryRepository.Update(reviewHistory);
     }
 }
+
+public class DeleteReviewHistoryCommand : ICommand
+{
+    public int ReviewHistoryId { get; set; }
+
+    public DeleteReviewHistoryCommand(int reviewHistoryId)
+    {
+        ReviewHistoryId = reviewHistoryId;
+    }
+}
+
+public class DeleteReviewHistoryCommandHandler : ICommandHandler<DeleteReviewHistoryCommand>
+{
+    private readonly IReviewHistoryRepository _reviewHistoryRepository;
+
+    public DeleteReviewHistoryCommandHandler(IReviewHistoryRepository reviewHistoryRepository)
+    {
+        _reviewHistoryRepository = reviewHistoryRepository;
+    }
+
+    public async Task Handle(DeleteReviewHistoryCommand command)
+    {
+        var reviewHistory = await _reviewHistoryRepository.Get(command.ReviewHistoryId);
+        if (reviewHistory == null)
+        {
+            throw new Exception("Review history not found");
+        }
+
+        await _reviewHistoryRepository.Delete(command.ReviewHistoryId);
+    }
+}
