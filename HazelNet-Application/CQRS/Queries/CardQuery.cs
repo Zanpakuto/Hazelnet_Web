@@ -2,6 +2,21 @@ using HazelNet_Application.CQRS.Abstractions;
 using HazelNet_Domain.IRepository;
 using HazelNet_Domain.Models;
 
+/*
+    HOW TO USE
+    1. Inject the query handler into your controller or service where you want to execute the query
+    ex:
+    private readonly GetCardByIdQueryHandler _getCardByIdQueryHandler;
+    public YourController(GetCardByIdQueryHandler getCardByIdQueryHandler)
+    {
+        _getCardByIdQueryHandler = getCardByIdQueryHandler;
+    }
+    2. Create an instance of the query with the required parameters and execute it using the handler
+    ex:
+    var query = new GetCardByIdQuery(cardId);
+    var card = await _getCardByIdQueryHandler.Handle(query);
+    3. Query handler will execute the logic defined and use repositories to interact with the database as needed
+*/
 public class GetCardByIdQuery : IQuery<Card>
 {
     public int Id { get; set; }
