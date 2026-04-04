@@ -79,3 +79,34 @@ public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand>
         await _userRepository.Update(user);
     }
 }
+
+public class DeleteUserCommand : ICommand
+{
+    public int UserId { get; set; }
+
+    public DeleteUserCommand(int userId)
+    {
+        UserId = userId;
+    }
+}
+
+public class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand>
+{
+    private readonly IUserRepository _userRepository;
+
+    public DeleteUserCommandHandler(IUserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    public async Task Handle(DeleteUserCommand command)
+    {
+        var user = await _userRepository.Get(command.UserId);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+
+        await _userRepository.Delete(command.UserId);
+    }
+}
