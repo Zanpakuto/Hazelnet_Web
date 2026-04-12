@@ -1,7 +1,8 @@
 using System.Security.Claims;
 using HazelNet_Application.Auth;
+using HazelNet_Application.CQRS.Abstractions;
+using HazelNet_Application.CQRS.Features.Decks.Commands;
 using HazelNet_Application.CQRS.Features.Decks.Queries;
-using HazelNet_Application.DBServices.Abstractions;
 using HazelNet_Application.Interface;
 using HazelNet_Infrastracture.Command;
 using MudBlazor.Services;
@@ -52,7 +53,7 @@ builder.Services.AddScoped<LoginHandler>();
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IQueryHandler<GetDecksQuery, List<DeckViewModel>>, GetDecksQueryHandler>();
-
+builder.Services.AddScoped<ICommandHandler<CreateDeckCommand, int>, CreateDeckCommandHandler>();
 
 builder.Services.AddHttpClient("LocalApi", (sp, client) =>
 {

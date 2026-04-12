@@ -13,7 +13,6 @@
 
     <ItemGroup>
       <Folder Include="CQRS\Features\Cards\Command\" />
-      <Folder Include="CQRS\Features\Decks\Commands\" />
     </ItemGroup>
 
 </Project>

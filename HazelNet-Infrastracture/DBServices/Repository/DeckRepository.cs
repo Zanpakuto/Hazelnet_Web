@@ -17,27 +17,27 @@ public class DeckRepository : IDeckRepository
         _context = context;
     }
 
-    public async Task<Deck?> Get(int deckId)
+    public async Task<Deck?> GetAsync(int deckId)
     {
         return await _context.Decks.FindAsync(deckId);
     }
 
 
-    public async Task<List<Deck>> GetDeckByUserId(int userId)
+    public async Task<List<Deck>> GetDeckByUserIdAsync(int userId)
     {
         return await _context.Decks
             .Where(d => d.UserId == userId)
             .ToListAsync();
     }
-    public async Task Update(Deck deck)
+    public async Task UpdateAsync(Deck deck)
     {
         _context.Decks.Update(deck);
         await _context.SaveChangesAsync();
     }
 
-    public async Task Delete(int deckId)
+    public async Task DeleteAsync(int deckId)
     {
-        var deck = await Get(deckId);
+        var deck = await GetAsync(deckId);
         if (deck != null)
         {
             _context.Decks.Remove(deck);
@@ -45,7 +45,7 @@ public class DeckRepository : IDeckRepository
         }
     }
 
-    public async Task Create(Deck deck)
+    public async Task CreateAsync(Deck deck)
     {
         await _context.Decks.AddAsync(deck);
         await _context.SaveChangesAsync();

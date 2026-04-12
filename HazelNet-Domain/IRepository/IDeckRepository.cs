@@ -5,9 +5,9 @@ namespace HazelNet_Domain.IRepository;
 
 public interface IDeckRepository
 {
-   Task<Deck?> Get(int deckId);
-    Task<List<Deck>> GetDeckByUserId(int userId);
-   Task Update(Deck deck);
-    Task Delete(int deckId);
-    Task Create(Deck deck);
+   Task<Deck?> GetAsync(int deckId);
+    Task<List<Deck>> GetDeckByUserIdAsync(int userId);
+   Task UpdateAsync(Deck deck);
+    Task DeleteAsync(int deckId);
+    Task CreateAsync(Deck deck);
 }

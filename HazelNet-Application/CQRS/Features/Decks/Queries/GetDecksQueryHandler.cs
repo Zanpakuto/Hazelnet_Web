@@ -1,4 +1,5 @@
-﻿using HazelNet_Application.DBServices.Abstractions;
+﻿using HazelNet_Application.CQRS.Abstractions;
+
 using HazelNet_Domain.Models;
 using HazelNet_Web.ViewModel;
 
