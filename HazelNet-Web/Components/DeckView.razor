@@ -1,0 +1,82 @@
+﻿@using HazelNet_Web.Features.Private
+@using HazelNet_Web.ViewModel
+<MudCard Elevation="10" 
+                         Style=" min-height: 150px; width: 100%; 
+                         display: flex; flex-direction: column; border: 120px">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Align="Align.Left" Typo="Typo.h5">
+                                @Deck.Name
+                            </MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz"
+                                           Color="Color.Default" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+
+                    <MudCardContent Style="flex-grow: 1;">
+                        <MudText Typo="Typo.body1">
+                            @Deck.Description
+                        </MudText>
+                        <MudProgressLinear Color="Color.Info" Value="@Deck.MasteredPercentage"
+                                           Class="mt-5" Size="Size.Medium" Rounded="true" />
+                        
+                        <MudGrid Spacing="5" Class="d-flex justify-space-between mb-5" >
+                            <MudItem>
+                                <MudText Typo="Typo.caption">
+                                    @Deck.MasteredCards/@Deck.TotalNumberOfCards
+                                </MudText>
+                            </MudItem>
+                            
+                            <MudItem>
+                                <MudText Typo="Typo.caption">
+                                    @Deck.MasteredPercentage%
+                                </MudText>
+                            </MudItem>
+                        </MudGrid>
+                        
+                        <MudDivider/>
+                        
+                        <MudStack Row="true" Spacing="5" Class="d-flex justify-space-between mt-5" AlignItems="AlignItems.Center" >
+                            <MudItem>
+                                <MudText Typo="Typo.body2">
+                                    @GetRelativeTime(Deck.LastDateAccessed)
+                                </MudText>
+                            </MudItem>
+                            <MudChip T="int" Color="Color.Error" Size="Size.Small">
+                                @_dueToday due
+                            </MudChip>
+                        </MudStack>
+                        
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" 
+                                   Size="Size.Medium" FullWidth="true"
+                                   Class="my-5">
+                            Study Now
+                        </MudButton>
+                        
+                    </MudCardContent>
+                </MudCard>
+                
+                
+
+@code {
+
+    [Parameter] public DeckViewModel Deck { get; set; }
+
+    private int _dueToday = 0;
+
+    private string GetRelativeTime(DateTime date)
+    {
+        var diff = DateTime.Now - date;
+
+        if (diff.TotalMinutes < 1)    return "Just now";
+        if (diff.TotalMinutes < 60)   return $"{(int)diff.TotalMinutes} minutes ago";
+        if (diff.TotalHours < 24)     return $"{(int)diff.TotalHours} hours ago";
+        if (diff.TotalDays < 7)       return $"{(int)diff.TotalDays} days ago";
+        if (diff.TotalDays < 30)      return $"{(int)(diff.TotalDays / 7)} weeks ago";
+        if (diff.TotalDays < 365)     return $"{(int)(diff.TotalDays / 30)} months ago";
+
+        return $"{(int)(diff.TotalDays / 365)} years ago";
+    }
+}

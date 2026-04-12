@@ -1,40 +1,147 @@
 ﻿@page "/decks"
+
+@using HazelNet_Domain.Models
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims
+@using HazelNet_Application.CQRS.Features.Decks.Queries
+@using HazelNet_Application.DBServices.Abstractions
+@using HazelNet_Web.ViewModel
 @using Microsoft.AspNetCore.Components.Authorization
+
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IQueryHandler<GetDecksQuery, List<DeckViewModel>> GetDecksHandler
+
 @attribute [Authorize]
 
-<AuthorizeView>
-    <Authorized>
-        <p>Hello, @context.User.Identity?.Name!</p>
-        <MudText>@_username</MudText>
-    </Authorized>
-    <NotAuthorized>
-        <p>You are not logged in.</p>
-    </NotAuthorized>
-</AuthorizeView>
 
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-5" >
+    <MudGrid Spacing="3" Justify="Justify.Center" >
+        <MudItem>
+            <MudText Typo="Typo.h3" Align="Align.Left">
+                Decks
+            </MudText>
+        </MudItem>
+        <MudSpacer/>
+        <MudItem>
+            <MudButton Variant="Variant.Outlined" Size="Size.Large"
+                       StartIcon="@Icons.Material.Filled.Add">
+                New Deck
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+    
+    <MudStack Row="true" Spacing="20"  Justify="Justify.SpaceAround"AlignItems="AlignItems.Center" Class="mt-5">
+        <MudStack Spacing="0" >
+            <MudText Typo="Typo.h3">
+                @_numOfDecks
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Decks
+            </MudText>
+        </MudStack>
+        
+        <MudStack Spacing="0" >
+            <MudText Typo="Typo.h3">
+                @_totalCards
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Total Cards
+            </MudText>
+        </MudStack>
+        
+        <MudStack Spacing="0" >
+            <MudText Typo="Typo.h3" Color="Color.Success">
+                @_completedDecks
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Completed Decks
+            </MudText>
+        </MudStack>
+        
+        <MudStack Spacing="0" >
+            <MudText Typo="Typo.h3" Color="Color.Error">
+                @_ToTaldueToday
+            </MudText>
+            <MudText Typo="Typo.body1">
+                Due today
+            </MudText>
+        </MudStack>
+    </MudStack>
+    
+    <MudGrid Spacing="5" Justify="Justify.Center" Class="mt-5 px-20" xs="12">
+        
+        <MudItem sm="4" md="6"
+                 Class="d-flex align-center justify-center">
+            
+            <MudTextField @bind-Value="_highlightedText"  Variant="Variant.Outlined"
+                          Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search"
+                          AdornmentColor="Color.Primary"
+                          Immediate="true" Label="Search for a Deck"/>
+        </MudItem>
+        
+        
+        <MudItem sm="4" md=4
+                 Class="d-flex align-center justify-center">
+            <MudSelect T="string" Label="Sorting Method" FullWidth="true" FitContent="true"
+                       Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Sort"
+                       AdornmentColor="Color.Primary" @bind-Value="_sortDisplay">
+                <MudSelectItem Value="@("due_first")">Due first</MudSelectItem>
+                <MudSelectItem Value="@("by_name")">By Name</MudSelectItem>
+                <MudSelectItem Value="@("date_added")">Date Added</MudSelectItem>
+                <MudSelectItem Value="@("recently_added")">Recently Added</MudSelectItem>
+            </MudSelect>
+        </MudItem>
+        
+        <MudItem sm="4" md="2"
+                 Class="d-flex align-center justify-center">
+            <MudButtonGroup Variant="Variant.Outlined" Size="Size.Large">
+                <MudIconButton Icon="@Icons.Material.Filled.List"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.GridView"></MudIconButton>
+            </MudButtonGroup>
+        </MudItem>
 
-<PageTitle>Counter</PageTitle>
+    </MudGrid>
+    
+   <!-- Card Component-->
+    <MudGrid Spacing="5" Justify="Justify.Center" Class="mt-5 px-20">
 
-<MudText Typo="Typo.h3" GutterBottom="true">Counter</MudText>
+        @foreach (var deck in _deckList)
+        {
+            <MudItem sm="12" md="4" lg="3" Class="d-flex">
+                <DeckView Deck="deck" />
+            </MudItem>
+        }
 
-<MudText Typo="Typo.body1" Class="mb-4">Current count: @currentCount</MudText>
-
-<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="IncrementCount">Click me</MudButton>
+    </MudGrid>
+    
+    
+</MudContainer>
 
 @code {
-    private int currentCount = 0;
-
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
+    
+    //Sample Deck Data
+    
+    
+    private List<DeckViewModel> _deckList = new();
+    
+    
     [CascadingParameter]
     private Task<AuthenticationState>? AuthStateTask { get; set; }
 
     private string? _username;
+    private string? _userId;
+    private string? _userEmail;
+
+    private string? _highlightedText;
+
+    private string _sortDisplay = "Date Added";
+    
+    private int _numOfDecks;
+    private int _totalCards;
+    private int _ToTaldueToday;
+    private int _completedDecks;
+
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,10 +150,20 @@
             var authState = await AuthStateTask;
             var user = authState.User;
 
-            if (user.Identity is { IsAuthenticated: true })
+            if (user.Identity is not null && user.Identity.IsAuthenticated)
             {
                 _username = user.Identity.Name;
+                _userEmail = user.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+                _userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             }
+
+            _deckList = await GetDecksHandler.Handle(new GetDecksQuery());
+            _numOfDecks = _deckList.Count;
         }
     }
+    
+    
+    
+    
+    
 }
