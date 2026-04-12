@@ -1,5 +1,7 @@
 using System.Security.Claims;
 using HazelNet_Application.Auth;
+using HazelNet_Application.CQRS.Features.Decks.Queries;
+using HazelNet_Application.DBServices.Abstractions;
 using HazelNet_Application.Interface;
 using HazelNet_Infrastracture.Command;
 using MudBlazor.Services;
@@ -7,6 +9,7 @@ using HazelNet_Web.Core;
 using HazelNet_Infrastracture.DBContext;
 using HazelNet_Web.Features.Account;
 using HazelNet_Web.Features.Private;
+using HazelNet_Web.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
@@ -47,6 +50,8 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<LoginHandler>();
 builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<IQueryHandler<GetDecksQuery, List<DeckViewModel>>, GetDecksQueryHandler>();
 
 
 builder.Services.AddHttpClient("LocalApi", (sp, client) =>
