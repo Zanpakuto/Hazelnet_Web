@@ -1,9 +1,13 @@
 using HazelNet_Domain.IRepository;
 using HazelNet_Domain.Models;
 using HazelNet_Infrastracture.DBContext;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HazelNet_Infrastracture.DBServices.Repository;
 
+//implementation of icardrepository 
 public class CardRepository : ICardRepository
 {
     private readonly ApplicationDbContext _context;
@@ -16,6 +20,13 @@ public class CardRepository : ICardRepository
     public async Task<Card?> Get(int cardId)
     {
         return await _context.Cards.FindAsync(cardId);
+    }
+
+    public async Task<List<Card>> GetCardByDeckId(int deckId)
+    {
+        return await _context.Cards
+            .Where(c => c.DeckId == deckId)
+            .ToListAsync();
     }
 
     public async Task Update(Card card)
