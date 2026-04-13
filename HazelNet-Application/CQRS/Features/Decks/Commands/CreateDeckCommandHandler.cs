@@ -20,8 +20,8 @@ public class CreateDeckCommandHandler : ICommandHandler<CreateDeckCommand, int>
         {
             DeckName = command.DeckName,
             DeckDescription = command.DeckDescription,
-            CreationDate = DateTime.Now,
-            LastAcess = DateTime.Now,
+            CreationDate = DateTime.UtcNow,
+            LastAcess = DateTime.UtcNow,
             UserId = command.UserId,
         };
         

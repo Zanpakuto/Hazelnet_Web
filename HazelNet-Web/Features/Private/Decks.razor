@@ -6,11 +6,14 @@
 @using HazelNet_Application.CQRS.Abstractions
 @using HazelNet_Application.CQRS.Features.Decks.Queries
 @using HazelNet_Application.CQRS.Abstractions
+@using HazelNet_Application.CQRS.Features.Decks.Commands
 @using HazelNet_Web.ViewModel
 @using Microsoft.AspNetCore.Components.Authorization
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IQueryHandler<GetDecksQuery, List<DeckViewModel>> GetDecksHandler
+@inject ICommandHandler<CreateDeckCommand, int> CreateDeckHandler
+@inject IDialogService DialogService
 
 @attribute [Authorize]
 
@@ -25,7 +28,8 @@
         <MudSpacer/>
         <MudItem>
             <MudButton Variant="Variant.Outlined" Size="Size.Large"
-                       StartIcon="@Icons.Material.Filled.Add">
+                       StartIcon="@Icons.Material.Filled.Add"
+                       OnClick="OpenCreateDeckDialog">
                 New Deck
             </MudButton>
         </MudItem>
@@ -34,7 +38,7 @@
     <MudStack Row="true" Spacing="20"  Justify="Justify.SpaceAround"AlignItems="AlignItems.Center" Class="mt-5">
         <MudStack Spacing="0" >
             <MudText Typo="Typo.h3">
-                @_numOfDecks
+                @_NumOfDecks
             </MudText>
             <MudText Typo="Typo.body1">
                 Decks
@@ -43,7 +47,7 @@
         
         <MudStack Spacing="0" >
             <MudText Typo="Typo.h3">
-                @_totalCards
+                @_TotalCards
             </MudText>
             <MudText Typo="Typo.body1">
                 Total Cards
@@ -52,7 +56,7 @@
         
         <MudStack Spacing="0" >
             <MudText Typo="Typo.h3" Color="Color.Success">
-                @_completedDecks
+                @_CompletedDecks
             </MudText>
             <MudText Typo="Typo.body1">
                 Completed Decks
@@ -74,7 +78,7 @@
         <MudItem sm="4" md="6"
                  Class="d-flex align-center justify-center">
             
-            <MudTextField @bind-Value="_highlightedText"  Variant="Variant.Outlined"
+            <MudTextField @bind-Value="_HighlightedText"  Variant="Variant.Outlined"
                           Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search"
                           AdornmentColor="Color.Primary"
                           Immediate="true" Label="Search for a Deck"/>
@@ -85,7 +89,7 @@
                  Class="d-flex align-center justify-center">
             <MudSelect T="string" Label="Sorting Method" FullWidth="true" FitContent="true"
                        Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Sort"
-                       AdornmentColor="Color.Primary" @bind-Value="_sortDisplay">
+                       AdornmentColor="Color.Primary" @bind-Value="_SortDisplay">
                 <MudSelectItem Value="@("due_first")">Due first</MudSelectItem>
                 <MudSelectItem Value="@("by_name")">By Name</MudSelectItem>
                 <MudSelectItem Value="@("date_added")">Date Added</MudSelectItem>
@@ -106,7 +110,7 @@
    <!-- Card Component-->
     <MudGrid Spacing="5" Justify="Justify.Center" Class="mt-5 px-20">
 
-        @foreach (var deck in _deckList)
+        @foreach (var deck in _DeckList)
         {
             <MudItem sm="12" md="4" lg="3" Class="d-flex">
                 <DeckView Deck="deck" />
@@ -120,27 +124,24 @@
 
 @code {
     
-    //Sample Deck Data
-    
-    
-    private List<DeckViewModel> _deckList = new();
+    private List<DeckViewModel> _DeckList = new();
     
     
     [CascadingParameter]
     private Task<AuthenticationState>? AuthStateTask { get; set; }
 
-    private string? _username;
-    private string? _userId;
-    private string? _userEmail;
+    private string? _Username;
+    private string? _UserId;
+    private string? _UserEmail;
 
-    private string? _highlightedText;
+    private string? _HighlightedText;
 
-    private string _sortDisplay = "Date Added";
+    private string _SortDisplay = "Date Added";
     
-    private int _numOfDecks;
-    private int _totalCards;
+    private int _NumOfDecks;
+    private int _TotalCards;
     private int _ToTaldueToday;
-    private int _completedDecks;
+    private int _CompletedDecks;
 
     
 
@@ -153,17 +154,45 @@
 
             if (user.Identity is not null && user.Identity.IsAuthenticated)
             {
-                _username = user.Identity.Name;
-                _userEmail = user.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
-                _userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                _Username = user.Identity.Name;
+                _UserEmail = user.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+                _UserId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             }
-
-            _deckList = await GetDecksHandler.Handle(new GetDecksQuery());
-            _numOfDecks = _deckList.Count;
+            if (!int.TryParse(_UserId, out int parsedUserId)) return;
+            
+            _DeckList = await GetDecksHandler.Handle(new GetDecksQuery(parsedUserId));
+            _NumOfDecks = _DeckList.Count;
         }
     }
     
-    
+    private async Task OpenCreateDeckDialog()
+    {
+        if (!int.TryParse(_UserId, out int parsedUserId)) return;
+        
+        var parameters = new DialogParameters { ["UserId"] = parsedUserId };
+        
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true,
+            CloseButton = true,
+            CloseOnEscapeKey = true,
+            Position = DialogPosition.Center
+        };
+
+        var dialog = await DialogService.ShowAsync<CreateDeckDialog>("Create New Deck", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled && result.Data is CreateDeckCommand command)
+        {
+
+            await CreateDeckHandler.Handle(command);
+            
+            _DeckList = await GetDecksHandler.Handle(new GetDecksQuery(parsedUserId));
+            _NumOfDecks = _DeckList.Count;
+            StateHasChanged();
+        }
+    }
     
     
     

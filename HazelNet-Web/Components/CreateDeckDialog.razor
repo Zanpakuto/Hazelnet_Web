@@ -1,0 +1,51 @@
+﻿@using HazelNet_Application.CQRS.Features.Decks.Commands
+
+<MudDialog>
+    <TitleContent>
+        Create New Deck
+    </TitleContent>
+
+    <DialogContent>
+        <MudDivider/>
+        <MudStack Spacing="3" AlignItems="AlignItems.Center" Justify="Justify.Center" Class="mt-3">
+            <MudTextField T="string" @bind-Value="_deckName" Label="Enter Deck Name (required)"
+                          Clearable="true" Variant="Variant.Outlined" ShrinkLabel="true"
+                          Lines="1" Sizing="InputSizing.Auto" FullWidth="true"
+                          Counter="100" MaxLength="100" Immediate="true"/>
+            <MudTextField T="string" @bind-Value="_description" Label="Enter Deck Description"
+                          Clearable="true" Variant="Variant.Outlined" ShrinkLabel="true"
+                          Lines="5" Sizing="InputSizing.Auto" FullWidth="true"
+                          Counter="250" MaxLength="250" Immediate="true"/>
+        </MudStack>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Cancel" Variant="Variant.Outlined">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit" Variant="Variant.Outlined">OK</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    [Parameter]
+    public int UserId { get; set; }
+
+    private string _deckName = string.Empty;
+    private string? _description;
+
+    private void Submit()
+    {
+        var result = new CreateDeckCommand(
+            Id: 0,
+            DeckName: _deckName,
+            DeckDescription: _description,
+            UserId: UserId
+        );
+
+        MudDialog.Close(DialogResult.Ok(result));
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

@@ -4,4 +4,4 @@ using HazelNet_Web.ViewModel;
 namespace HazelNet_Application.CQRS.Features.Decks.Queries;
 
 
-public record GetDecksQuery : IQuery<List<DeckViewModel>>;
+public record GetDecksQuery(int UserId) : IQuery<List<DeckViewModel>>;

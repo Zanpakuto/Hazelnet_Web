@@ -15,14 +15,14 @@
                         </CardHeaderActions>
                     </MudCardHeader>
 
-                    <MudCardContent Style="flex-grow: 1;">
-                        <MudText Typo="Typo.body1">
+                    <MudCardContent Class="d-flex flex-column">
+                        <MudText Typo="Typo.body2">
                             @Deck.Description
                         </MudText>
                         <MudProgressLinear Color="Color.Info" Value="@Deck.MasteredPercentage"
                                            Class="mt-5" Size="Size.Medium" Rounded="true" />
                         
-                        <MudGrid Spacing="5" Class="d-flex justify-space-between mb-5" >
+                        <MudGrid Spacing="5" Class="d-flex justify-space-between mb-auto" >
                             <MudItem>
                                 <MudText Typo="Typo.caption">
                                     @Deck.MasteredCards/@Deck.TotalNumberOfCards
@@ -48,10 +48,9 @@
                                 @_dueToday due
                             </MudChip>
                         </MudStack>
-                        
                         <MudButton Variant="Variant.Filled" Color="Color.Primary" 
-                                   Size="Size.Medium" FullWidth="true"
-                                   Class="my-5">
+                                   Size="Size.Medium" FullWidth="true" 
+                                   Class="mt-5">
                             Study Now
                         </MudButton>
                         
@@ -68,7 +67,7 @@
 
     private string GetRelativeTime(DateTime date)
     {
-        var diff = DateTime.Now - date;
+        var diff = DateTime.UtcNow - date;
 
         if (diff.TotalMinutes < 1)    return "Just now";
         if (diff.TotalMinutes < 60)   return $"{(int)diff.TotalMinutes} minutes ago";
