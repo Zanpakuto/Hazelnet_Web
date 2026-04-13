@@ -4,10 +4,12 @@ using HazelNet_Application.CQRS.Abstractions;
 using HazelNet_Application.CQRS.Features.Decks.Commands;
 using HazelNet_Application.CQRS.Features.Decks.Queries;
 using HazelNet_Application.Interface;
+using HazelNet_Domain.IRepository;
 using HazelNet_Infrastracture.Command;
 using MudBlazor.Services;
 using HazelNet_Web.Core;
 using HazelNet_Infrastracture.DBContext;
+using HazelNet_Infrastracture.DBServices.Repository;
 using HazelNet_Web.Features.Account;
 using HazelNet_Web.Features.Private;
 using HazelNet_Web.ViewModel;
@@ -18,6 +20,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using IUserRepository = HazelNet_Application.Interface.IUserRepository;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,6 +50,8 @@ builder.Services.AddCascadingAuthenticationState();
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IDeckRepository, DeckRepository>();
+
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<RegisterHandler>();
 builder.Services.AddScoped<LoginHandler>();
