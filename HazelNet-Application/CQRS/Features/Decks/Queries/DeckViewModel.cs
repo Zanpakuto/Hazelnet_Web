@@ -8,6 +8,7 @@ public class DeckViewModel
     public string? Description;
     public int TotalNumberOfCards = 0;
     public DateTime LastDateAccessed;
+    public DateTime CreationDate;
         
     //I need a function for the following 
     public int MasteredCards { get; set; }

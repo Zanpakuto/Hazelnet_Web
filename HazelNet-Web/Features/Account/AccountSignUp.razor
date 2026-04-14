@@ -126,7 +126,7 @@
         [RegularExpression(@"^((?=.*[a-z])(?=.*[A-Z])(?=.*\d)).+$", ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, and one digit.")]
         public string Password { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please confirm you password")]
         [Compare(nameof(Password), ErrorMessage = "Passwords do not match.")]
         public string Password2 { get; set; }
 
