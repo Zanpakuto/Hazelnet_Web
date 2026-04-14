@@ -89,11 +89,11 @@
                  Class="d-flex align-center justify-center">
             <MudSelect T="string" Label="Sorting Method" FullWidth="true" FitContent="true"
                        Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.Sort"
-                       AdornmentColor="Color.Primary" @bind-Value="_SortDisplay">
+                       AdornmentColor="Color.Primary" @bind-Value="_SortDisplay" @bind-Value:after="SortDecks">
                 <MudSelectItem Value="@("due_first")">Due first</MudSelectItem>
                 <MudSelectItem Value="@("by_name")">By Name</MudSelectItem>
                 <MudSelectItem Value="@("date_added")">Date Added</MudSelectItem>
-                <MudSelectItem Value="@("recently_added")">Recently Added</MudSelectItem>
+                <MudSelectItem Value="@("recently_accessed")">Recently Accessed</MudSelectItem>
             </MudSelect>
         </MudItem>
         
@@ -162,6 +162,7 @@
             
             _DeckList = await GetDecksHandler.Handle(new GetDecksQuery(parsedUserId));
             _NumOfDecks = _DeckList.Count;
+            SortDecks();
         }
     }
     
@@ -192,6 +193,19 @@
             _NumOfDecks = _DeckList.Count;
             StateHasChanged();
         }
+    }
+
+    private void SortDecks()
+    {
+        _DeckList = _SortDisplay switch
+        {
+            //Implement Due First. Must return deck with cards that are due the soonest
+            "due_first"          => _DeckList.OrderBy(x => x.Name).ToList(),
+            "by_name"            => _DeckList.OrderBy(x => x.Name).ToList(),
+            "date_added"         => _DeckList.OrderBy(x => x.CreationDate).ToList(),
+            "recently_accessed"  => _DeckList.OrderByDescending(x => x.LastDateAccessed).ToList(),
+            _                    => _DeckList
+        };
     }
     
     

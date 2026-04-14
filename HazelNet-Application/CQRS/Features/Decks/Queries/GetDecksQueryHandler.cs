@@ -25,6 +25,7 @@ public class GetDecksQueryHandler
             Name = d.DeckName,
             Description = d.DeckDescription,
             TotalNumberOfCards = d.Cards.Count,
+            CreationDate = d.CreationDate,
             LastDateAccessed = d.LastAcess
         }).ToList();
 
