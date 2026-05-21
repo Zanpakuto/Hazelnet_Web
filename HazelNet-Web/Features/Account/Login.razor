@@ -2,6 +2,8 @@
 @layout EmptyLayout
 
 @using System.ComponentModel.DataAnnotations
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 
 @inject HttpClient Http
 @inject NavigationManager Navigation
@@ -9,17 +11,25 @@
 
 <PageTitle>Account Login</PageTitle>
 
-@if (HasRegistrationSuccess)
+@if (user?.Identity?.IsAuthenticated == true)
 {
-    TriggerSuccessSnackbar("Account created! Please log in.");
+    <MudProgressCircular
+        Indeterminate="true" />
 }
-
-@if (HasError)
+else
 {
-    TriggerErrorSnackbar("Wrong Credentials. Try Again.");
-}
+    
+    @if (HasRegistrationSuccess)
+    {
+        TriggerSuccessSnackbar("Account created! Please log in.");
+    }
 
-<form action="/login" method="post" data-enhance="false">
+    @if (HasError)
+    {
+        TriggerErrorSnackbar("Wrong Credentials. Try Again.");
+    }
+    
+    <form action="/login" method="post" data-enhance="false">
     <AntiforgeryToken/>
 
 
@@ -106,8 +116,18 @@
 
 
 
+}
+
+
+
+
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthStateTask { get; set; }
+
+    private ClaimsPrincipal user;
+    
     // Read the query parameter set by the failed API redirect
     [SupplyParameterFromQuery(Name = "error")]
     public string? ErrorParam { get; set; }
@@ -117,6 +137,20 @@
     
     private bool HasError => !string.IsNullOrEmpty(ErrorParam);
     private bool HasRegistrationSuccess => !string.IsNullOrEmpty(RegistrationSuccessParam);
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthStateTask is null)
+            return;
+
+        var authState = await AuthStateTask;
+        user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            Navigation.NavigateTo("/Dashboard", true);
+        }
+    }
 
     private void TriggerSuccessSnackbar(string message)
     {
