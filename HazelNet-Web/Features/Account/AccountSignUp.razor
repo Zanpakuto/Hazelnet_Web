@@ -1,115 +1,173 @@
 ﻿@page "/register"
 @layout EmptyLayout
 
-
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject ISnackbar Snackbar
 
 @using System.ComponentModel.DataAnnotations
+@using System.Security.Claims
 @using System.Text.Json
+@using Microsoft.AspNetCore.Components.Authorization
 
 <PageTitle>Account Sign Up</PageTitle>
 
-@if (!string.IsNullOrEmpty(_errorMessage))
+@if (user?.Identity?.IsAuthenticated == true)
 {
-    TriggerError(_errorMessage);
+    <MudProgressCircular Indeterminate="true" />
 }
+else
+{
+    <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator/>
 
-<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator/>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="text-center d-flex align-center">
+            <MudGrid Spacing="0" Justify="Justify.Center" Class="flex-grow-1">
 
-    <MudContainer MaxWidth="MaxWidth.Large" Class="text-center d-flex align-center">
-        <MudGrid Spacing="0" Justify="Justify.Center" Class="flex-grow-1">
+                <MudItem xs="12" md="5"  Class="d-flex justify-center align-center">
+                    <MudPaper Class="pa-15 ma-2 flex-grow-1" Outlined="false" Elevation="0" Style="background: var(--mud-palette-background);">
 
-            <MudItem xs="12" md="5"  Class="d-flex justify-center align-center">
-                <MudPaper Class="pa-15 ma-2 flex-grow-1" Outlined="false" Elevation="0" Style="background: var(--mud-palette-background);">
+                        <MudStack>
+                            <MudText Typo="Typo.h1" Color="Color.Default" Align="Align.Center">
+                                Registration
+                            </MudText>
+                        
+                            <MudCard Elevation="0" Style="background: var(--mud-palette-background);">
+                                <MudCardContent>
+                                    <MudTextField Label="Username" HelperText="Max. 30 characters"
+                                                  @bind-Value="model.Username" For="@(() => model.Username)"
+                                                  Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Person"/>
+                                    
+                                    <MudTextField Label="Email" Class="mt-3"
+                                                  @bind-Value="model.Email" For="@(() => model.Email)"
+                                                  Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Email"/>
+                                    
+                                    <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                                                  Value="model.Password"
+                                                  ValueChanged="@((string s) => { model.Password = s; ComputeStrength(s); })"
+                                                  For="@(() => model.Password)" 
+                                                  InputType="InputType.Password" Clearable="true" Immediate="true"
+                                                  Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Lock"/>
+                                    
+                                    @if (!string.IsNullOrEmpty(model.Password))
+                                    {
+                                        <div style="margin-bottom: 16px;">
+                                            <MudProgressLinear Value="@_passwordStrengthPct"
+                                                               Color="@_passwordStrengthColor"
+                                                               Rounded="true"
+                                                               Size="Size.Small"
+                                                               Class="mb-1"/>
+                                            <MudText Typo="Typo.caption" Color="@_passwordStrengthColor">
+                                                @_passwordStrengthLabel
+                                            </MudText>
+                                        </div>
+                                    }
+                                    
+                                    <MudTextField Label="Check Password" HelperText="Repeat the password" Class="mt-3"
+                                                  @bind-Value="model.Password2" For="@(() => model.Password2)" 
+                                                  InputType="InputType.Password" Clearable="true"
+                                                  Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Password"/>
+                                </MudCardContent>
+                                
+                                <MudCardActions>
+                                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" 
+                                               Color="Color.Primary" Class="ml-auto" Size="Size.Large"
+                                               FullWidth="true" Disabled="@_isBusy">
+                                        @if (_isBusy)
+                                        {
+                                            <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2"/>
+                                        }
+                                        Register
+                                    </MudButton>
+                                </MudCardActions>
+                                
+                                <MudText Typo="Typo.caption" Align="Align.Center" Color="Color.Dark">
+                                    or signup with
+                                </MudText> 
+                                <MudStack Row="true" Spacing="3" Justify="Justify.Center">
+                                    <MudIconButton Icon="@Icons.Custom.Brands.Google" Color="Color.Dark" aria-label="google" Size="Size.Large"/>
+                                    <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Color="Color.Dark" aria-label="facebook" Size="Size.Large"/>
+                                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Dark" aria-label="github" Size="Size.Large"/>
+                                    <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn" Color="Color.Dark" aria-label="linkedin" Size="Size.Large"/>
+                                </MudStack>
+                            </MudCard>
+                        </MudStack>
 
-                    <MudStack>
-                        <MudText Typo="Typo.h1" Color="Color.Default" Align="Align.Center">
-                            Registration
-                        </MudText>
-                    
-                        <MudCard Elevation="0" Style="background: var(--mud-palette-background);">
-                            <MudCardContent>
-                                <MudTextField Label="Username" HelperText="Max. 30 characters"
-                                              @bind-Value="model.Username" For="@(() => model.Username)"
-                                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Person"/>
-                                <MudTextField Label="Email" Class="mt-3"
-                                              @bind-Value="model.Email" For="@(() => model.Email)"
-                                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Email"/>
-                                <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
-                                              @bind-Value="model.Password" For="@(() => model.Password)" 
-                                              InputType="InputType.Password" Clearable="true"
-                                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Lock"/>
-                                <MudTextField Label="Check Password" HelperText="Repeat the password" Class="mt-3"
-                                              @bind-Value="model.Password2" For="@(() => model.Password2)" 
-                                              InputType="InputType.Password" Clearable="true"
-                                              Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Password"/>
-                            </MudCardContent>
-                            <MudCardActions>
-                                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" 
-                                           Color="Color.Primary" Class="ml-auto" Size="Size.Large"
-                                           FullWidth="true">
-                                    Register
-                                </MudButton>
-                            </MudCardActions>
-                            <MudText Typo="Typo.caption" Align="Align.Center" Color="Color.Dark">
-                                or signup with
-                            </MudText> 
-                            <MudStack Row="true" Spacing="3" Justify="Justify.Center">
-                                <MudIconButton Icon="@Icons.Custom.Brands.Google" Color="Color.Dark" aria-label="google" Size="Size.Large"/>
-                                <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Color="Color.Dark" aria-label="facebook" Size="Size.Large"/>
-                                <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Dark" aria-label="github" Size="Size.Large"/>
-                                <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn" Color="Color.Dark" aria-label="linkedin" Size="Size.Large"/>
+                    </MudPaper>
+                </MudItem>
 
-                            </MudStack>
-                        </MudCard>
-                    </MudStack>
+                <MudItem xs="12" md="7" Class="d-flex" >
+                    <MudPaper Class="pa-16 ma-5 flex-grow-1 d-flex" Outlined="true" Elevation="0"
+                              Style="background: #7e6fff; border-radius: 100px 10px 10px 100px">
+                        <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Class="flex-grow-1">
+                            <MudText Typo="Typo.h1" Align="Align.Center" Style="color: #fcfcfd">
+                                Welcome to HazelNet!
+                            </MudText>
+                            <MudText Typo="Typo.body1" Align="Align.Center" Style="color: #fcfcfd" Class="mt-10">
+                                Already have an account?
+                            </MudText>
 
-                </MudPaper>
-            </MudItem>
+                            <MudButton Variant="Variant.Outlined" class="mb-10" Size="Size.Large" Href="/login"
+                                       Style="background-color: transparent; color: white; width: 200px; height: 60px; border-color: white">
+                                Login 
+                            </MudButton>
+                        </MudStack>
+                    </MudPaper>
+                </MudItem>
 
-
-            <MudItem xs="12" md="7" Class="d-flex" >
-                <MudPaper Class="pa-16 ma-5 flex-grow-1 d-flex" Outlined="true" Elevation="0"
-                          Style="background: #7e6fff; 
-                      border-radius: 100px 10px 10px 100px">
-                    <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" 
-                              Class="flex-grow-1">
-                        <MudText Typo="Typo.h1" Align="Align.Center" Style="color: #fcfcfd">
-                            Welcome to HazelNet!
-                        </MudText>
-                        <MudText Typo="Typo.body1" Align="Align.Center" Style="color: #fcfcfd"
-                                 Class="mt-10">
-                            Already have an account?
-                        </MudText>
-
-                        <MudButton Variant="Variant.Outlined" class="mb-10" Size="Size.Large"
-                                   Href="/login"
-                                   Style="background-color: transparent; color: white; width: 200px; height: 60px; border-color: white">
-                            Login 
-                        </MudButton>
-                    
-                    </MudStack>
-                </MudPaper>
-            </MudItem>
-
-        </MudGrid>
-    </MudContainer>
-
-</EditForm>
-
-
+            </MudGrid>
+        </MudContainer>
+    </EditForm>
+}
 
 @code {
     public RegisterAccountForm model = new RegisterAccountForm();
-    private bool success;
-    
     private string? _errorMessage;
     private bool _isBusy;
     
+    private double _passwordStrengthPct   = 0;
+    private Color  _passwordStrengthColor = Color.Error;
+    private string _passwordStrengthLabel = "";
     
+    private void ComputeStrength(string value)
+    {
+        if (string.IsNullOrEmpty(value)) { _passwordStrengthPct = 0; return; }
+
+        int score = 0;
+        if (value.Length >= 8)                     score++;
+        if (value.Length >= 12)                    score++;
+        if (value.Any(char.IsUpper))               score++;
+        if (value.Any(char.IsDigit))               score++;
+        if (value.Any(c => !char.IsLetterOrDigit(c))) score++;
+
+        (_passwordStrengthPct, _passwordStrengthColor, _passwordStrengthLabel) = score switch
+        {
+            <= 1 => (20,  Color.Error,   "Weak"),
+            2    => (40,  Color.Warning, "Fair"),
+            3    => (60,  Color.Warning, "Moderate"),
+            4    => (80,  Color.Success, "Strong"),
+            _    => (100, Color.Success, "Very Strong")
+        };
+    }
+    
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthStateTask { get; set; }
+
+    private ClaimsPrincipal user;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthStateTask is null)
+            return;
+
+        var authState = await AuthStateTask;
+        user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            Navigation.NavigateTo("/Dashboard", true);
+        }
+    }
     
     public class RegisterAccountForm
     {
@@ -129,7 +187,6 @@
         [Required(ErrorMessage = "Please confirm you password")]
         [Compare(nameof(Password), ErrorMessage = "Passwords do not match.")]
         public string Password2 { get; set; }
-
     }
 
     private async Task OnValidSubmit(EditContext context)
@@ -141,7 +198,6 @@
         
         try
         {
-            // Assuming standard API convention. Change logic if using Blazor Server.
             var response = await Http.PostAsJsonAsync(absoluteUri, model);
 
             if (response.IsSuccessStatusCode)
@@ -150,15 +206,15 @@
             }
             else
             {
-                // Read error, display locally, DO NOT Navigate
                 var json = await response.Content.ReadFromJsonAsync<JsonElement>();
                 _errorMessage = json.GetProperty("error").GetString();
+                TriggerError(_errorMessage ?? "Unknown registration error.");
             }
         }
         catch (Exception ex)
         {
             _errorMessage = "An unexpected error occurred.";
-            // Log error to console or logging service
+            TriggerError(_errorMessage);
             Console.WriteLine(ex.Message);
         }
         finally
@@ -166,7 +222,6 @@
             _isBusy = false;
         }
     }
-
 
     private void TriggerError(string errorMessage)
     {
@@ -176,5 +231,4 @@
             config.ShowCloseIcon = true;
         });
     }
-    
 }

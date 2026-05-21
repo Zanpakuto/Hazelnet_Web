@@ -18,7 +18,14 @@
 
 
 <PageTitle>Dashboard</PageTitle>
-@if (_goalReached && _showGoalAlert)
+
+@if (_isLoading)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary"/>
+}
+else
+{
+    @if (_goalReached && _showGoalAlert)
 {
     <MudAlert Severity="Severity.Success"
               Variant="Variant.Filled"
@@ -202,10 +209,13 @@ else
 {
     <WelcomeUserPage/>  
 }
+}
+
     
 
 @code {
     private List<DeckViewModel> _DeckList = new();
+    private bool _isLoading = true;
 
     
     private int _deckCount;
@@ -238,24 +248,24 @@ else
         try
         {
             var userIdString = await _currentUserService.GetUserIdAsync();
-        
+
             if (!int.TryParse(userIdString, out _UserId))
             {
                 throw new Exception("User is not authenticated or token is invalid.");
             }
-            
+
 
             var allDecks = await GetDecksVMHandler.Handle(new GetDecksVMQuery(_UserId));
 
-            
-            
+
+
             _deckCount = allDecks.Count;
             _DeckList = allDecks
                 .OrderByDescending(c => c.LastDateAccessed)
                 .Take(3)
                 .ToList();
-            
-            
+
+
             _dailyGoal = await GetCountOfAllCardsQueryHandler.Handle(new GetCountOfAllCardsQuery(_UserId));
 
             // DueToday is already on the ViewModel — just sum it
@@ -263,7 +273,7 @@ else
             _cardsStudied = _dailyGoal - _dueCount;
 
             await BuildUpcomingReviews(allDecks);
-            
+
 
             StateHasChanged();
         }
@@ -271,6 +281,10 @@ else
         {
             Console.WriteLine(e);
             throw;
+        }
+        finally
+        {
+            _isLoading = false;
         }
         
     }

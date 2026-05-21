@@ -11,5 +11,10 @@ public interface IUserRepository
     Task<string?> GetPasswordHashAsync(string email);
     //Made a new query for getting user by email
     Task<User> GetUserByEmailAsync(string email);
+    
+    Task DeleteUserByIdAsync(int userId);
+    Task UpdateUserNameAsync(int userId, string userName);
+    Task<string?> GetUsernameByUserIdAsync(int userId);
+    Task<bool> UpdatePasswordAsync(int userId, string currentPassword, string newPassword); 
 
 }

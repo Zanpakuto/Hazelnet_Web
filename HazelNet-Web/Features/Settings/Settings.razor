@@ -1,10 +1,596 @@
 ﻿@page "/settings"
 
+@using HazelNet_Application.CQRS.Abstractions
+@using HazelNet_Application.CQRS.Features.Cards.Queries
+@using HazelNet_Application.CQRS.Features.Decks.Queries
+@using HazelNet_Application.CQRS.Features.ReviewLogs.Queries
+@using HazelNet_Application.CQRS.Features.User.Command
+@using HazelNet_Application.CQRS.Features.User.Query
+@using HazelNet_Application.Interface
+@using HazelNet_Domain.Models
+@using HazelNet_Web.Features.Settings.Components
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.JSInterop
+
 @attribute [Authorize]
 
-<h3>Settings</h3>
+@inject NavigationManager NavigationManager
+@inject IDialogService    DialogService
+@inject ISnackbar         Snackbar
+@inject IJSRuntime        JS
+
+@inject IQueryHandler<GetAllDecksByUserIDQuery, List<Deck>>  GetAllDecksByUserIDQueryHandler
+@inject IQueryHandler<GetCountOfAllCardsQuery, int>  GetCountOfAllCardsQueryHandler
+@inject IQueryHandler<GetTotalCountOfReviewLogsQuery, int>  GetTotalCountOfReviewLogsQueryHandler
+@inject IQueryHandler<GetUsernameByUserIdQuery, string?> GetUsernameByUserIdQueryHandler
+
+@inject ICommandHandler<DeleteUserCommand> DeleteUserCommandHandler
+
+<style>
+    .settings-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        letter-spacing: -1px;
+        flex-shrink: 0;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .settings-section {
+        border-radius: 16px !important;
+        overflow: hidden;
+    }
+
+    .settings-section-header {
+        padding: 20px 24px 0 24px;
+        border-bottom: 1px solid var(--mud-palette-lines-default);
+        margin-bottom: 0;
+    }
+
+    .settings-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 24px;
+        gap: 16px;
+        transition: background 0.15s ease;
+    }
+
+    .settings-row:not(:last-child) {
+        border-bottom: 1px solid var(--mud-palette-lines-default);
+    }
+
+    .settings-row:hover {
+        background: rgba(0,0,0,0.02);
+    }
+
+    .danger-zone-card {
+        border: 1.5px solid var(--mud-palette-error) !important;
+        border-radius: 16px !important;
+    }
+
+    .danger-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 24px;
+        gap: 16px;
+    }
+
+    .danger-row:not(:last-child) {
+        border-bottom: 1px solid rgba(var(--mud-palette-error-rgb), 0.15);
+    }
+
+    .stat-pill {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 20px;
+        border-radius: 12px;
+        background: rgba(0,0,0,0.03);
+        border: 1px solid var(--mud-palette-lines-default);
+        min-width: 80px;
+    }
+
+    @@media (max-width: 600px) {
+        .settings-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .settings-row .action-slot {
+            align-self: flex-end;
+        }
+        .danger-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .danger-row .action-slot {
+            align-self: flex-end;
+        }
+    }
+</style>
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="pt-8 pb-12">
+
+    @* ── Page Title ── *@
+    <div class="mb-8">
+        <MudText Typo="Typo.h4" Style="font-weight: 700; letter-spacing: -0.5px;">Settings</MudText>
+        <MudText Typo="Typo.body2" Color="Color.Default">Manage your account and preferences</MudText>
+    </div>
+
+    @* ── Profile Card ── *@
+    <MudPaper Outlined="true" Class="settings-section mb-5">
+
+        <div class="settings-section-header pb-4 pt-5">
+            <MudText Typo="Typo.overline" Color="Color.Default" Style="font-size: 0.7rem; letter-spacing: 1.5px;">PROFILE</MudText>
+        </div>
+
+        @* Avatar + name block *@
+        <div style="display: flex; align-items: center; gap: 20px; padding: 24px;">
+            <div class="settings-avatar">
+                @_initials
+            </div>
+            <div style="flex: 1; min-width: 0;">
+                <MudText Typo="Typo.h4" Style="font-weight: 600; line-height: 1.2;">@(_Username ?? "—")</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Default">@(_UserEmail ?? "—")</MudText>
+            </div>
+        </div>
+
+        @* Stats strip *@
+        <div style="display: flex; gap: 12px; padding: 0 24px 24px; flex-wrap: wrap;">
+            <div class="stat-pill">
+                <MudText Typo="Typo.h6" Style="font-weight: 700; line-height: 1;">@_numOfDecks</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Default">Decks</MudText>
+            </div>
+            <div class="stat-pill">
+                <MudText Typo="Typo.h6" Style="font-weight: 700; line-height: 1;">@_numOfCards</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Default">Cards</MudText>
+            </div>
+            <div class="stat-pill">
+                <MudText Typo="Typo.h6" Style="font-weight: 700; line-height: 1;">@_numberOfReviews</MudText>
+                <MudText Typo="Typo.caption" Color="Color.Default">Reviews</MudText>
+            </div>
+        </div>
+
+    </MudPaper>
+
+    @* ── Account Information ── *@
+    <MudPaper Elevation="0" Outlined="true" Class="settings-section mb-5">
+
+        <div class="settings-section-header pb-4 pt-5">
+            <MudText Typo="Typo.overline" Color="Color.Default" Style="font-size: 0.7rem; letter-spacing: 1.5px;">ACCOUNT INFORMATION</MudText>
+        </div>
+
+        @* Username row *@
+        <div class="settings-row">
+            <div>
+                <MudText Typo="Typo.body1" Style="font-weight: 600;">Username</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Default">@(_Username ?? "Not set")</MudText>
+            </div>
+            <div class="action-slot">
+                <MudButton Variant="Variant.Text"
+                           Color="Color.Primary"
+                           Size="Size.Small"
+                           Style="text-transform: none; font-weight: 600;"
+                           OnClick="OpenEditUsernameDialogAsync">
+                    Edit
+                </MudButton>
+            </div>
+        </div>
+
+        @* Email row *@
+        <div class="settings-row">
+            <div>
+                <MudText Typo="Typo.body1" Style="font-weight: 600;">Email Address</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Default">@(_UserEmail ?? "Not set")</MudText>
+            </div>
+            <div class="action-slot">
+                <MudChip T="string"
+                         Size="Size.Small"
+                         Color="Color.Success"
+                         Variant="Variant.Outlined"
+                         Icon="@Icons.Material.Outlined.VerifiedUser"
+                         Style="height: 26px; font-size: 0.72rem;">
+                    Verified
+                </MudChip>
+            </div>
+        </div>
+        
+    </MudPaper>
+
+    @* ── Security ── *@
+    <MudPaper Elevation="0" Outlined="true" Class="settings-section mb-5">
+
+        <div class="settings-section-header pb-4 pt-5">
+            <MudText Typo="Typo.overline" Color="Color.Default" Style="font-size: 0.7rem; letter-spacing: 1.5px;">SECURITY</MudText>
+        </div>
+
+        @* Password row *@
+        <div class="settings-row">
+            <div>
+                <MudText Typo="Typo.body1" Style="font-weight: 600;">Password</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Default">Last changed: never</MudText>
+            </div>
+            <div class="action-slot">
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Primary"
+                           Size="Size.Small"
+                           Style="text-transform: none; border-radius: 8px; font-weight: 600;"
+                           StartIcon="@Icons.Material.Outlined.Lock"
+                           OnClick="OpenChangePasswordDialogAsync">
+                    Change Password
+                </MudButton>
+            </div>
+        </div>
+
+        @* Active sessions row — placeholder *@
+        <div class="settings-row">
+            <div>
+                <MudText Typo="Typo.body1" Style="font-weight: 600;">Active Session</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Default">Current browser session</MudText>
+            </div>
+            <div class="action-slot">
+                <MudChip T="string"
+                         Size="Size.Small"
+                         Color="Color.Success"
+                         Icon="@Icons.Material.Outlined.Circle"
+                         Style="height: 26px; font-size: 0.72rem;">
+                    Active
+                </MudChip>
+            </div>
+        </div>
+
+    </MudPaper>
+
+    @* ── Data & Privacy ── *@
+    <MudPaper Elevation="0" Outlined="true" Class="settings-section mb-5">
+
+        <div class="settings-section-header pb-4 pt-5">
+            <MudText Typo="Typo.overline" Color="Color.Default" Style="font-size: 0.7rem; letter-spacing: 1.5px;">DATA & PRIVACY</MudText>
+        </div>
+
+        @* Export row *@
+        <div class="settings-row">
+            <div>
+                <MudText Typo="Typo.body1" Style="font-weight: 600;">Export My Data</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Default">Download all your decks, cards, and review history as CSV.</MudText>
+            </div>
+            <div class="action-slot">
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Default"
+                           Size="Size.Small"
+                           Style="text-transform: none; border-radius: 8px; font-weight: 600;"
+                           StartIcon="@Icons.Material.Outlined.FileDownload"
+                           Disabled="_isExporting"
+                           OnClick="ExportAsCsvAsync">
+                    @(_isExporting ? "Exporting…" : "Export CSV")
+                </MudButton>
+            </div>
+        </div>
+
+    </MudPaper>
+
+    @* ── Session ── *@
+    <MudPaper Elevation="0" Outlined="true" Class="settings-section mb-5">
+
+        <div class="settings-section-header pb-4 pt-5">
+            <MudText Typo="Typo.overline" Color="Color.Default" Style="font-size: 0.7rem; letter-spacing: 1.5px;">SESSION</MudText>
+        </div>
+
+        <div class="settings-row">
+            <div>
+                <MudText Typo="Typo.body1" Style="font-weight: 600;">Log Out</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Default">End your current session on this device.</MudText>
+            </div>
+            <div class="action-slot">
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Default"
+                           Size="Size.Small"
+                           Style="text-transform: none; border-radius: 8px; font-weight: 600;"
+                           StartIcon="@Icons.Material.Outlined.Logout"
+                           OnClick="LogOutAsync">
+                    Log Out
+                </MudButton>
+            </div>
+        </div>
+
+    </MudPaper>
+
+    @* ── Danger Zone ── *@
+    <MudPaper Elevation="0" Class="settings-section danger-zone-card mb-2">
+
+        <div class="settings-section-header pb-4 pt-5" style="border-bottom-color: rgba(var(--mud-palette-error-rgb), 0.2);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <MudIcon Icon="@Icons.Material.Outlined.WarningAmber" Color="Color.Error" Size="Size.Small"/>
+                <MudText Typo="Typo.overline" Color="Color.Error" Style="font-size: 0.7rem; letter-spacing: 1.5px;">DANGER ZONE</MudText>
+            </div>
+        </div>
+
+        <div class="danger-row">
+            <div>
+                <MudText Typo="Typo.body1" Style="font-weight: 600;">Delete Account</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Default">
+                    Permanently remove your account, all decks, cards, and study history. This cannot be undone.
+                </MudText>
+            </div>
+            <div class="action-slot">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Error"
+                           Size="Size.Small"
+                           Style="text-transform: none; border-radius: 8px; font-weight: 600;"
+                           StartIcon="@Icons.Material.Outlined.DeleteForever"
+                           Disabled="_isDeletingAccount"
+                           OnClick="DeleteAccountAsync">
+                    @(_isDeletingAccount ? "Deleting…" : "Delete Account")
+                </MudButton>
+            </div>
+        </div>
+
+    </MudPaper>
+
+    @* Footer note *@
+    <MudText Typo="Typo.caption" Color="Color.Default" Align="Align.Center" Class="mt-4 d-block">
+        HazelNet · @DateTime.Now.Year · Logged in as @(_Username ?? "—")
+    </MudText>
+
+</MudContainer>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthStateTask { get; set; }
+
+    private string? _Username;
+    private string? _StringUserId;
+    private int     _UserId;
+    private string? _UserEmail;
+    private string  _initials    = "?";
+   
+
+    private bool _isExporting;
+    private bool _isDeletingAccount;
+
+    private int _numOfCards;
+    private int _numOfDecks;
+    private int _numberOfReviews;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (AuthStateTask is null) return;
+
+            var authState = await AuthStateTask;
+            var user      = authState.User;
+
+            if (user.Identity is { IsAuthenticated: true })
+            {
+               
+                _UserEmail = user.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+                _StringUserId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                
+                if (!int.TryParse(_StringUserId, out _UserId))
+                {
+                    throw new Exception("User is not authenticated or token is invalid.");
+                }
+                
+                _Username = await GetUsernameByUserIdQueryHandler.Handle(new GetUsernameByUserIdQuery(_UserId));
+                _initials = BuildInitials(_Username);
+            }
+
+            _numOfCards = await GetCountOfAllCardsQueryHandler.Handle(new GetCountOfAllCardsQuery(_UserId));
+            var decks = await GetAllDecksByUserIDQueryHandler.Handle(new GetAllDecksByUserIDQuery(_UserId));
+            _numOfDecks = decks.Count;
+            _numberOfReviews = await GetTotalCountOfReviewLogsQueryHandler.Handle(new GetTotalCountOfReviewLogsQuery(_UserId));
+            int.TryParse(_StringUserId, out _UserId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private static string BuildInitials(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return "?";
+        var parts = name.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length >= 2
+            ? $"{parts[0][0]}{parts[^1][0]}".ToUpperInvariant()
+            : name[..Math.Min(2, name.Length)].ToUpperInvariant();
+    }
+
+    // ── Edit Username ─────────────────────────────────────────────────────────
+
+    private async Task OpenEditUsernameDialogAsync()
+    {
+        var parameters = new DialogParameters<EditUserNameDialog>
+        {
+            ["CurrentUsername"] = _Username,
+            ["_UserId"] = _UserId
+        };
+
+        var options = new DialogOptions
+        {
+            CloseOnEscapeKey = true,
+            MaxWidth         = MaxWidth.ExtraSmall,
+            FullWidth        = true,
+            CloseButton      = true
+        };
+
+        var dialog = await DialogService.ShowAsync<EditUserNameDialog>("Edit Username", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled && result.Data is string newUsername)
+        {
+            _Username = newUsername;
+            _initials = BuildInitials(_Username);
+            StateHasChanged();
+        }
+    }
+
+    // ── Change Password ───────────────────────────────────────────────────────
+
+    private async Task OpenChangePasswordDialogAsync()
+    {
+        var parameters = new DialogParameters<ChangePasswordDialog>
+        {
+            { x => x.UserId, _UserId }
+        };
+
+        var options = new DialogOptions
+        {
+            CloseOnEscapeKey = true,
+            MaxWidth         = MaxWidth.Small,
+            FullWidth        = true,
+            CloseButton      = true
+        };
+
+        var dialog = await DialogService.ShowAsync<ChangePasswordDialog>("Change Password", parameters, options);
+        var result = await dialog.Result;
+
+        if (result is { Canceled: false })
+            Snackbar.Add("Password changed successfully.", Severity.Success);
+    }
+
+    // ── Export ────────────────────────────────────────────────────────────────
+
+
+    private async Task DownloadFileAsync(string fileName, byte[] content, string mimeType)
+    {
+        var base64  = Convert.ToBase64String(content);
+        var dataUri = "data:" + mimeType + ";base64," + base64;
+        var js = "var _a=document.createElement('a');" +
+                 "_a.setAttribute('href','"     + dataUri  + "');" +
+                 "_a.setAttribute('download','" + fileName + "');" +
+                 "document.body.appendChild(_a);" +
+                 "_a.click();" +
+                 "document.body.removeChild(_a);";
+        await JS.InvokeVoidAsync("eval", js);
+    }
+
+    private async Task ExportAsCsvAsync()
+    {
+        _isExporting = true;
+        StateHasChanged();
+
+        try
+        {
+            var decks = await GetAllDecksByUserIDQueryHandler.Handle(new GetAllDecksByUserIDQuery(_UserId));
+
+            if (decks is null || decks.Count == 0)
+            {
+                Snackbar.Add("Nothing to export — you have no decks yet.", Severity.Info);
+                return;
+            }
+
+            var csv   = BuildCsvFromDecks(decks);
+            var bytes = System.Text.Encoding.UTF8.GetBytes(csv);
+            await DownloadFileAsync($"hazelnet_export_{DateTime.UtcNow:yyyyMMdd}.csv", bytes, "text/csv");
+            Snackbar.Add($"Exported {decks.Count} deck(s) — check your downloads.", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Export failed: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _isExporting = false;
+        }
+    }
+
+    private static string BuildCsvFromDecks(List<Deck> decks)
+    {
+        var sb = new System.Text.StringBuilder();
+
+        // Header row
+        sb.AppendLine("DeckName,Front,Back,State,Stability,Difficulty,DueAt,CreatedAt");
+
+        foreach (var deck in decks)
+        {
+            // If your deck has no cards loaded, this loop just won't run for that deck
+            foreach (var card in deck.Cards)
+            {
+                sb.AppendLine(string.Join(",",
+                    EscapeCsv(deck.DeckName),
+                    EscapeCsv(card.FrontOfCard),
+                    EscapeCsv(card.BackOfCard),
+                    EscapeCsv(card.State.ToString()),
+                    card.Stability.ToString("F2"),
+                    card.Difficulty.ToString("F2"),
+                    card.Due.ToString("O"),
+                    card.CreationDate.ToString("O")
+                ));
+            }
+        }
+
+        return sb.ToString();
+    }
+
+// Wraps a value in quotes and escapes any internal quotes — required for
+// values that may contain commas or newlines (e.g. card fronts/backs)
+    private static string EscapeCsv(string? value)
+    {
+        if (string.IsNullOrEmpty(value)) return "\"\"";
+        return "\"" + value.Replace("\"", "\"\"") + "\"";
+    }
     
+
+    // ── Log Out ───────────────────────────────────────────────────────────────
+
+    private async Task LogOutAsync()
+    {
+        var confirm = await DialogService.ShowMessageBoxAsync(
+            title:      "Log Out",
+            message:    "Are you sure you want to log out?",
+            yesText:    "Log Out",
+            cancelText: "Cancel");
+
+        if (confirm is not true) return;
+
+        NavigationManager.NavigateTo("/logout", forceLoad: true);
+    }
+
+    // ── Delete Account ────────────────────────────────────────────────────────
+
+    private async Task DeleteAccountAsync()
+    {
+        var first = await DialogService.ShowMessageBoxAsync(
+            title:      "Delete Account",
+            message:    "This will permanently delete your account, all decks, cards, and progress. This cannot be undone.",
+            yesText:    "Yes, continue",
+            cancelText: "Cancel");
+
+        if (first is not true) return;
+
+        var second = await DialogService.ShowMessageBoxAsync(
+            title:      "Last Chance",
+            message:    $"You are about to permanently delete \"{_Username}\". Are you absolutely sure?",
+            yesText:    "Delete my account",
+            cancelText: "No, keep it");
+
+        if (second is not true) return;
+
+        _isDeletingAccount = true;
+        StateHasChanged();
+
+        try
+        {
+            await DeleteUserCommandHandler.Handle(new DeleteUserCommand(_UserId));     
+            NavigationManager.NavigateTo("/logout", forceLoad: true);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Could not delete account: {ex.Message}", Severity.Error);
+            _isDeletingAccount = false;
+        }
+    }
 }
