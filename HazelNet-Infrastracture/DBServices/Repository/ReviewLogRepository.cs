@@ -26,7 +26,15 @@ public class ReviewLogRepository : IReviewLogRepository
         return await _context.ReviewLogs
             .Where(rl => rl.ReviewHistoryId == reviewHistoryId)
             .ToListAsync();
-    }  
+    } 
+    
+    public async Task<int> GetTotalReviewsByUserIdAsync(int userId)
+    {
+        await using var _context = await _contextFactory.CreateDbContextAsync();
+        return await _context.ReviewLogs
+            .Where(rl => rl.ReviewHistory.Card.Deck.UserId == userId)
+            .CountAsync();
+    }
     
     public async Task<IReadOnlyDictionary<int, List<ReviewLog>>> GetReviewLogsByHistoryIdsAsync(IEnumerable<int> historyIds)
     {

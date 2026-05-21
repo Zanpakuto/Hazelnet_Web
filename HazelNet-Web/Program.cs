@@ -11,6 +11,8 @@ using HazelNet_Application.CQRS.Features.ReviewLogs.Commands;
 using HazelNet_Application.CQRS.Features.ReviewLogs.Queries;
 using HazelNet_Application.CQRS.Features.Stats;
 using HazelNet_Application.CQRS.Features.Stats.Queries;
+using HazelNet_Application.CQRS.Features.User.Command;
+using HazelNet_Application.CQRS.Features.User.Query;
 using HazelNet_Application.Interface;
 using HazelNet_Domain.IRepository;
 using HazelNet_Domain.Models;
@@ -66,6 +68,10 @@ builder.Services.AddScoped<IFSRSParametersRepository, FSRSParametersRepository>(
 builder.Services.AddScoped<IStatsRepository, StatsRepository>();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<ICommandHandler<DeleteUserCommand>, DeleteUserCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<UpdateUserNameCommand>, UpdateUserNameCommandHandler>();
+builder.Services.AddScoped<IQueryHandler<GetUsernameByUserIdQuery, string>,  GetUsernameByUserIdQueryHandler>();
+builder.Services.AddScoped<ICommandHandler<UpdateUserPasswordCommand>, UpdateUserPasswordCommandHandler>();
 
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<RegisterHandler>();
@@ -74,6 +80,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IQueryHandler<GetDecksVMQuery, List<DeckViewModel>>, GetDecksVMQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetAllCardsInDeckQuery, List<Card>>, GetAllCardsInDeckQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetAllDecksByUserIDQuery, List<Deck>>, GetAllDecksByUserIDQueryHandler>();
 
 builder.Services.AddScoped<ICommandHandler<CreateDeckCommand>, CreateDeckCommandHandler>();
 builder.Services.AddScoped<ICommandHandler<DeleteDeckCommand>, DeleteDeckCommandHandler>();
@@ -89,6 +96,9 @@ builder.Services.AddScoped<IQueryHandler<GetCompletedDecksCountQuery, int>, GetC
 
 builder.Services.AddScoped<ICommandHandler<OptimizeWeightsCommand>, OptimizeWeightsCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<GetUserStatQuery, UserStatsViewModel>, GetUserStatsQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetTotalCountOfReviewLogsQuery, int>,  GetTotalCountOfReviewLogsQueryHandler>();
+
+
 
 
 

@@ -1,0 +1,119 @@
+﻿@using HazelNet_Application.CQRS.Abstractions
+@using HazelNet_Application.CQRS.Features.User.Command
+@using MudBlazor
+
+@inject ICommandHandler<UpdateUserNameCommand> UpdateUserNameCommandHandler
+<MudDialog>
+
+    <TitleContent>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <MudText Typo="Typo.h6" Style="font-weight: 600;">Edit Username</MudText>
+        </div>
+    </TitleContent>
+
+    <DialogContent>
+        <MudText Typo="Typo.caption" Color="Color.Default" Class="mb-5">
+            Choose a new display name. This is how you'll appear in the app.
+        </MudText>
+
+        <MudForm @ref="_form" @bind-IsValid="_isValid">
+            <MudTextField T="string"
+                          @bind-Value="_newUsername"
+                          Label="New Username"
+                          Variant="Variant.Outlined"
+                          Placeholder="@CurrentUsername"
+                          Required="true"
+                          RequiredError="Username cannot be empty."
+                          Validation="@(new Func<string, string?>(ValidateUsername))"
+                          Counter="32"
+                          MaxLength="32"
+                          Immediate="true"
+                          Class="mb-2"/>
+        </MudForm>
+
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Dense="true" Class="mt-2 rounded-lg">
+                @_errorMessage
+            </MudAlert>
+        }
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Cancel"
+                   Variant="Variant.Text"
+                   Color="Color.Default"
+                   Style="text-transform: none;">
+            Cancel
+        </MudButton>
+        <MudButton OnClick="Submit"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   Disabled="@(_isSubmitting || !_isValid)"
+                   Style="text-transform: none; border-radius: 8px; font-weight: 600; min-width: 110px;">
+            @if (_isSubmitting)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2"/>
+                <span>Saving…</span>
+            }
+            else
+            {
+                <span>Save</span>
+            }
+        </MudButton>
+    </DialogActions>
+
+</MudDialog>
+
+@code {
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = default!;
+
+    [Parameter] public string? CurrentUsername { get; set; }
+    [Parameter] public int _UserId { get; set; }
+
+    private MudForm _form        = default!;
+    private bool    _isValid;
+    private bool    _isSubmitting;
+    private string? _errorMessage;
+    private string  _newUsername = string.Empty;
+
+    protected override void OnInitialized()
+        => _newUsername = CurrentUsername ?? string.Empty;
+
+    private string? ValidateUsername(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))  return "Username cannot be empty.";
+        if (value.Trim().Length < 2)           return "Must be at least 2 characters.";
+        if (value.Trim().Length > 32)          return "Cannot exceed 32 characters.";
+        if (value.Trim() == CurrentUsername)   return "That's already your username.";
+        return null;
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private async Task Submit()
+    {
+        await _form.Validate();
+        if (!_isValid) return;
+
+        _isSubmitting = true;
+        _errorMessage = null;
+
+        try
+        {
+            var command = new UpdateUserNameCommand(_UserId, _newUsername.Trim());
+            await UpdateUserNameCommandHandler.Handle(command);
+            MudDialog.Close(DialogResult.Ok(_newUsername.Trim()));
+           
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Could not update username: {ex.Message}";
+        }
+        finally
+        {
+            _isSubmitting = false;
+            StateHasChanged();
+        }
+    }
+}

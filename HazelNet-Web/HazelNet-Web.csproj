@@ -55,5 +55,6 @@
     <_ContentIncludedByDefault Remove="Shared\Components\Pages\Home.razor" />
     <_ContentIncludedByDefault Remove="Shared\Components\Pages\Weather.razor" />
     <_ContentIncludedByDefault Remove="Features\Study\Study.razor" />
+    <_ContentIncludedByDefault Remove="Features\User\User.razor" />
   </ItemGroup>
 </Project>
