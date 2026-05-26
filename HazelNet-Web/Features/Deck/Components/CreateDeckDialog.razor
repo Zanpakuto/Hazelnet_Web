@@ -12,11 +12,13 @@
             <MudTextField T="string" @bind-Value="_deckName" Label="Enter Deck Name (required)"
                           Clearable="true" Variant="Variant.Outlined" ShrinkLabel="true"
                           Lines="1" Sizing="InputSizing.Auto" FullWidth="true"
-                          Counter="100" MaxLength="100" Immediate="true"/>
+                          Counter="100" MaxLength="100" Immediate="true"
+                          Class="@(_deckName?.Length >= 85 ? "counter-warn" : "")"/>
             <MudTextField T="string" @bind-Value="_description" Label="Enter Deck Description"
                           Clearable="true" Variant="Variant.Outlined" ShrinkLabel="true"
                           Lines="5" Sizing="InputSizing.Auto" FullWidth="true"
-                          Counter="250" MaxLength="250" Immediate="true"/>
+                          Counter="250" MaxLength="250" Immediate="true"
+                          Class="@(_description?.Length >= 213 ? "counter-warn" : "")"/>
         </MudStack>
     </DialogContent>
 
