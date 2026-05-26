@@ -3,6 +3,7 @@
 @using HazelNet_Application.CQRS.Features.Cards.Commands
 @using HazelNet_Application.CQRS.Features.Cards.Queries
 @using HazelNet_Domain.Models
+@using HazelNet_Domain.Services.FSRS
 @inject ISnackbar Snackbar
 @inject IQueryHandler<GetAllDueCardsQuery, List<Card>> GetAllDueCardsQueryHandler;
 @inject ICommandHandler<StudyCardCommand> StudyCardCommandHandler;
@@ -99,47 +100,62 @@
     <DialogActions>
         @if (_progress < _numberOfDueCards)
         {
-            <MudStack Spacing="3"
-                      Row="true"
-                      AlignItems="AlignItems.Center"
-                      Justify="Justify.SpaceEvenly"
+            <MudStack Spacing="0"
+                      AlignItems="AlignItems.Stretch"
                       Style="width: 100%; padding: 8px 16px;">
+
+                <MudStack Spacing="3"
+                          Row="true"
+                          AlignItems="AlignItems.Center"
+                          Justify="Justify.SpaceEvenly"
+                          Class="mb-3">
+
+                    <MudButton Size="Size.Large"
+                               DropShadow="false"
+                               Variant="Variant.Outlined"
+                               Disabled="@(!_isShowingAnswer)"
+                               Style="flex: 1; color: #16a34a; border-color: #16a34a"
+                               OnClick="() => RateCard(Rating.Easy)">
+                        <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                            <MudText>Easy</MudText>
+                            <MudText Typo="Typo.caption" Style="opacity: 0.8">@FormatInterval(Rating.Easy)</MudText>
+                        </MudStack>
+                    </MudButton>
+                    <MudButton Size="Size.Large"
+                               DropShadow="false"
+                               Variant="Variant.Outlined"
+                               Disabled="@(!_isShowingAnswer)"
+                               Style="flex: 1; color: #d97706; border-color: #d97706"
+                               OnClick="() => RateCard(Rating.Good)">
+                        <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                            <MudText>Good</MudText>
+                            <MudText Typo="Typo.caption" Style="opacity: 0.8">@FormatInterval(Rating.Good)</MudText>
+                        </MudStack>
+                    </MudButton>
+                    <MudButton Size="Size.Large"
+                               DropShadow="false"
+                               Variant="Variant.Outlined"
+                               Disabled="@(!_isShowingAnswer)"
+                               Style="flex: 1; color: #dc2626; border-color: #dc2626"
+                               OnClick="() => RateCard(Rating.Hard)">
+                        <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                            <MudText>Hard</MudText>
+                            <MudText Typo="Typo.caption" Style="opacity: 0.8">@FormatInterval(Rating.Hard)</MudText>
+                        </MudStack>
+                    </MudButton>
+                </MudStack>
 
                 <MudButton Size="Size.Large"
                            DropShadow="false"
-                           Variant="Variant.Outlined"
-                           Color="Color.Success"
-                           Disabled="@(!_isShowingAnswer)"
-                           Style="flex: 1"
-                           OnClick="() => RateCard(Rating.Easy)">
-                    Easy
-                </MudButton>
-                <MudButton Size="Size.Large"
-                           DropShadow="false"
-                           Variant="Variant.Outlined"
-                           Color="Color.Info"
-                           Disabled="@(!_isShowingAnswer)"
-                           Style="flex: 1"
-                           OnClick="() => RateCard(Rating.Good)">
-                    Medium
-                </MudButton>
-                <MudButton Size="Size.Large"
-                           DropShadow="false"
-                           Variant="Variant.Outlined"
-                           Color="Color.Tertiary"
-                           Disabled="@(!_isShowingAnswer)"
-                           Style="flex: 1"
-                           OnClick="() => RateCard(Rating.Hard)">
-                    Hard
-                </MudButton>
-                <MudButton Size="Size.Large"
-                           DropShadow="false"
-                           Variant="Variant.Outlined"
+                           Variant="Variant.Filled"
                            Color="Color.Error"
                            Disabled="@(!_isShowingAnswer)"
-                           Style="flex: 1"
+                           FullWidth="true"
                            OnClick="() => RateCard(Rating.Again)">
-                    Again
+                    <MudStack Spacing="0" Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                        <MudText>Again</MudText>
+                        <MudText Typo="Typo.caption" Class="ml-2" Style="opacity: 0.8">@FormatInterval(Rating.Again)</MudText>
+                    </MudStack>
                 </MudButton>
             </MudStack>
         }
@@ -192,6 +208,7 @@
             _numberOfDueCards = _dueCards.Count;
             _currentCard = _dueCards.FirstOrDefault();
             _hasNoDueCards = _dueCards.Count == 0;
+            UpdatePreview();
         }
         catch (Exception ex)
         {
@@ -204,11 +221,30 @@
     }
 
     private bool _isShowingAnswer = false;
+    private RecordLog? _preview;
 
     private string _currentQA => _currentCard == null ? "" :
         _isShowingAnswer
         ? _currentCard.BackOfCard ?? "(No answer)"
         : _currentCard?.FrontOfCard;
+
+    private void UpdatePreview()
+    {
+        if (_currentCard == null) { _preview = null; return; }
+        var fsrs = FSRS.NewFSRS(Parameters.DefaultParam());
+        _preview = fsrs.Repeat(_currentCard, DateTime.UtcNow);
+    }
+
+    private string FormatInterval(Rating rating)
+    {
+        if (_preview == null || !_preview.ContainsKey(rating)) return "";
+        var days = _preview[rating].Card.ScheduledDays;
+        if (days == 0) return "<1d";
+        if (days == 1) return "1d";
+        if (days < 30) return $"{days}d";
+        if (days < 365) return $"{days / 30}mo";
+        return $"{days / 365}y";
+    }
 
     private string _showAnswerOrQuestion => _isShowingAnswer
         ? "Show Question"
@@ -239,7 +275,8 @@
             }
 
             _currentCard = _dueCards[0];
-            _isShowingAnswer = false;  // always start on question side
+            _isShowingAnswer = false;
+            UpdatePreview();
         }
         catch (Exception ex)
         {
