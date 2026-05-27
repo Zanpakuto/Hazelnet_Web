@@ -1,9 +1,17 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using HazelNet_Application.CQRS.Features.Decks.Commands
+@inject IDialogService DialogService
 
 <MudDialog>
     <TitleContent>
-        Create New Deck
+        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+            <MudText>Create New Deck</MudText>
+            <MudSpacer />
+            <MudIconButton Icon="@Icons.Material.Filled.Close"
+                           Color="Color.Inherit"
+                           aria-label="close dialog"
+                           OnClick="ConfirmCloseAsync" />
+        </MudStack>
     </TitleContent>
 
     <DialogContent>
@@ -23,7 +31,7 @@
     </DialogContent>
 
     <DialogActions>
-        <MudButton OnClick="Cancel" Variant="Variant.Outlined">Cancel</MudButton>
+        <MudButton OnClick="ConfirmCloseAsync" Variant="Variant.Outlined">Cancel</MudButton>
         <MudButton Color="Color.Primary" OnClick="Submit" 
                    Variant="Variant.Outlined"
                    Disabled="@(string.IsNullOrEmpty(_deckName))">Save Deck</MudButton>
@@ -61,11 +69,23 @@
         {
             MudDialog.Close(
                 DialogResult.Ok(
-                    new UpdateDeckCommand(DeckId.Value, _deckName, _description)));
+                    new UpdateDeckCommand(DeckId.Value, _deckName, _description ?? string.Empty)));
         } 
         else
             MudDialog.Close(DialogResult.Ok(result));
     }
 
-    private void Cancel() => MudDialog.Cancel();
+    private async Task ConfirmCloseAsync()
+    {
+        var confirm = await DialogService.ShowMessageBoxAsync(
+            title: "Close",
+            message: "Are you sure you want to close? Your changes will be lost",
+            yesText: "Close",
+            cancelText: "Cancel");
+
+        if (confirm is true)
+        {
+            MudDialog.Cancel();
+        }
+    }
 }
