@@ -103,60 +103,137 @@
             <MudStack Spacing="0"
                       AlignItems="AlignItems.Stretch"
                       Style="width: 100%; padding: 8px 16px;">
+                @if (_isShowingAnswer)
+                {
+                    <MudStack Row="true"
+                              AlignItems="AlignItems.Center"
+                              Spacing="3">
+                        <MudStack Spacing="3"
+                                  Row="true"
+                                  AlignItems="AlignItems.Center"
+                                  Justify="Justify.SpaceEvenly"
+                                  Class="mb-3"
+                                  Style="flex: 1;">
 
-                <MudStack Spacing="3"
-                          Row="true"
-                          AlignItems="AlignItems.Center"
-                          Justify="Justify.SpaceEvenly"
-                          Class="mb-3">
+                            <MudButton Size="Size.Large"
+                                       DropShadow="false"
+                                       Variant="@(IsSelected(Rating.Easy) ? Variant.Filled : Variant.Outlined)"
+                                       Color="@(IsSelected(Rating.Easy) ? Color.Success : Color.Default)"
+                                       Style="@(IsSelected(Rating.Easy)
+                                           ? "flex: 1; color: white; background-color: #16a34a; border-color: #16a34a"
+                                           : "flex: 1; color: #16a34a; border-color: #16a34a")"
+                                       OnClick="() => SelectRating(Rating.Easy)">
+                                <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                                    <MudText Style="@(IsSelected(Rating.Easy) ? "color: white;" : string.Empty)">Easy</MudText>
+                                    <MudText Typo="Typo.caption" Style="@(IsSelected(Rating.Easy) ? "color: white; opacity: 0.85" : "opacity: 0.8")">@FormatInterval(Rating.Easy)</MudText>
+                                </MudStack>
+                            </MudButton>
+                            <MudButton Size="Size.Large"
+                                       DropShadow="false"
+                                       Variant="@(IsSelected(Rating.Good) ? Variant.Filled : Variant.Outlined)"
+                                       Color="@(IsSelected(Rating.Good) ? Color.Warning : Color.Default)"
+                                       Style="@(IsSelected(Rating.Good)
+                                           ? "flex: 1; color: white; background-color: #d97706; border-color: #d97706"
+                                           : "flex: 1; color: #d97706; border-color: #d97706")"
+                                       OnClick="() => SelectRating(Rating.Good)">
+                                <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                                    <MudText Style="@(IsSelected(Rating.Good) ? "color: white;" : string.Empty)">Good</MudText>
+                                    <MudText Typo="Typo.caption" Style="@(IsSelected(Rating.Good) ? "color: white; opacity: 0.85" : "opacity: 0.8")">@FormatInterval(Rating.Good)</MudText>
+                                </MudStack>
+                            </MudButton>
+                            <MudButton Size="Size.Large"
+                                       DropShadow="false"
+                                       Variant="@(IsSelected(Rating.Hard) ? Variant.Filled : Variant.Outlined)"
+                                       Color="@(IsSelected(Rating.Hard) ? Color.Error : Color.Default)"
+                                       Style="@(IsSelected(Rating.Hard)
+                                           ? "flex: 1; color: white; background-color: #dc2626; border-color: #dc2626"
+                                           : "flex: 1; color: #dc2626; border-color: #dc2626")"
+                                       OnClick="() => SelectRating(Rating.Hard)">
+                                <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                                    <MudText Style="@(IsSelected(Rating.Hard) ? "color: white;" : string.Empty)">Hard</MudText>
+                                    <MudText Typo="Typo.caption" Style="@(IsSelected(Rating.Hard) ? "color: white; opacity: 0.85" : "opacity: 0.8")">@FormatInterval(Rating.Hard)</MudText>
+                                </MudStack>
+                            </MudButton>
+                        </MudStack>
 
-                    <MudButton Size="Size.Large"
-                               DropShadow="false"
-                               Variant="Variant.Outlined"
-                               Disabled="@(!_isShowingAnswer)"
-                               Style="flex: 1; color: #16a34a; border-color: #16a34a"
-                               OnClick="() => RateCard(Rating.Easy)">
-                        <MudStack Spacing="0" AlignItems="AlignItems.Center">
-                            <MudText>Easy</MudText>
-                            <MudText Typo="Typo.caption" Style="opacity: 0.8">@FormatInterval(Rating.Easy)</MudText>
-                        </MudStack>
-                    </MudButton>
-                    <MudButton Size="Size.Large"
-                               DropShadow="false"
-                               Variant="Variant.Outlined"
-                               Disabled="@(!_isShowingAnswer)"
-                               Style="flex: 1; color: #d97706; border-color: #d97706"
-                               OnClick="() => RateCard(Rating.Good)">
-                        <MudStack Spacing="0" AlignItems="AlignItems.Center">
-                            <MudText>Good</MudText>
-                            <MudText Typo="Typo.caption" Style="opacity: 0.8">@FormatInterval(Rating.Good)</MudText>
-                        </MudStack>
-                    </MudButton>
-                    <MudButton Size="Size.Large"
-                               DropShadow="false"
-                               Variant="Variant.Outlined"
-                               Disabled="@(!_isShowingAnswer)"
-                               Style="flex: 1; color: #dc2626; border-color: #dc2626"
-                               OnClick="() => RateCard(Rating.Hard)">
-                        <MudStack Spacing="0" AlignItems="AlignItems.Center">
-                            <MudText>Hard</MudText>
-                            <MudText Typo="Typo.caption" Style="opacity: 0.8">@FormatInterval(Rating.Hard)</MudText>
-                        </MudStack>
-                    </MudButton>
-                </MudStack>
-
-                <MudButton Size="Size.Large"
-                           DropShadow="false"
-                           Variant="Variant.Filled"
-                           Color="Color.Error"
-                           Disabled="@(!_isShowingAnswer)"
-                           FullWidth="true"
-                           OnClick="() => RateCard(Rating.Again)">
-                    <MudStack Spacing="0" Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
-                        <MudText>Again</MudText>
-                        <MudText Typo="Typo.caption" Class="ml-2" Style="opacity: 0.8">@FormatInterval(Rating.Again)</MudText>
+                        <MudButton Size="Size.Large"
+                                   DropShadow="false"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   Disabled="@(!_selectedRating.HasValue)"
+                                   Style="min-width: 88px; min-height: 56px; align-self: flex-start; padding: 10px 14px;"
+                                   OnClick="AdvanceCardAsync">
+                            Next
+                        </MudButton>
                     </MudStack>
-                </MudButton>
+
+                    <MudButton Size="Size.Large"
+                               DropShadow="false"
+                               Variant="@(IsSelected(Rating.Again) ? Variant.Filled : Variant.Outlined)"
+                               Color="@(IsSelected(Rating.Again) ? Color.Error : Color.Default)"
+                               Style="@(IsSelected(Rating.Again)
+                                   ? "color: white; background-color: #dc2626; border-color: #dc2626"
+                                   : "color: #dc2626; border-color: #dc2626")"
+                               FullWidth="true"
+                               OnClick="() => SelectRating(Rating.Again)">
+                        <MudStack Spacing="0" Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                            <MudText Style="@(IsSelected(Rating.Again) ? "color: white;" : string.Empty)">Again</MudText>
+                            <MudText Typo="Typo.caption" Class="ml-2" Style="@(IsSelected(Rating.Again) ? "color: white; opacity: 0.85" : "opacity: 0.8")">@FormatInterval(Rating.Again)</MudText>
+                        </MudStack>
+                    </MudButton>
+                }
+                else
+                {
+                    <MudStack Spacing="3"
+                              Row="true"
+                              AlignItems="AlignItems.Center"
+                              Justify="Justify.SpaceEvenly"
+                              Class="mb-3">
+
+                        <MudButton Size="Size.Large"
+                                   DropShadow="false"
+                                   Variant="Variant.Outlined"
+                                   Disabled="true"
+                                   Style="flex: 1; color: #16a34a; border-color: #16a34a">
+                            <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                                <MudText>Easy</MudText>
+                                <MudText Typo="Typo.caption" Style="opacity: 0.8">@FormatInterval(Rating.Easy)</MudText>
+                            </MudStack>
+                        </MudButton>
+                        <MudButton Size="Size.Large"
+                                   DropShadow="false"
+                                   Variant="Variant.Outlined"
+                                   Disabled="true"
+                                   Style="flex: 1; color: #d97706; border-color: #d97706">
+                            <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                                <MudText>Good</MudText>
+                                <MudText Typo="Typo.caption" Style="opacity: 0.8">@FormatInterval(Rating.Good)</MudText>
+                            </MudStack>
+                        </MudButton>
+                        <MudButton Size="Size.Large"
+                                   DropShadow="false"
+                                   Variant="Variant.Outlined"
+                                   Disabled="true"
+                                   Style="flex: 1; color: #dc2626; border-color: #dc2626">
+                            <MudStack Spacing="0" AlignItems="AlignItems.Center">
+                                <MudText>Hard</MudText>
+                                <MudText Typo="Typo.caption" Style="opacity: 0.8">@FormatInterval(Rating.Hard)</MudText>
+                            </MudStack>
+                        </MudButton>
+                    </MudStack>
+
+                    <MudButton Size="Size.Large"
+                               DropShadow="false"
+                               Variant="Variant.Filled"
+                               Color="Color.Error"
+                               Disabled="true"
+                               FullWidth="true">
+                        <MudStack Spacing="0" Row="true" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                            <MudText>Again</MudText>
+                            <MudText Typo="Typo.caption" Class="ml-2" Style="opacity: 0.8">@FormatInterval(Rating.Again)</MudText>
+                        </MudStack>
+                    </MudButton>
+                }
             </MudStack>
         }
         else
@@ -222,11 +299,12 @@
 
     private bool _isShowingAnswer = false;
     private RecordLog? _preview;
+    private Rating? _selectedRating;
 
     private string _currentQA => _currentCard == null ? "" :
         _isShowingAnswer
         ? _currentCard.BackOfCard ?? "(No answer)"
-        : _currentCard?.FrontOfCard;
+        : _currentCard.FrontOfCard ?? string.Empty;
 
     private void UpdatePreview()
     {
@@ -254,20 +332,34 @@
     {
         if (_currentCard == null) return;
         _isShowingAnswer = !_isShowingAnswer;
-        ;
+        if (!_isShowingAnswer)
+        {
+            _selectedRating = null;
+        }
     }
     
-    private async Task RateCard(Rating rating)
+    private void SelectRating(Rating rating)
     {
-        if (_currentCard == null) return;
+        if (!_isShowingAnswer) return;
+
+        _selectedRating = rating;
+    }
+
+    private bool IsSelected(Rating rating) => _selectedRating == rating;
+
+    private async Task AdvanceCardAsync()
+    {
+        if (_currentCard == null || !_selectedRating.HasValue) return;
 
         try
         {
+            var rating = _selectedRating.Value;
             var command = new StudyCardCommand(UserId, DeckId, _currentCard.Id, rating);
             await StudyCardCommandHandler.Handle(command);
 
             _progress++;
             _dueCards.RemoveAt(0);
+            _selectedRating = null;
 
             if (_dueCards.Count == 0)
             {
